@@ -1,0 +1,8 @@
+version: '3'
+services:
+  review:
+    image: vvakame/review:5.6
+    volumes:
+      - .:/startLINEBot
+    build: .
+    working_dir: /startLINEBot
