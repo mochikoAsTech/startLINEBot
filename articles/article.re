@@ -186,6 +186,30 @@ LINE公式アカウントには認証ステータスというものがあり、�
 
 === 友だち全員にメッセージを一斉配信する
 
+===[column] 【コラム】URLを送る前にOGPの見た目を事前に確認したり、キャッシュを消したりしたい
+
+LINEでURLを含むメッセージを送ると、こんなふうにプレビューが表示されます。（@<img>{url-preview}）
+
+//image[url-preview][URLのプレビュー][scale=0.4]{
+//}
+
+実際にメッセージを送る前に、このプレビューでどんな画像やテキストが表示されるのか、確認したかったらどうすればいいのでしょう？
+
+実はPagePokerという公式のツールを使うと、対象ページのOGPタグを読み込んで、どんなふうにプレビューが表示されるのかを事前に確認できます。@<fn>{card-validator}
+
+ * Pagepoker @<href>{https://poker.line.naver.jp/}
+
+「Clear Cache」にチェックを入れることで、LINEサーバー側のキャッシュも削除できるということなので、ウェブサイト側でOGPの画像を差し替えた後にここでキャッシュを削除すれば、「URLを投げたらうっかり古い画像がプレビューで表示されてしまった」という事態も避けられます。
+
+OGPタグの書き方については、LINE Developersサイトの「トークとLINE VOOM内のURLプレビューはどのようにして生成されますか？」を参考にしてください。
+
+ * @<href>{https://developers.line.biz/ja/faq/#how-are-the-url-previews-generated}
+
+===[/column]
+
+//footnote[card-validator][TwitterのCard Validatorとか、Facebookのシェアデバッガーみたいなものですね。Card Validatorは気づいたらプレビュー確認機能がなくなっていたけれど。 @<href>{https://cards-dev.twitter.com/validator} @<href>{https://developers.facebook.com/tools/debug/}]
+//footnote[ogp][OGPはOpen Graph Protcolの略です。HTMLにメタデータとして「og:image」のようなOGPタグを書いておくことで、TwitterやLINEなどでそのURLを共有したときに、URLそのままではなく対象ページのタイトルや概要、画像などがカードのように表示されます。]
+
 === 特定の属性を指定してメッセージを送る
 
 === ユーザーIDを指定して特定の人に送る
