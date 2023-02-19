@@ -22,8 +22,8 @@ bookname: startLINEBot
 language: ja
 
 # 書名
-booktitle: {name: "LINE Botをはじめよう", file-as: "ラインボットヲハジメヨウ"}
-subtitle: {name: "基礎からトラブルシューティングまで", file-as: "キソカラトラブルシューティングマデ カイテイダイニハン"}
+booktitle: {name: "LINE Botをつくってみよう", file-as: "ラインボットヲツクッテミヨウ"}
+subtitle: {name: "ひとつずつAPIを試して学んでしっかりわかる", file-as: "ヒトツズツエーピーアイヲタメシテマナンデシッカリワカル"}
 
 # 著者名。「, 」で区切って複数指定できる
 aut: [{name: "mochikoAsTech", file-as: "モチコアズテック"}]
