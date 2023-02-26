@@ -154,12 +154,17 @@ LINEで［メールアドレスが登録されました。］というメッセ�
 
 作ったLINE公式アカウントから友だちにメッセージを送るため、既にLINEを使っているスマートフォンで、LINE公式アカウント管理アプリをインストールします。
 
- * Android
- ** LINE公式アカウント
- ** https://play.google.com/store/apps/details?id=com.linecorp.lineoa
- * iOS
- ** LINE公式アカウント
- ** https://apps.apple.com/jp/app/id1450599059
+ * LINE公式アカウント管理アプリ
+ ** Android（Google Play）
+ *** https://play.google.com/store/apps/details?id=com.linecorp.lineoa（@<img>{kanri-app-for-android}）
+ ** iPhone（App Store）
+ *** https://apps.apple.com/jp/app/id1450599059（@<img>{kanri-app-for-ios}）
+
+//image[kanri-app-for-android][Android（Google Play）向けの管理アプリ][scale=0.4]{
+//}
+
+//image[kanri-app-for-ios][iPhone（App Store）向けの管理アプリ][scale=0.4]{
+//}
 
 インストールしたLINE公式アカウント管理アプリを開いて、［LINEアプリで登録・ログイン］をタップします。
 
