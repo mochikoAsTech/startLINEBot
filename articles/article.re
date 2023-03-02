@@ -234,9 +234,19 @@ LINEに戻って、Keepメモという自分専用トークルームみたいな
 
 = Messaging APIでLINE Botをつくってみよう
 
-== Messaging APIとは
-
 == そもそもAPIとは
+
+さて、Messaging APIとは何か、という話をする前に、そもそも「API」とは何か、という話をさせてください。
+
+そもそもMessaging APIの「API」とは、「REST API」@<fn>{restful}のことです。
+
+//footnote[restful][RESTはREpresentational State Transferの略。RESTアーキテクチャスタイルという、ルールのようなものに従って作られたAPIがREST APIやRESTful APと呼ばれます。]
+
+通常、私たちはブラウザでURLを入力したり、リンクをクリックしたりすることで「このウェブページを見せてくれ！」とリクエストを投げ、リクエストを受けたウェブサーバが「はい、どうぞ」とウェブページをレスポンスで返してくれます。REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンドや、Postmanや、プログラムを通じてREST APIに対してリクエストを投げると、ウェブサーバ上でうごくREST APIが「APIの実行に成功したよ！」とか「君が求めていた情報はこれだよ！」というようにレスポンスを返してくれるのです。
+
+本来、APIはもっと広義の意味をもつ言葉ですが、本書においてはただ「API」と呼んだら、それはREST APIのことを指していると思ってください。
+
+== Messaging APIとは
 
 
 === 開発には「個人のLINEアカウント」が必要か？
