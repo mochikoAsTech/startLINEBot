@@ -23,7 +23,7 @@ language: ja
 
 # 書名
 booktitle: {name: "LINE Botをつくってみよう", file-as: "ラインボットヲツクッテミヨウ"}
-subtitle: {name: "ひとつずつAPIを試して学んでしっかりわかる", file-as: "ヒトツズツエーピーアイヲタメシテマナンデシッカリワカル"}
+subtitle: {name: "APIを試して学んでしっかりわかる", file-as: "エーピーアイヲタメシテマナンデシッカリワカル"}
 
 # 著者名。「, 」で区切って複数指定できる
 aut: [{name: "mochikoAsTech", file-as: "モチコアズテック"}]

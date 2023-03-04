@@ -8,7 +8,7 @@ mochikoAsTech
 //}
 
 この本を手に取ってくださったあなた、こんにちは、あるいははじめまして。
-「LINE Botをつくってみよう ～ひとつずつAPIを試して学んでしっかりわかる～」の筆者、mochikoAsTechです。
+「LINE Botをつくってみよう ～APIを試して学んでしっかりわかる～」の筆者、mochikoAsTechです。
 
 == 想定する読者層
 
