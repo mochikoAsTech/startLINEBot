@@ -423,7 +423,14 @@ Webhookを使うとき、私たちは自分でサーバを用意する必要が�
 
 === ボットサーバー
 
-今回はWebhookを受け取って、200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS Lambdaを使用します。AWSのアカウントの作り方や、うっかりめちゃくちゃに課金されたときに気づくための設定は、DNSをはじめよう、およびAWSをはじめようを読んでください。
+今回はWebhookを受け取って、200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS Lambdaを使用します。
+
+なおAWSアカウントの作成方法は、はじめようシリーズ3部作の「DNSをはじめよう」（@<img>{flow}）@<fn>{booth}で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」で詳しく紹介しています。まだAWSのアカウントをお持ちでない場合は、そちらを参考にしてください。
+
+//footnote[booth][@<href>{https://mochikoastech.booth.pm/}]
+
+//image[flow][はじめようシリーズ3部作][scale=0.8]{
+//}
 
 === ボットサーバーがWebhookを受け取れなかったときの再送機能
 
@@ -606,6 +613,12 @@ LINE Creative Labを使うと、画像メッセージとして送るような素
 ==== 自社のスタンプを使う方法
 
 === Flex Message
+
+=== Flex Message Simulatorは便利
+
+でもFlex Message Simulatorで出力されるJSONは、messages直下のFlex Message全体じゃなくて、コンテナ（contents以下）なので要注意です。あとログインが必要です。
+
+ * @<href>{https://developers.line.biz/flex-simulator/}
 
 == やりとりする場所
 
