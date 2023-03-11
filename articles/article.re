@@ -661,12 +661,20 @@ LINE Creative Labを使うと、画像メッセージとして送るような素
 
 === Python
 
-mkdir aws
-cd aws
-pip install line-bot-sdk -t . --no-user
+ 1. mkdir python
+ 1. cd python
+ 1. pip install line-bot-sdk -t . --no-user
+ 1. SDKのコードが詰まったpythonディレクトリをzipファイルに圧縮する
+ 1. AWS Lambdaで「レイヤーを作成」
+ 1. zipファイルを選択
+ 1. 互換性のあるランタイムでPython 3.9を選択する
+ 1. x86_64にチェックを入れる
+ 1. カスタムレイヤーで選ぶ
+ 1. APIタイプはHTTP APIでAPI gateway作る
 
+ディレクトリをline-bot-sdk-pythonにしてたらこれでひっかかった
+ * @<href>{https://aws.amazon.com/jp/premiumsupport/knowledge-center/lambda-import-module-error-python/}
 
-REST APIでAPI gateway作る
 
 
 === Node.js

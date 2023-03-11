@@ -1,11 +1,29 @@
 import json
 import os
+import sys
+import logging
 import urllib.request
+
+from linebot import (
+    LineBotApi, WebhookHandler
+)
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage,
+)
+from linebot.exceptions import (
+    LineBotApiError, InvalidSignatureError
+)
+
+logger = logging.getLogger()
+logger.setLevel(logging.ERROR)
+
+channel_secret = os.environ['CHANNEL_SECRET']
+channel_access_token = os.environ['CHANNEL_ACCESS_TOKEN']
 
 
 def lambda_handler(event, context):
     # 環境変数のチャネルアクセストークンを取得
-    token = os.environ['CHANNEL_ACCESS_TOKEN']
+    channel_access_token = os.environ['CHANNEL_ACCESS_TOKEN']
     reply_url = 'https://api.line.me/v2/bot/message/reply'
 
     # json.loadsの
@@ -13,7 +31,7 @@ def lambda_handler(event, context):
     for message_event in json.loads(event['body'])['events']:
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
+            'Authorization': 'Bearer ' + channel_access_token
         }
         body = {
             'replyToken': message_event['replyToken'],
