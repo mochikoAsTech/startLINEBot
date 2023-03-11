@@ -661,6 +661,8 @@ LINE Creative Labを使うと、画像メッセージとして送るような素
 
 === Python
 
+ * @<href>{https://github.com/line/line-bot-sdk-python}
+
  1. mkdir python
  1. cd python
  1. pip install line-bot-sdk -t . --no-user
@@ -674,6 +676,21 @@ LINE Creative Labを使うと、画像メッセージとして送るような素
 
 ディレクトリをline-bot-sdk-pythonにしてたらこれでひっかかった
  * @<href>{https://aws.amazon.com/jp/premiumsupport/knowledge-center/lambda-import-module-error-python/}
+
+ 1. OpenAIでアカウント作る
+ 1. SECRET_KEYを取得する
+ 1. mkdir python
+ 1. cd python
+ 1. pip install openai -t . --no-user
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+line-bot-sdk 2.4.1 requires aiohttp==3.8.3, but you have aiohttp 3.8.4 which is incompatible.
+line-bot-sdk 2.4.1 requires requests==2.28.1, but you have requests 2.28.2 which is incompatible.
+Successfully installed aiohttp-3.8.4 aiosignal-1.3.1 async-timeout-4.0.2 attrs-22.2.0 certifi-2022.12.7 charset-normalizer-3.1.0 colorama-0.4.6 frozenlist-1.3.3 idna-3.4 multidict-6.0.4 openai-0.27.2 requests-2.28.2 tqdm-4.65.0 urllib3-1.26.15 yar
+
+pip check
+No broken requirements found.
+なので無視してそのまま行く
 
 
 
