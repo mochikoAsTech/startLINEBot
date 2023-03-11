@@ -14,24 +14,31 @@ from linebot.exceptions import (
     LineBotApiError, InvalidSignatureError
 )
 
+# WARNING, ERROR, CRITICALのログメッセージを拾うように設定する
 logger = logging.getLogger()
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.WARNING)
 
-channel_secret = os.environ['CHANNEL_SECRET']
-channel_access_token = os.environ['CHANNEL_ACCESS_TOKEN']
+# 環境変数からチャネルアクセストークンとチャネルシークレットを取得する
+CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
+CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
+REPLY_URL = 'https://api.line.me/v2/bot/message/reply'
+
+# チャネルアクセストークンとチャネルシークレットが環境変数に登録されていないとエラー
+if CHANNEL_SECRET is None:
+    logger.error(
+        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
+    sys.exit(1)
+if CHANNEL_ACCESS_TOKEN is None:
+    logger.error(
+        'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
+    sys.exit(1)
 
 
 def lambda_handler(event, context):
-    # 環境変数のチャネルアクセストークンを取得
-    channel_access_token = os.environ['CHANNEL_ACCESS_TOKEN']
-    reply_url = 'https://api.line.me/v2/bot/message/reply'
-
-    # json.loadsの
-
     for message_event in json.loads(event['body'])['events']:
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + channel_access_token
+            'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN
         }
         body = {
             'replyToken': message_event['replyToken'],
@@ -66,7 +73,7 @@ def lambda_handler(event, context):
             ]
         }
 
-        req = urllib.request.Request(reply_url, data=json.dumps(
+        req = urllib.request.Request(REPLY_URL, data=json.dumps(
             body).encode('utf-8'), method='POST', headers=headers)
         with urllib.request.urlopen(req) as res:
             logger.info(res.read().decode("utf-8"))
