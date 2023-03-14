@@ -4,8 +4,10 @@ PREDEF:
   - introduction.re
 
 CHAPS:
-# 本編
-  - article.re
+# LINE公式アカウントをつくってみよう
+  - article01.re
+# Messaging APIでLINE Botをつくってみよう
+  - article02.re
 
 POSTDEF:
 # あとがき
