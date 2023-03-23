@@ -16,23 +16,23 @@ LINE公式アカウントの「中の人」を、人間の代わりにボット�
 
 チャットボットとは、リアルタイムにメッセージをやりとりする「チャット」と、人間のように動いたり働いたりする機械の「ロボット」を組み合わせた言葉です。チャットボットの裏側には人間がいるわけではなく、プログラムがメッセージの内容に応じた返信をしてくれたり、自動でメッセージを送ってきたりしています。
 
-このチャットボットは、近年では身近な存在になったことで、単に「ボット」と呼ばれることの方が多いかもしれません。Twitterで地震が起きるとすぐに震度を知らせてくれる地震速報ボットや、著名人の名言を定期的につぶやくボット、特定の用語に反応してリプライしてくるボットなどを、あなたも一度は見たことがあるのではないでしょうか。会社のSlackに、GitHubの通知をしてくれるボットやメッセージを自動翻訳してくれるボットがいる、というケースもあるかも知れません。
+このチャットボットは、近年では身近な存在になったことで、単に「ボット」と呼ばれることの方が多いかもしれません。Twitterで地震が起きるとすぐに震度を知らせてくれる地震速報ボットや、著名人の名言を定期的につぶやくボット、特定の用語に反応してリプライしてくるボットなどを、あなたも一度は見たことがあるのではないでしょうか。会社のSlackに、GitHubの通知をしてくれるボットや、メッセージを自動翻訳してくれるボットがいる、というケースもあるかも知れません。
 
 本書では、この自動応答するチャットボットのプログラムのことを「ボット」と呼びます。
 
 == Messaging APIでボットを作ろう
 
-ボットを作って、LINE公式アカウントをチャットボットにするには、Messaging APIというものを使います。
+ボットを作って、LINE公式アカウントをチャットボットにするには、LINEのMessaging APIというものを使います。
 
-=== そもそもAPIとは
+=== APIとは
 
 さて、Messaging APIとは何か、という話をする前に、そもそも「API」とは何か、という話をさせてください。
 
-Messaging APIの「API」は、Application Programming Interfaceの略です。名前のとおり、別々のアプリケーションがお互いに情報をやりとりするときの接点となる、窓口のようなものだと思ってください。そして本来、APIはとても広い意味をもつ言葉ですが、Messaging APIにおけるAPIは「REST API」@<fn>{restful}のことだと思われます。
+Messaging APIの「API」は、Application Programming Interfaceの略です。名前のとおり、別々のアプリケーションがお互いに情報をやりとりするときの接点となる、窓口のようなものだと思ってください。そして本来、APIはとても広い意味をもつ言葉ですが、このMessaging APIにおけるAPIは「REST API」@<fn>{restful}のことだと思われます。
 
 //footnote[restful][RESTはREpresentational State Transferの略。RESTアーキテクチャスタイルという、ルールのようなものに従って作られたAPIがREST APIやRESTful APIと呼ばれます。]
 
-通常、私たちはブラウザでURLを入力したり、リンクをクリックしたりすることで「このウェブページを見せてくれ！」とサーバにリクエストを投げ、リクエストを受けたウェブサーバが「はい、どうぞ」とウェブページをレスポンスで返してくれます。REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンドや、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というようにリクエストを投げると、ウェブサーバ上でうごくREST APIが「君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。
+通常、私たちはブラウザでURLを入力したり、リンクをクリックしたりすることで「このウェブページを見せてくれ！」とサーバーにリクエストを投げ、リクエストを受けたウェブサーバーが「はい、どうぞ」とウェブページをレスポンスで返してくれます。REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンドや、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。
 
 //footnote[postman][Postmanは、GUIの画面でREST APIを叩ける便利なツール。 @<href>{https://www.postman.com/}]
 
@@ -40,7 +40,7 @@ Messaging APIの「API」は、Application Programming Interfaceの略です。�
 
 === Messaging APIとは
 
-Messaging APIは、LINE公式アカウントからのメッセージ送信や、返信などの操作ができるAPIです。LINE株式会社が無料で提供しており、LINE Developersコンソールと呼ばれる開発者向けサイトでアカウント登録をすれば誰でも利用できます。@<fn>{price}
+ではあらためて、Messaging APIについて説明していきましょう。Messaging APIは、LINE公式アカウントからのメッセージ送信や、返信などの操作ができるAPIです。LINE株式会社が無料で提供しており、LINE Developersコンソールと呼ばれる開発者向けサイトでアカウント登録をすれば誰でも利用できます。@<fn>{price}
 
 //footnote[price][Messaging APIの各APIをたたくこと自体に費用はかかりません。@<chapref>{article01}の@<hd>{article01|oaprice}で紹介したとおり、無料メッセージの通数を増やすためにライトプランやスタンダードプランを契約したときに初めてお金がかかります。]
 
@@ -48,13 +48,13 @@ Messaging APIを使用することで、開発者はユーザーがLINE公式ア
 
 実際にMessaging APIを使用するためには、LINE公式アカウントと紐づく形でMessaging APIチャネルというものを作って、APIの利用に必要なチャネルアクセストークンを取得する必要があります。
 
-ではMessaging APIを使うため、早速Messaging APIチャネルを作りましょう！
+ではMessaging APIを使うため、早速Messaging APIチャネルを作っていきましょう。
 
 == LINE Official Account ManagerでMessaging APIチャネルを作る
 
-LINE公式アカウントとMessaging APIチャネルは、表と裏のような存在です。LINE公式アカウントを単体で作って、中の人が頑張ることもできますが、裏側にMessaging APIチャネルを紐付けて、ボットが応答するようにすることも可能です。
+LINE公式アカウントとMessaging APIチャネルは、表と裏のような存在です。LINE公式アカウントを単体で作って、LINE Official Account Managerや管理アプリを使って中の人が頑張ることもできますが、裏側にMessaging APIチャネルを紐付けて、ボットが応答するようにすることも可能です。
 
-あなたはさっき、LINEでLINE公式アカウントを作ったので、いまは表だけで裏のMessaging APIチャネルが存在していない状態です。
+あなたはさっき、LINEでLINE公式アカウントを作ったので、いまは表だけで裏に控えるMessaging APIチャネルが存在していない状態です。
 
 LINE Official Account Managerで、LINE公式アカウントに紐づくMessaging APIチャネルを作りましょう。
 
@@ -62,9 +62,12 @@ LINE Official Account Managerで、LINE公式アカウントに紐づくMessagin
 
 @<chapref>{article01}では、スマートフォンで色々な操作をしていましたが、ここからはパソコンで作業します。
 
-まずはLINE Official Account Managerにログインします。
+Messaging APIチャネルを作成するため、LINE Official Account Managerを開きます。
 
-@<href>{https://www.linebiz.com/jp/login/}を開いて、［管理画面にログイン］からLINE公式アカウントの管理画面こと、LINE Official Account Managerにログインします。（@<img>{line-for-business-login}）
+ * LINE Official Account Manager
+ ** @<href>{https://www.linebiz.com/jp/login/}
+
+左側の［管理画面にログイン］から、LINE公式アカウントの管理画面こと、LINE Official Account Managerにログインします。（@<img>{line-for-business-login}）
 
 //image[line-for-business-login][［管理画面にログイン］からログインする][scale=0.8]{
 //}
@@ -120,9 +123,9 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 //image[create-messaging-api-channel-3][［Messaging APIを利用する］を開く][scale=0.8]{
 //}
 
-まだLINE Developersコンソールにログインしたことがなかったため、登録する開発者情報の入力を求められます。ここでいう「開発者」とは、イコール「LINE Developersコンソールにアクセスする人のこと」です。あなたの［名前］@<fn>{mochiko}と［メールアドレス］@<fn>{mail-address}を入力して、リンク先の「LINE開発者契約」を確認した上で、同意できる内容であれば［同意する］を押します。（@<img>{create-messaging-api-channel-5}）
+まだLINE Developersコンソールにログインしたことがなかったため、開発者情報の入力を求められます。ここでいう「開発者」とは、イコール「LINE Developersコンソールにアクセスする人のこと」です。あなたの［名前］@<fn>{mochiko}と［メールアドレス］@<fn>{mail-address}を入力して、リンク先の「LINE開発者契約」を確認した上で、同意できる内容であれば［同意する］を押します。（@<img>{create-messaging-api-channel-5}）
 
-//footnote[mochiko][私は名前の欄に個人事業主としての屋号（mochikoAsTech）を記入しましたが、個人開発者として登録するのであれば普通に氏名の入力で構わないと思います。]
+//footnote[mochiko][私は名前の欄に個人事業主としての屋号（mochikoAsTech）を記入していますが、個人開発者として登録するのであれば普通に氏名の入力で構わないと思います。]
 //footnote[mail-address][ここで登録するメールアドレスは、LINEに登録してあるメールアドレスとは別のアドレスでも構いません。開発者宛ての連絡を送ってほしいメールアドレスを記入しましょう。]
 
 //image[create-messaging-api-channel-5][［名前］と［メールアドレス］を入力して［同意する］を押す][scale=0.8]{
@@ -141,7 +144,7 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 
 あなたが個人の開発者なのであれば、プロバイダー名は個人名でも構いません。誰かに「このLINE公式アカウントの運営母体はどこなんですか？」と聞かれたときに、あなたが答えるであろう名称をプロバイダー名にしましょう。
 
-まだプロバイダーというものを1つも作っていないので、今回は［プロバイダーを作成］します。プロバイダー名を入力して、「LINE公式アカウントAPI利用規約」を確認し、同意できる内容であれば［同意する］を押します。（@<img>{create-messaging-api-channel-7}）
+まだプロバイダーというものを1つも持っていないので、今回は［プロバイダーを作成］します。プロバイダー名を入力して、「LINE公式アカウントAPI利用規約」を確認し、［同意する］を押します。（@<img>{create-messaging-api-channel-7}）
 
 //image[create-messaging-api-channel-7][プロバイダー名を入力して［同意する］を押す][scale=0.8]{
 //}
@@ -151,7 +154,7 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 //image[create-messaging-api-channel-8][入力せずに［OK］を押す][scale=0.8]{
 //}
 
-このLINE公式アカウントを、このプロバイダーと紐付けますがいいですか、という確認画面が表示されます。記載のとおり、一度チャネルをプロバイダーと紐付けてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので、プロバイダー名はよく確認してください。問題なければ［OK］を押します。（@<img>{create-messaging-api-channel-9}）
+このLINE公式アカウントを、このプロバイダーと紐付けますがいいですか、という最終確認の画面が表示されます。記載のとおり、一度チャネルをプロバイダーと紐付けてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので、プロバイダー名はよく確認してください。問題なければ［OK］を押します。（@<img>{create-messaging-api-channel-9}）
 
 //image[create-messaging-api-channel-9][確認して［OK］を押す][scale=0.8]{
 //}
@@ -172,17 +175,17 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
  * LINE Developersコンソール
  ** @<href>{https://developers.line.biz/console/}
 
-既にLINE Official Account Managerにログインしていれば、LINE Developersコンソールのプロバイダー一覧が表示されるはずです。もしログインを求められたら、@<hd>{article02|login-oamanager}と同じようにLINEのアカウントでログインしてください。（@<img>{console}）
+既にLINE Official Account Managerにログインしていれば、そのままLINE Developersコンソールのプロバイダー一覧が表示されるはずです。もしログインを求められたら、@<hd>{article02|login-oamanager}と同じようにLINEのアカウントでログインしてください。プロバイダー一覧が表示されたら、左メニューで、先ほど作ったプロバイダーを選びます。（@<img>{console}）
 
 //image[console][LINE Developersコンソールのプロバイダー一覧が表示された][scale=0.8]{
 //}
 
-左メニューで、先ほど作ったプロバイダーを選ぶと、そのプロバイダー配下にあるチャネルの一覧が表示されます。（@<img>{console-2}）
+選択したプロバイダーの配下にあるチャネルの一覧が表示されます。続いて、同じく先ほど作ったMessaging APIチャネルを選びます。（@<img>{console-2}）
 
 //image[console-2][プロバイダー配下のチャネル一覧が表示された][scale=0.8]{
 //}
 
-同じく先ほど作ったMessaging APIチャネルを選びます。［チャネル基本設定］タブの右隣にある［Messaging API設定］タブを開いてください。（@<img>{console-3}）
+Messaging APIチャネルが表示されたら、［チャネル基本設定］タブの右隣にある［Messaging API設定］タブを開いてください。（@<img>{console-3}）
 
 //image[console-3][先ほど作ったMessaging APIチャネルが表示された][scale=0.8]{
 //}
@@ -192,7 +195,7 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 //image[console-4][［発行］を押して長期のチャネルアクセストークンを発行する][scale=0.8]{
 //}
 
-このチャネルアクセストークン@<fn>{access-token}は、Messaging APIを叩くときに、自分がそのMessaging APIチャネルの持ち主であることを証明する身分証のような役割を果たします。うっかりブログに書いて公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
+このチャネルアクセストークン@<fn>{access-token}は、Messaging APIを使うときに、自分がそのMessaging APIチャネルの持ち主であることを証明する身分証のような役割を果たします。うっかりブログに書いて公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
 
 //footnote[access-token][チャネルアクセストークンにはいくつか種類がありますが、本書では説明を割愛し、この長期のチャネルアクセストークンを使用します。 @<href>{https://developers.line.biz/ja/docs/messaging-api/channel-access-tokens/}]
 
@@ -205,7 +208,7 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 
 === Messaging APIでブロードキャストメッセージを送信する
 
-メッセージを送るだけならウェブサーバは必要ありません。あなたのパソコンがWindowsならWSL、Macならターミナルを起動して、以下のcurlコマンドをまるごとコピーして貼り付け、Enterを押してみてください。3行目の「チャネルアクセストークン」の部分には、いまLINE Developersコンソールでコピーしたばかりの、あなたのMessaging APIチャネルのチャネルアクセストークンを置き換えてください。
+ただメッセージを送るだけならウェブサーバーは必要ありません。以下のcurlコマンドで、3行目の「チャネルアクセストークン」の部分を、いまLINE Developersコンソールでコピーしたばかりの、あなたのMessaging APIチャネルのチャネルアクセストークンに置き換えた上で、あなたのパソコンがWindowsならWSL、Macならターミナルを起動して、以下のcurlコマンドをまるごとコピーして貼り付け、Enterを押してみてください。
 
 //cmd{
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
@@ -226,16 +229,20 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 }'
 //}
 
-LINEでメッセージが届きました！（@<img>{broadcast-message}）
+すると、Messaging APIで送ったメッセージがLINEに届きました！（@<img>{broadcast-message}）
 
-//image[broadcast-message][Messaging APIで送ったメッセージが届いた][scale=0.8]{
+//image[broadcast-message][Messaging APIで送ったメッセージが届いた][scale=0.4]{
 //}
 
-やったぁ！APIが叩けましたね！おめでとうございます。
+やったぁ！Messaging APIが叩けましたね！おめでとうございます。
+
+公開されている「送信可能なスタンプリスト@<fn>{stamp}」を見ながら、packageIdやstickerIdを好きなものに変えて、メッセージを何度か送り直してみましょう。
+
+//footnote[stamp][@<href>{https://developers.line.biz/ja/docs/messaging-api/sticker-list/}]
 
 ===[column] 【コラム】仕事でLINE Botを開発するときにも「個人のLINEアカウント」が必要か？
 
-Messaging APIで開発をするとき、様々な設定をするための管理画面が「LINE Developersコンソール」です。このLINE Developersコンソールにログインするには、LINEアカウントまたはビジネスアカウントのどちらかが必要です。
+Messaging APIを使って開発をするとき、様々な設定をするための管理画面が「LINE Developersコンソール」です。このLINE Developersコンソールにログインするには、LINEアカウントまたはビジネスアカウントのどちらかが必要です。
 
 すでにスマートフォンでLINEを使っていれば、そのLINEアカウントでそのままログインできます。本書では、@<chapref>{article01}でLINE公式アカウントを作ったときのLINEアカウントで、LINE Developersコンソールにログインしています。
 
@@ -247,17 +254,19 @@ Messaging APIで開発をするとき、様々な設定をするための管理�
 
 //footnote[limited][LINE Developersコンソールへのログイン | LINE Developers @<href>{https://developers.line.biz/ja/docs/line-developers-console/login-account/}]
 
-== LINE Botから返信する
+== LINE公式アカウントから返信する
 
 さて、ここまでは「LINE公式アカウントからメッセージを送る」という、LINE公式アカウント起点の話をしてきました。LINE公式アカウント起点というのは、たとえば今月の定休日を知らせるメッセージを送るとか、新商品が出たときにメッセージを送るとかいうように、LINE公式アカウント側が「送りたい！」と思った任意のタイミングでメッセージを送る、ということです。
 
-でも片方が話したいときだけ一方的に話すのでは、それは対話とは言えません。ユーザーが友だち追加してくれたときや、ユーザーが何か質問してきたとき、ユーザーがリッチメニューをタップしたときなど、ユーザー起点のコミュニケーションにきちんと反応できるようになってこそのボットと言えます。
+でも片方が話したいときだけ一方的に話すのでは、それは対話とは言えません。ユーザーが友だち追加してくれたときや、ユーザーが何か質問してきたとき、ユーザーがリッチメニュー@<fn>{rich}をタップしたときなど、ユーザー起点のコミュニケーションにきちんと反応できるようになってこそのチャットボットです。
 
-LINE公式アカウントで、ユーザーからメッセージに応対する方法は、大きく分けて4つあります。
+//footnote[rich][リッチメニューについては、@<hd>{article02|richmenus}で後述します。]
 
-=== 方法1. 固定の自動応答を設定しておいて個別の応対は一切しない
+ではユーザー起点のメッセージにLINE公式アカウントが反応するには、どうしたらいいのでしょう？ユーザーからのメッセージに応対する方法は、大きく分けて4つあります。
 
-1つめは、LINE Official Account Managerで次のような「応答メッセージ」を設定しておいて、個別の応対は一切しないという方法です。（@<img>{auto-res}）
+==={reply} 方法1. 固定の自動応答を設定しておいて個別の応対は一切しない
+
+1つめは、LINE Official Account Managerで次のような固定の「応答メッセージ」を設定しておいて、個別の応対は一切しないという方法です。@<hd>{article01|try-message}で「新刊買います！」をメッセージを送ったときに受け取ったメッセージなので見覚えがありますね。（@<img>{auto-res}）
 
 //image[auto-res][自動の応答メッセージ][scale=0.6]{
 //}
@@ -292,83 +301,52 @@ LINE Official Account Managerや管理アプリには、応答メッセージと
 
 ユーザーが、LINE公式アカウントを友だち追加したり、ブロックしたり、LINE公式アカウントにメッセージを送ったりというように、何かしらの「イベント」を起こすと、LINEプラットフォームからボットサーバーに対して、Webhookが送られます。ボットサーバーのURLは、LINE Developersコンソールの「Webhook URL」で指定できます。
 
-LINEプラットフォームから送られてくるWebhookを受け止めるためには、LINE公式アカウントを運営するあなたが自分でボットサーバを用意する必要があります。
+LINEプラットフォームから送られてくるWebhookを受け止めるためには、LINE公式アカウントを運営するあなたが自分でボットサーバーを用意する必要があります。
 
-通常、私たちはブラウザでショッピングサイトのマイページを開いて、住所を入力して送信ボタンを押すことで、「住所変更をしてくれ！」とウェブサーバにリクエストを投げ、リクエストを受けたウェブサーバが諸々の処理をしてから「はい。住所変更終わりましたよ」と変更完了ページをレスポンスで返してくれたりします。このときは、ウェブサーバ側が「サーバ」で、自分やブラウザ側が「クライアント」です。
+通常、私たちはブラウザでショッピングサイトのマイページを開いて、住所を入力して送信ボタンを押すことで、「住所変更をしてくれ！」とウェブサーバーにリクエストを投げ、リクエストを受けたウェブサーバーが諸々の処理をしてから「はい。住所変更終わりましたよ」と変更完了ページをレスポンスで返してくれたりします。このときは、ウェブサーバー側が「サーバー」で、自分やブラウザ側が「クライアント」です。
 
-しかしWebhookにおいてはこれが逆転します。LINEプラットフォームから「ユーザーが友だちになったよ！Webhook受け取って！」とリクエストが飛んでくるので、あなたが用意したボットサーバーでそれを受け取って、「ありがとう！Webhookちゃんと受け取ったよ！ステータスコード200！」というレスポンスを返さなければいけません。Webhookを投げてくるLINEプラットフォームが「クライアント」で、あなたの用意するボットサーバーが「サーバ」なのです。
+しかしWebhookにおいてはこれが逆転します。LINEプラットフォームから「ユーザーが友だちになったよ！Webhook受け取って！」とリクエストが飛んでくるので、あなたが用意したボットサーバーでそれを受け取って、「ありがとう！Webhookちゃんと受け取ったよ！ステータスコード200！」というレスポンスを返さなければいけません。Webhookを投げてくるLINEプラットフォームが「クライアント」で、あなたの用意するボットサーバーが「サーバー」なのです。
 
-私たちはクライアントになった経験はよくありますが、サーバの立場になる経験はあまりないのでなんだか不思議な感じがしますが、ことWebhookにおいては、あなたは「ボットサーバを用意する側」なのです。
+私たちはクライアントになった経験はよくありますが、サーバーの立場になる経験はあまりないのでなんだか不思議な感じがしますが、ことWebhookにおいては、あなたは「ボットサーバーを用意する側」であり、「レスポンスを返す側」なのです。
 
 ===[column] 【コラム】LINE公式アカウントの「既読」はいつ付くのか？
 
 普通の友だちとのLINEのメッセージは、相手がトークルームを開いてメッセージを見ることで「既読」がつきます。ではLINE公式アカウントの場合は、「既読」はいつ付くのでしょう？
 
-LINE Official Account Managerや管理アプリの応答設定からチャットをオンにしていると、中の人がチャットの画面でメッセージを確認するまでは、LINE公式アカウント側でメッセージを読んだことを示す「既読」マークがつきません。逆にチャットをオフにしていると、メッセージが送られた瞬間に自動的に「既読」がつきます。
+LINE Official Account Managerや管理アプリの応答設定に「チャット」と「Webhook」という設定項目があります。この「チャット」をオンにしていると、中の人がチャットの画面でメッセージを確認するまでは、LINE公式アカウント側でメッセージを読んだことを示す「既読」マークがつきません。逆にこの「チャット」をオフにしていると、メッセージが送られた瞬間に自動的に「既読」がつきます。
 
-Messaging APIを使って自動応答しているのに、なぜか「既読」マークが付かない！というときは、うっかり応答設定でチャットをオンにしないか確認してみてください。応答設定で「ボットだけをオンにしている」だと自動で既読が付きますが、「チャットだけをオンにしている」もしくは「チャットとボットの両方をオンにしている」状態だと、チャットの画面でメッセージを確認するまで既読が付きません。
+Messaging APIを使って自動応答しているのに、なぜか「既読」マークが付かない！というときは、うっかり応答設定で「チャット」をオンにしないか確認してみてください。応答設定で「Webhookだけをオンにしている」だと自動で既読が付きますが、「チャットだけをオンにしている」もしくは「チャットとWebhookの両方をオンにしている」状態だと、チャットの画面でメッセージを確認するまで既読が付きません。
 
-チャットもボットもオンにしたいけど、チャット画面で確認するんじゃなくて自動で既読を付けたい、という場合は「既読API」というものを叩くことで既読が付けられますが、残念ながら既読APIは法人ユーザー限定のオプション機能です。
-
- * @<href>{https://developers.line.biz/ja/docs/partner-docs/mark-as-read/}
+チャットもWebhookも両方をオンにしたいけど、チャット画面で確認するんじゃなくて自動で既読を付けたい、という場合は「既読API@<fn>{mark-as-read}」というAPIを使うことで既読が付けられますが、残念ながら既読APIは法人ユーザー限定のオプション機能です。
 
 ===[/column]
 
-=== ボットサーバーを作ってみよう
+//footnote[mark-as-read][既読API | LINE Developers @<href>{https://developers.line.biz/ja/docs/partner-docs/mark-as-read/}]
 
-今回はWebhookを受け取って、200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS Lambdaを使用します。
+== ボットサーバーを作ってみよう
 
-なおAWSアカウントの作成方法は、はじめようシリーズ3部作の「DNSをはじめよう」（@<img>{flow}）@<fn>{booth}で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」で詳しく紹介しています。まだAWSのアカウントをお持ちでない場合は、そちらを参考にしてください。
+今回はWebhookを受け取って、200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS Lambda@<fn>{aws-lambda}を使用します。
 
-//footnote[booth][@<href>{https://mochikoastech.booth.pm/}]
+//footnote[aws-lambda][AWSアカウントの作成方法は「DNSをはじめよう」で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」で詳しく紹介しています。もしまだAWSのアカウントをお持ちでない場合は、そちらを参考にしてください。 @<href>{https://mochikoastech.booth.pm/}]
 
-//image[flow][はじめようシリーズ3部作][scale=0.8]{
-//}
+=== AWS LambdaとAPI Gatewayでボットサーバーを作る
 
-AWS LambdaとAPI Gatewayを組み合わせて、ボットサーバーを用意し、そのURLをWebhook URLとして登録します。
+AWS LambdaとAPI Gatewayを組み合わせて、ボットサーバーを用意し、そのURLをWebhook URLとして登録します。（要追記）
 
-=== エラーの統計情報
+Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、Ruby、Python、Node.jsで用意されています。今回はPythonのSDKを使ってコードを書いていきます。
 
-ボットサーバーでWebhookを受け取って、きちんとステータスコード200が返せなかった場合、エラーの統計情報でそのログが確認できます。
+ * @<href>{https://github.com/line/line-bot-sdk-python}
 
- * @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}
-
-
-=== ボットサーバーがWebhookを受け取れなかったときの再送機能
-
-たとえばLINE公式アカウントが急に有名になり、一気に友だちが増えて、メッセージが大量に送られてきたとします。急なアクセス集中でサイトが落ちるように、LINEプラットフォームからWebhookが飛んでくるリクエストによって、ボットサーバーが過負荷になって応答できなくなってしまったらどうなるのでしょうか。
-
-そんなときのために「Webhookの再送@<fn>{retry-webhook}」という機能があります。Webhookの再送はデフォルトではオフになっていますが、LINE Developersコンソールでオンにすることで、ボットサーバーがWebhookを受け取れなかったときに再送してくれるようになります。
-
-//footnote[retry-webhook][受け取りに失敗したWebhookを再送する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#webhook-redelivery}]
-
-どこで「Webhookを受け取れなかった」と判断されるのかというと、LINEプラットフォームから見て、「Webhookを受け取ってー！」というリクエストに対して、きちんとステータスコード200が返ってこなければ「Webhookを受け取れなかった」と判断されます。
-
-ただし、ボットサーバーから見て「Webhookを受け取ってー！」というリクエストに対して、きちんとステータスコード200を返したつもりでも、ボットサーバーからLINEプラットフォームまでのネットワーク経路上で何か問題があって、きちんとレスポンスがLINEプラットフォームまで到達しないケースは考えられます。
-
-その場合、Webhookの再送をオンにしたことで次のようなトラブルが考えられます。
-
- 1. ユーザーが『購入する』というメッセージを送信する
- 1. LINEプラットフォームからボットサーバーに『購入する』というメッセージのWebhookが飛ぶ
- 1. ボットサーバーでWebhookを受け取ってステータスコード200を返し、商品購入処理を行った上でユーザーに「購入完了しました！」という応答メッセージを送る
- 1. しかし何らかの理由でステータスコード200のレスポンスがLINEプラットフォームに到達しない
- 1. LINEプラットフォームは「Webhookを受け取れなかった」と判断して、『購入する』というメッセージのWebhookを再送する
- 1. ボットサーバーでWebhookを受け取ってステータスコード200を返し、商品購入処理を行った上でユーザーに「購入完了しました！」という応答メッセージを送る
- 1. ユーザーは一度『購入する』と送っただけなのに、商品が2つ購入されてしまい、購入完了メッセージも2度届いて驚く
-
-これを防ぐためには、商品購入処理を行う際に、Webhookのイベントごとに一意な値であるwebhookEventIdを確認して、「既に購入処理を行ったWebhookイベントと同一のイベントではないか？」を確認する必要があります。
-
-Webhookの再送は便利な機能ですが、このように意図しない再送が行われたときのことを考えた重複チェックの処理がなければ、迂闊にオンにするべきではありません。
-
-===[column] 【コラム】Webhookへのレスポンスが先？応答メッセージが先？
-
-Webhookを受け取って、その内容に応じた処理や応答メッセージの送信などをしてからステータスコード200を返す、という順番はお勧めしません。
-
-なぜなら間に挟まる処理や応答メッセージ送信などに時間がかかった場合、レスポンスを返す前にWebhookのリクエストがタイムアウトしてしまう可能性があるためです。
-
-なんとなく先に色々片付けてからレスポンスを返したい気持ちは分かりますが、郵便局員が郵便物を持って来てくれたとき、わざわざ玄関前で待たせて封筒を開けて中身を読んで、読み終わってから受領の判子を押すのはおかしいよね、と考えると納得しやすいのではないでしょうか。先ずは受領の判子を押して郵便局員を帰らせてあげて、手紙を読んだり、返事を書いたりはそのあとでやりましょう。
-
-===[/column]
+ 1. mkdir python
+ 1. cd python
+ 1. pip install line-bot-sdk -t . --no-user
+ 1. SDKのコードが詰まったpythonディレクトリをzipファイルに圧縮する
+ 1. AWS Lambdaで「レイヤーを作成」
+ 1. zipファイルを選択
+ 1. 互換性のあるランタイムでPython 3.9を選択する
+ 1. x86_64にチェックを入れる
+ 1. カスタムレイヤーで選ぶ
+ 1. APIタイプはHTTP APIでAPI gatewayを作る
 
 ===[column] 【コラム】これは本当にLINEプラットフォームから来たWebhook？
 
@@ -378,7 +356,7 @@ Webhookを受け取って、その内容に応じた処理や応答メッセー�
 
 アクセス元のIPアドレスが分かれば、IPアドレス制限をかけることで、LINEプラットフォーム以外からのアクセスを遮断できますが、残念ながらLINEプラットフォームはIPアドレスのレンジを開示していません。@<fn>{ip-addr}代わりに、署名の検証を行いましょう。
 
-LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず「x-line-signature」という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーのx-line-signatureの署名の一致を確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
+LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず「x-line-signature」という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として扱い、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーのx-line-signatureの署名の一致を確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
 
 この検証をしないで、無条件に「テキストメッセージのWebhookイベントが届いたらユーザーに返信する」のような処理をしていると、ボットサーバーに偽のWebhookを投げ続けることで、LINE Botを介して特定のユーザーに大量のメッセージを送りつける攻撃が可能になってしまいます。
 
@@ -389,11 +367,65 @@ LINEプラットフォームから届くWebhookには、そのリクエストヘ
 //footnote[ip-addr][Webook | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhooks}]
 //footnote[signature][署名を検証する | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#signature-validation}]
 
-== メッセージの種類
+=== ボットサーバーをWebhook URLに登録する
+
+再びLINE Developersコンソールを開いて、作成したボットサーバーのURLをWebhook URLに登録します。（要追記）
+
+=== ユーザーのメッセージをオウム返しする
+
+それではLINEでLINE公式アカウントにメッセージを送って、そのメッセージがオウム返しされて戻ってくるか、確認してみましょう。（要追記）
+
+===[column] 【コラム】Webhookへのレスポンスが先？応答メッセージが先？
+
+ボットサーバーでWebhookを受け取った際、Webhookのその内容に応じた処理や応答メッセージの送信などをしてからステータスコード200を返す、という順番はお勧めしません。
+
+なぜなら間に挟まる処理や応答メッセージ送信などに時間がかかった場合、レスポンスを返す前にWebhookのリクエストがタイムアウトしてしまう可能性があるためです。
+
+なんとなく先に色々片付けてからレスポンスを返したい気持ちは分かりますが、郵便局員が郵便物を持って来てくれたとき、わざわざ玄関前で待たせて封筒を開けて中身を読んで、読み終わってから受領の判子を押すのはおかしいよね、と考えると納得しやすいのではないでしょうか。先ずは受領の判子を押して郵便局員を帰らせてあげて、手紙を読んだり、返事を書いたりはそのあとでやりましょう。
+
+===[/column]
+
+=== エラーの統計情報
+
+ボットサーバーでWebhookを受け取って、きちんとステータスコード200が返せなかった場合、エラーの統計情報でそのログが確認できます。（要追記）
+
+ * @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}
+
+=== ボットサーバーがWebhookを受け取れなかったときの再送機能
+
+たとえばLINE公式アカウントが急に有名になり、一気に友だちが増えて、メッセージが大量に送られてきたとします。急なアクセス集中でサイトが落ちるように、LINEプラットフォーム飛んでくるWebhookのリクエストによって、ボットサーバーが過負荷になって応答できなくなってしまったらどうなるのでしょうか。
+
+そんなときのために「Webhookの再送@<fn>{retry-webhook}」という機能があります。Webhookの再送はデフォルトではオフになっていますが、LINE Developersコンソールでオンにすることで、ボットサーバーがWebhookを受け取れなかったときに再送してくれるようになります。
+
+//footnote[retry-webhook][受け取りに失敗したWebhookを再送する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#webhook-redelivery}]
+
+どこで「Webhookを受け取れなかった」と判断されるのかというと、LINEプラットフォームから見て、「Webhookを受け取ってー！」というリクエストに対してきちんとステータスコード200が返ってこなければ「ボットサーバーはWebhookを受け取れなかった」と判断されます。
+
+とても便利に見えるWebhookの再送機能ですが、ボットサーバーから見て「Webhookを受け取ってー！」というリクエストに対して、きちんとステータスコード200を返したつもりでも、ボットサーバーからLINEプラットフォームまでのネットワーク経路上で何か問題があって、きちんとレスポンスがLINEプラットフォームまで到達しないケースは考えられます。その場合、Webhookの再送をオンにしたことで次のようなトラブルが考えられます。
+
+ 1. ユーザーが『購入する』というメッセージを送信する
+ 1. LINEプラットフォームからボットサーバーに『購入する』というメッセージのWebhookが飛ぶ
+ 1. ボットサーバーでWebhookを受け取ってステータスコード200を返し、商品購入処理を行った上でユーザーに「購入完了しました！」という応答メッセージを送る
+ 1. しかし何らかの理由でステータスコード200のレスポンスがLINEプラットフォームに到達しない
+ 1. LINEプラットフォームは「ボットサーバーがWebhookを受け取れなかった」と判断して、『購入する』というメッセージのWebhookを再送する
+ 1. ボットサーバーでWebhookを受け取ってステータスコード200を返し、商品購入処理を行った上でユーザーに「購入完了しました！」という応答メッセージを送る
+ 1. ユーザーは一度『購入する』と送っただけなのに、商品が2つ購入されてしまい、購入完了メッセージも2度届いて驚く
+
+これを防ぐためには、ボットサーバー側で商品購入処理を行う際に、Webhookのイベントごとに一意な値であるwebhookEventIdを確認して、「既に購入処理を行ったWebhookイベントと同一のイベントではないか？」を確認する必要があります。
+
+Webhookの再送は便利な機能ですが、このように意図しない再送が行われたときのことを考えた重複チェックの処理がなければ、迂闊にオンにするべきではありません。
 
 ==={greeting} 友だち追加されたときのあいさつメッセージ
 
-==={reply} メッセージに自動応答する応答メッセージ
+友だち追加されたときに、自動で任意のメッセージを送ることができる「あいさつメッセージ」は、LINE Official Account Managerの［応答設定］でオン、オフの設定ができます。Webhookに対するボットサーバーからの応答と、このあいさつメッセージを併用することも可能です。
+
+Webhookのフォローイベント@<fn>{follow}を用いると、「あいさつメッセージ」と同等の処理をボットサーバーで実現できます。
+
+//footnote[follow][フォローイベント | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#follow-event}]
+
+=== ユーザーIDを指定して特定の人に送る
+
+Messaging APIでメッセージを送るとき、いちばん簡単なのは友だち全員にメッセージを一斉配信するブロードキャストメッセージです。しかしユーザーのユーザーIDが取得できたら、そのユーザーIDを指定して、特定の人にだけメッセージを送ることも可能です。特定のひとりにだけ送りたいときはプッシュメッセージ、特定の数人にまとめて送りたいときはマルチキャストメッセージで送れます。（要追記）
 
 ===[column] 【コラム】開発チームだけにメッセージのテスト配信がしたい
 
@@ -409,7 +441,15 @@ LINEプラットフォームから届くWebhookには、そのリクエストヘ
 
 ===[/column]
 
-=== 友だち全員にメッセージを一斉配信する
+=== メッセージの配信対象を属性で絞り込む
+
+ナローキャストメッセージで、性別や年齢、地域、友だちになってからの期間といった属性情報を指定して送ることも可能です。（要追記）
+
+=== メッセージ送信元のアイコンと表示名を変更する
+
+メッセージを送るときに、送信元のアイコンと表示名を変更して送ることができます。たとえばテーマパークのLINE公式アカウントで、特定のキャラクターにちなんだイベントを告知するときだけ、メッセージの送信元をそのキャラクターのアイコンと名前にする、といった使い方が可能です。（要追記）
+
+ * @<href>{https://developers.line.biz/ja/docs/messaging-api/icon-nickname-switch/}
 
 ===[column] 【コラム】URLを送る前にOGPの見た目を事前に確認したり、キャッシュを消したりしたい
 
@@ -435,49 +475,18 @@ OGPタグの書き方については、LINE Developersサイトの「トーク�
 //footnote[ogp][OGPはOpen Graph Protcolの略です。HTMLにメタデータとして「og:image」のようなOGPタグを書いておくことで、TwitterやLINEなどでそのURLを共有したときに、URLそのままではなく対象ページのタイトルや概要、画像などがカードのように表示されます。]
 //footnote[card-validator][TwitterのCard Validatorとか、Facebookのシェアデバッガーみたいなものですね。Card Validatorは気づいたらプレビュー確認機能がなくなっていたけれど。 @<href>{https://cards-dev.twitter.com/validator} @<href>{https://developers.facebook.com/tools/debug/}]
 
-=== 特定の属性を指定してメッセージを送る
+=== Flex Messageで見た目にこだわったメッセージを送る
 
-=== ユーザーIDを指定して特定の人に送る
+レイアウトを自由にカスタマイズできるFlex Messageなら、見た目にこだわったメッセージが送れます。（要追記）
 
-== アカウントの管理方法
+そしてFlex Message Simulator（ログイン必須）を使えば、JSONのコードを自分で書かなくてもFlex Messageが作れます。
 
-LINE Official Account ManagerとLINE Developersコンソールでは、アカウントの権限管理が異なります。
+ * Flex Message Simulator
+ ** @<href>{https://developers.line.biz/flex-simulator/}
 
-=== 複数人で開発するとき
+ただしFlex Message Simulatorで出力されるJSONは、messages直下のFlex Message全体じゃなくて、コンテナ（contents以下）なので注意が必要です。
 
-=== メッセージの配信対象を属性で絞り込む
-
-== LINEキャンパスで資格を取ってみよう
-
-== PC版のLINEを使おう
-
-== ツール編
-
-=== LINE Official Account Managerで運用する
-
-=== LINE公式アカウント管理アプリで運用する
-
-=== Messaging APIで運用する
-
-=== 非公式の管理画面で運用する
-
-=== メッセージ送信元のアイコンと表示名を変更する
-
-=== 無料通数を超えたら自動で追加課金されるのか
-
-== メッセージをWebhookで受け取る
-
-=== 画像などのメディアファイルを指定して取得する
-
-== メッセージ以外のイベントをWebhookで受け取る
-
-=== 友だちになったとき
-
-=== ブロックされたとき
-
-=== ユーザーが何かをタップしたとき
-
-== リッチメニュー
+=={richmenus} リッチメニュー
 
 LINE公式アカウントと友だちになると、トーク画面の下部にこんなメニューが表示されます。テキストだけでなく、画像でできた贅沢な多彩なメニュー…つまりリッチなメニュー…リッチなメニューなので…リッチメニュー！そう、これがリッチメニューです。わぁ、リッチ！（@<img>{richmenu}）
 
@@ -488,7 +497,7 @@ LINE公式アカウントと友だちになると、トーク画面の下部に�
 
 リッチメニューの実態は1枚の画像であり、画像内の各領域にそれぞれリンクを設定することで、公式サイトや予約ページ、特定の機能などにユーザーを誘導できます。
 
-== リッチメニュープレイグラウンドでリッチメニューを体験してみる
+=== リッチメニュープレイグラウンドでリッチメニューを体験してみる
 
 リッチメニューの様々な機能は、文字で説明するより体験してみるのが一番分かりやすいです。公式で提供されているリッチメニュープレイグラウンドという、「リッチメニューを体験するためのLINE公式アカウント」と友だちになってみましょう。（@<img>{richmenu-playground-qrcode}）
 
@@ -501,7 +510,7 @@ LINE公式アカウントと友だちになると、トーク画面の下部に�
 
 たとえば「再配達の申し込みをしたかったら、LINEで『再配達』というメッセージを送ってね」のように、ユーザーに手入力を促さなくても、リッチメニューに「再配達の申し込み」というボタンを用意して、そのボタンの領域をタップしたら「再配達」というメッセージが自動送信されるよう、対象の領域にメッセージアクションを設定しておけばいいのです。
 
-== リッチメニューの画像を作る
+=== リッチメニューの画像を作る
 
 LINE Official Account Managerでリッチメニューの作成画面を開くと、「デザインガイド」というボタンがあり、そこからリッチメニューのテンプレート画像がダウンロードできます。本書ではこのテンプレートをそのまま使ってリッチメニューを設定してみます。
 
@@ -525,114 +534,51 @@ LINE Official Account Managerでリッチメニューの作成画面を開くと
  2. そのリッチメニューに画像をアップロードする
  3. それをデフォルトのリッチメニューとして設定する
 
-== リッチメニューの設定の種類
+=== リッチメニューの設定方法と表示の優先順位
 
-== 3つの設定方法と表示の優先順位
+リッチメニューには以下の3つがあり、複数設定されていた場合は、上から順に優先的に表示されます。
 
-=== OA Managerで設定したリッチメニュー
+ 1. Messaging APIで設定するユーザー単位のリッチメニュー
+ 1. Messaging APIで設定するデフォルトのリッチメニュー
+ 1. LINE Official Account Managerで設定するデフォルトのリッチメニュー
 
-=== Messaging APIで設定したリッチメニュー
+== Messaging APIをもっと楽しむために
 
-=== ユーザー単位のリッチメニュー
+ここまでMessaging APIを使ってLINE Botを作ってきましたが、はじめてのチャットボット作りは楽しんでもらえましたか？
 
-== どんな見た目のメッセージが送れるのか
+最後に、一歩踏み出したあなたがこれからMessaging APIをもっと楽しむために、「この先にはこんな道やあんな道がありますよ」という、さまざまな道のご紹介をしたいと思います。
 
-=== テキストメッセージ
+=== Messaging API以外のプロダクトとの組み合わせ
 
-=== スタンプメッセージ
+LINE APIには、Messaging APIの他に、LINEログインやLIFFやLINEミニアプリ、LINE Social Pluginsなどさまざまなプロダクトがあります。Messaging API単体でできることが把握できたら、他のプロダクトと組み合わせるとさらにどんなことができるのか、LINE Developersサイトで見てみましょう。
 
-=== 画像メッセージ
+ * LINE Developersサイト
+ ** @<href>{https://developers.line.biz/}
 
-LINE Creative Labを使うと、画像メッセージとして送るような素敵なクリエイティブが簡単に作れます。
+=== LINEキャンパスで資格を取ってみよう
+
+「Messaging APIの前提知識として、もう少しLINE公式アカウントについて学びたい」という場合は総合学習プラットフォーム「LINEキャンパス」がお勧めです。「LINE公式アカウント Basic」と「LINE公式アカウント Advanced」という認定資格の取得を目指して、学習コースや資格認定コースを無料で受講してみましょう。
+
+ * LINEキャンパス
+ ** @<href>{https://campus.line.biz/}
+
+=== LINE Creative Labを使おう
+
+LINE Creative Labを使うと、画像メッセージとして送れる素材が簡単に作れます。
 
  * LINE Creative Lab
  ** @<href>{https://creativelab.line.biz/}
 
-==== 送れるスタンプの種類
+=== PC版のLINEを使おう
 
-==== 自社のスタンプを使う方法
+スマートフォンのLINEと同じアカウントで、PC版のLINEも使えます。メッセージの確認などはPC版のLINEでやると便利です。ただしリッチメニューなど、PC版のLINEではサポートされていない機能も一部ありますのでご注意ください。
 
-=== Flex Message
+ * パソコンでLINEを利用する｜LINEみんなの使い方ガイド
+ ** @<href>{https://guide.line.me/ja/services/pc-line.html}
 
-=== Flex Message Simulatorは便利
+=== LINE Developers communityに参加しよう
 
-でもFlex Message Simulatorで出力されるJSONは、messages直下のFlex Message全体じゃなくて、コンテナ（contents以下）なので要注意です。あとログインが必要です。
+LINE APIを活用している有志によって、LINE Developers communityのイベントが定期的に開催されています。LINE API Expertとして認定されたみなさんが、最新機能や開発手法をオンラインで教えてくれるので、ひとりで悩まずにコミュニティに参加してみるのがお勧めです。LINE Developers communityのサイトにはユーザー同士のQ&Aもあり、開発でつまづいたときは質問を投稿したり、過去の質問からヒントを探したりできます。
 
- * @<href>{https://developers.line.biz/flex-simulator/}
-
-== やりとりする場所
-
-=== ユーザーとのトーク
-
-=== グループトーク
-
-=== 複数人トーク
-
-== Messaging API以外のプロダクトとの組み合わせ
-
-=== LINE Social Plugins
-
-==== 自分のサイトに「友だち追加」ボタンを設置してみよう
-
-=== LINE VOOM
-
-=== LINEログイン
-
-=== LIFFやLINEミニアプリ
-
-=== プロバイダーページ
-
-== 開発を始める
-
-== Messaging API SDKを使おう
-
-=== Java
-
-=== PHP
-
-=== Go
-
-=== Perl
-
-=== Ruby
-
-=== Python
-
- * @<href>{https://github.com/line/line-bot-sdk-python}
-
- 1. mkdir python
- 1. cd python
- 1. pip install line-bot-sdk -t . --no-user
- 1. SDKのコードが詰まったpythonディレクトリをzipファイルに圧縮する
- 1. AWS Lambdaで「レイヤーを作成」
- 1. zipファイルを選択
- 1. 互換性のあるランタイムでPython 3.9を選択する
- 1. x86_64にチェックを入れる
- 1. カスタムレイヤーで選ぶ
- 1. APIタイプはHTTP APIでAPI gateway作る
-
-ディレクトリをline-bot-sdk-pythonにしてたらこれでひっかかった
- * @<href>{https://aws.amazon.com/jp/premiumsupport/knowledge-center/lambda-import-module-error-python/}
-
- 1. OpenAIでアカウント作る
- 1. SECRET_KEYを取得する
- 1. mkdir python
- 1. cd python
- 1. pip install openai -t . --no-user
-
-ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
-line-bot-sdk 2.4.1 requires aiohttp==3.8.3, but you have aiohttp 3.8.4 which is incompatible.
-line-bot-sdk 2.4.1 requires requests==2.28.1, but you have requests 2.28.2 which is incompatible.
-Successfully installed aiohttp-3.8.4 aiosignal-1.3.1 async-timeout-4.0.2 attrs-22.2.0 certifi-2022.12.7 charset-normalizer-3.1.0 colorama-0.4.6 frozenlist-1.3.3 idna-3.4 multidict-6.0.4 openai-0.27.2 requests-2.28.2 tqdm-4.65.0 urllib3-1.26.15 yar
-
-pip check
-No broken requirements found.
-なので無視してそのまま行く
-
-
-
-=== Node.js
-
-== コミュニティに参加しよう
-
-=== LINE Developers community
+ * LINE Developers community
+ ** @<href>{https://www.line-community.me/}
