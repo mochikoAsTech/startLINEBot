@@ -32,9 +32,17 @@ Messaging APIの「API」は、Application Programming Interfaceの略です。�
 
 //footnote[restful][RESTはREpresentational State Transferの略。RESTアーキテクチャスタイルという、ルールのようなものに従って作られたAPIがREST APIやRESTful APIと呼ばれます。]
 
-通常、私たちはブラウザでURLを入力したり、リンクをクリックしたりすることで「このウェブページを見せてくれ！」とサーバーにリクエストを投げ、リクエストを受けたウェブサーバーが「はい、どうぞ」とウェブページをレスポンスで返してくれます。REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンドや、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。
+通常、私たちはブラウザでURLを入力したり、リンクをクリックしたりすることで「このウェブページを見せてくれ！」とサーバーにリクエストを投げ、リクエストを受けたウェブサーバーが「はい、どうぞ」とウェブページをレスポンスで返してくれます。（@<img>{request-and-response}）
+
+//image[request-and-response][ブラウザでウェブページを見るときのリクエストとレスポンス][scale=0.8]{
+//}
+
+REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンドや、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。（@<img>{api-request-and-response}）
 
 //footnote[postman][Postmanは、GUIの画面でREST APIを叩ける便利なツール。 @<href>{https://www.postman.com/}]
+
+//image[api-request-and-response][REST APIをたたくときのリクエストとレスポンス][scale=0.8]{
+//}
 
 前述のとおり、APIは広義には「情報をやりとりする窓口」であり、様々なものを内包していますが、本書においてはただ「API」と呼んだら、それはREST APIのことを指していると思ってください。
 
@@ -52,7 +60,10 @@ Messaging APIを使用することで、開発者はユーザーがLINE公式ア
 
 == LINE Official Account ManagerでMessaging APIチャネルを作る
 
-LINE公式アカウントとMessaging APIチャネルは、表と裏のような存在です。LINE公式アカウントを単体で作って、LINE Official Account Managerや管理アプリを使って中の人が頑張ることもできますが、裏側にMessaging APIチャネルを紐付けて、ボットが応答するようにすることも可能です。
+LINE公式アカウントとMessaging APIチャネルは、表と裏のような存在です。LINE公式アカウントを単体で作って、LINE Official Account Managerや管理アプリを使って中の人が頑張ることもできますが、裏側にMessaging APIチャネルを紐付けて、ボットが応答するようにすることも可能です。（@<img>{messaging-api-channel}）
+
+//image[messaging-api-channel][LINE公式アカウントとMessaging APIチャネルは表と裏][scale=0.8]{
+//}
 
 あなたはさっき、LINEでLINE公式アカウントを作ったので、いまは表だけで裏に控えるMessaging APIチャネルが存在していない状態です。
 
@@ -514,7 +525,7 @@ LINE公式アカウントと友だちになると、トーク画面の下部に�
 
 LINE Official Account Managerでリッチメニューの作成画面を開くと、「デザインガイド」というボタンがあり、そこからリッチメニューのテンプレート画像がダウンロードできます。本書ではこのテンプレートをそのまま使ってリッチメニューを設定してみます。
 
-リッチメニューの画像は、LINE Official Account Managerで作成することも可能ですし、Canvaなどで自作しても構いません。サイズの制約は横幅が800px以上2500px以下、高さが250px以上となっています。参考までに3マスが2段重ねで6マス分のテンプレート画像だと横幅が2500px、高さが1686pxで作られていました。
+リッチメニューの画像は、LINE Official Account Managerで作成することも可能ですし、Canvaなどで自作しても構いません。サイズの制約は横幅が800px以上2500px以下、高さが250px以上となっています。参考までに3マスが2段重ねで6マス分のテンプレート画像だと横幅が2500px、高さが1686pxで作られていました。（要追記）
 
 === LINE Official Account ManagerとMessaging APIでのリッチメニューの制約の違い
 
