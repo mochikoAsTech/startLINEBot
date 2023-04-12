@@ -362,29 +362,31 @@ Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、
  1. x86_64にチェックを入れる
  1. カスタムレイヤーで選ぶ
  1. APIタイプはHTTP APIでAPI gatewayを作る
+ 1. Lambdaの設定>一般設定からタイムアウトを1分0秒に変更する
 
 //listnum[source-code][AWS Lambdaで動かすpythonのコード]{
 import json
+import logging
+import openai
 import os
 import sys
-import logging
 
 from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from linebot.exceptions import LineBotApiError, InvalidSignatureError
 
-# ERROR以上のログメッセージを拾うように設定する
+# INFOレベル以上のログメッセージを拾うように設定する
 logger = logging.getLogger()
-logger.setLevel(logging.ERROR)
-# 受け取ったWebhookのJSONを目視確認したいときは、INFO以上のログメッセージを拾うようにする
-# logger.setLevel(logging.INFO)
+logger.setLevel(logging.INFO)
 
-# 環境変数からチャネルアクセストークンとチャネルシークレットを取得する
+# 環境変数からMessaging APIのチャネルアクセストークンとチャネルシークレットを取得する
 CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
-REPLY_URL = 'https://api.line.me/v2/bot/message/reply'
 
-# チャネルアクセストークンとチャネルシークレットが環境変数に登録されていないとエラー
+# 環境変数からOpenAI APIのシークレットキーを取得する
+openai.api_key = os.getenv('SECRET_KEY')
+
+# それぞれ環境変数に登録されていないとエラー
 if CHANNEL_SECRET is None:
     logger.error(
         'LINE_CHANNEL_SECRET is not defined as environmental variables.')
@@ -393,53 +395,68 @@ if CHANNEL_ACCESS_TOKEN is None:
     logger.error(
         'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
     sys.exit(1)
+if openai.api_key is None:
+    logger.error(
+        'Open API key is not defined as environmental variables.')
+    sys.exit(1)
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(CHANNEL_SECRET)
+webhook_handler = WebhookHandler(CHANNEL_SECRET)
 
-response = {
-    'statusCode': 200,
-    'body': json.dumps('Hello from Lambda!')
-}
+# 質問に回答をする処理
 
-error_response = {
-    'statusCode': 500,
-    'body': json.dumps('Only webhooks from the LINE Platform will be accepted.')
-}
 
-# LINE Messaging APIのWebhookからのリクエストを処理する
+@webhook_handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+
+    # ChatGPTに質問を投げて回答を取得する
+    question = event.message.text
+    answer_response = openai.ChatCompletion.create(
+        model='gpt-3.5-turbo',
+        messages=[
+            {'role': 'user', 'content': question},
+        ],
+        stop=['。']
+    )
+    answer = answer_response["choices"][0]["message"]["content"]
+    # 受け取った回答のJSONを目視確認できるようにINFOでログに吐く
+    logger.info(answer)
+
+    # 応答トークンを使って回答を応答メッセージで送る
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text=answer))
+
+# LINE Messaging APIからのWebhookを処理する
 
 
 def lambda_handler(event, context):
 
     # リクエストヘッダーにx-line-signatureがあることを確認
-    if "x-line-signature" in event['headers']:
+    if 'x-line-signature' in event['headers']:
         signature = event['headers']['x-line-signature']
 
     body = event['body']
     # 受け取ったWebhookのJSONを目視確認できるようにINFOでログに吐く
     logger.info(body)
 
-    # オウム返しする処理
-    @handler.add(MessageEvent, message=TextMessage)
-    def handle_message(event):
-        # 応答トークンを使って応答メッセージを送る
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text=event.message.text))
-
     try:
-        handler.handle(body, signature)
+        webhook_handler.handle(body, signature)
     except InvalidSignatureError:
-        # 署名を検証した結果、飛んできたのがLINEプラットフォームからのWebhookでなければ500を返す
-        return error_response
+        # 署名を検証した結果、飛んできたのがLINEプラットフォームからのWebhookでなければ400を返す
+        return {
+            'statusCode': 400,
+            'body': json.dumps('Only webhooks from the LINE Platform will be accepted.')
+        }
     except LineBotApiError as e:
         # 応答メッセージを送ろうとしたがLINEプラットフォームからエラーが返ってきたらエラーを吐く
-        logger.ERROR("Got exception from LINE Messaging API: %s\n" % e.message)
+        logger.error('Got exception from LINE Messaging API: %s\n' % e.message)
         for m in e.error.details:
-            logger.ERROR("  %s: %s" % (m.property, m.message))
-        return error_response
+            logger.error('  %s: %s' % (m.property, m.message))
 
-    return response
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
 //}
 
 ===[column] 【コラム】これは本当にLINEプラットフォームから来たWebhook？
