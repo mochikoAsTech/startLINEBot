@@ -8,7 +8,7 @@ LINE公式アカウントの「中の人」を、人間の代わりにボット�
 
 @<chapref>{article01}ではLINE公式アカウントを作り、管理アプリを使って友だちにメッセージを送信しました。LINE公式アカウント管理アプリやLINE Official Account Managerには色んな機能があるので、それらを使ってお店やサービスのLINE公式アカウントを運用していくことも可能です。
 
-ですが、本書ではLINE公式アカウントを手作業で運用していきたい訳ではなく、「中の人」を人間からボットにすることで、LINE公式アカウントをチャットボットにしたいのです。
+ですが、本書ではLINE公式アカウントを手作業で運用していきたい訳ではなく、「中の人」を人間からボットに変えて、LINE公式アカウントを自動で応答するチャットボットにしたいのです。
 
 === チャットボットとは
 
@@ -26,9 +26,9 @@ LINE公式アカウントの「中の人」を、人間の代わりにボット�
 
 === APIとは
 
-さて、Messaging APIとは何か、という話をする前に、そもそも「API」とは何か、という話をさせてください。
+さて、Messaging APIとは何か、という話をする前に、そもそも「API」とは何か、という説明をさせてください。
 
-Messaging APIの「API」は、Application Programming Interfaceの略です。名前のとおり、別々のアプリケーションがお互いに情報をやりとりするときの接点となる、窓口のようなものだと思ってください。そして本来、APIはとても広い意味をもつ言葉ですが、このMessaging APIにおけるAPIは「REST API」@<fn>{restful}のことだと思われます。
+Messaging APIの「API」は、Application Programming Interfaceの略です。名前のとおり、別々のアプリケーションがお互いに情報をやりとりするときの接点となる、窓口のようなものだと思ってください。そして本来、APIはとても広い意味をもつ言葉ですが、このMessaging APIにおけるAPIとは「REST API」@<fn>{restful}のことだと思われます。
 
 //footnote[restful][RESTはREpresentational State Transferの略。RESTアーキテクチャスタイルという、ルールのようなものに従って作られたAPIがREST APIやRESTful APIと呼ばれます。]
 
@@ -37,8 +37,9 @@ Messaging APIの「API」は、Application Programming Interfaceの略です。�
 //image[request-and-response][ブラウザでウェブページを見るときのリクエストとレスポンス][scale=0.8]{
 //}
 
-REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンドや、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。（@<img>{api-request-and-response}）
+REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンド@<fn>{curl}や、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。（@<img>{api-request-and-response}）
 
+//footnote[curl][curk（カール）はHTTPやHTTPS、SCP、LDAPなど、さまざまなプロトコルでデータ転送ができるコマンドです。今までにcurlを使ったことのない人とっては、この説明を読んでもいまいちピンとこないと思うので、「ターミナル」という種類のソフトで、ブラウザのようなことができるコマンドだと思っておいてください。ちなみにターミナルは、エンジニア以外の方には、いわゆる「黒い画面」と言った方がお馴染みかもしれません。]
 //footnote[postman][Postmanは、GUIの画面でREST APIを叩ける便利なツール。 @<href>{https://www.postman.com/}]
 
 //image[api-request-and-response][REST APIをたたくときのリクエストとレスポンス][scale=0.8]{
@@ -48,32 +49,35 @@ REST APIは、このウェブページと同じように、ウェブサーバー
 
 === Messaging APIとは
 
-ではあらためて、Messaging APIについて説明していきましょう。Messaging APIは、LINE公式アカウントからのメッセージ送信や、返信などの操作ができるAPIです。LINE株式会社が無料で提供しており、LINE Developersコンソールと呼ばれる開発者向けサイトでアカウント登録をすれば誰でも利用できます。@<fn>{price}
+ではあらためて、Messaging APIについて説明していきましょう。Messaging APIは、LINE公式アカウントからのメッセージ送信や、返信などの操作ができるAPI@<fn>{use-messaging-api}です。LINE株式会社が無料で提供しており、LINE Developersコンソールと呼ばれる開発者向けの管理画面でアカウント登録をすれば誰でも利用できます。@<fn>{price}
 
-//footnote[price][Messaging APIの各APIをたたくこと自体に費用はかかりません。@<chapref>{article01}の@<hd>{article01|oaprice}で紹介したとおり、無料メッセージの通数を増やすためにライトプランやスタンダードプランを契約したときに初めてお金がかかります。]
+//footnote[use-messaging-api][Messaging APIは、あくまでLINE公式アカウントの操作をするためのAPIなので、個人のLINEアカウントで受信したメッセージをSlackに転送する、というようなことはできません。]
+//footnote[price][Messaging APIの各APIをたたくこと自体に費用はかかりません。@<chapref>{article01}の@<hd>{article01|oaprice}で紹介したとおり、送れるメッセージの通数を増やすために有料のプランを契約したときに初めてお金がかかります。]
 
 Messaging APIを使用することで、開発者はユーザーがLINE公式アカウントに送ったメッセージを受信したり、LINE公式アカウントから友だちに対して返信を送ったり、友だちとなったユーザーのプロフィール情報を取得したりすることができます。
 
-実際にMessaging APIを使用するためには、LINE公式アカウントと紐づく形でMessaging APIチャネルというものを作って、APIの利用に必要なチャネルアクセストークンを取得する必要があります。
+実際にMessaging APIを使用するためには、LINE公式アカウントと紐づく形でMessaging APIチャネルというものを作って、APIの利用に必要な「チャネルアクセストークン」というものを取得する必要があります。
 
-ではMessaging APIを使うため、早速Messaging APIチャネルを作っていきましょう。
+LINE公式アカウントとMessaging APIチャネルの関係は、初見だとちょっと分かりにくいので、実際にMessaging APIチャネルを作る前にそこを少し説明していきます。
 
 == LINE Official Account ManagerでMessaging APIチャネルを作る
 
-LINE公式アカウントとMessaging APIチャネルは、表と裏のような存在です。LINE公式アカウントを単体で作って、LINE Official Account Managerや管理アプリを使って中の人が頑張ることもできますが、裏側にMessaging APIチャネルを紐付けて、ボットが応答するようにすることも可能です。（@<img>{messaging-api-channel}）
+LINE公式アカウントとMessaging APIチャネルは、表と裏のような存在です。LINE公式アカウントを単体で作って、LINE Official Account Managerや管理アプリを使って中の人が頑張ることもできますが、裏側にMessaging APIチャネルを紐づけて、ボットが自動で応答するように設定することも可能です。（@<img>{messaging-api-channel}）
 
 //image[messaging-api-channel][LINE公式アカウントとMessaging APIチャネルは表と裏][scale=0.8]{
 //}
 
-あなたはさっき、LINEでLINE公式アカウントを作ったので、いまは表だけで裏に控えるMessaging APIチャネルが存在していない状態です。
+あなたはさっき、LINEでLINE公式アカウントを作ったので、いまは表のLINE公式アカウントだけが在って、裏に控えるMessaging APIチャネルは存在していない状態です。
 
-LINE Official Account Managerで、LINE公式アカウントに紐づくMessaging APIチャネルを作りましょう。
+前述のLINE DevelopersコンソールでMessaging APIチャネルを作ると、最初から表（LINE公式アカウント）と裏（Messaging APIチャネル）が揃った状態で作成されるのですが、先に表だけを作った場合は、LINE Official Account Managerで裏を作って紐づけてやる必要があります。
+
+それではLINE Official Account Managerで、あなたのLINE公式アカウントに紐づくMessaging APIチャネルを作りましょう。
 
 ==={login-oamanager} LINE Official Account Managerにログインする
 
 @<chapref>{article01}では、スマートフォンで色々な操作をしていましたが、ここからはパソコンで作業します。
 
-Messaging APIチャネルを作成するため、LINE Official Account Managerを開きます。
+Messaging APIチャネルを作成するため、LINE Official Account Managerを開いてください。
 
  * LINE Official Account Manager
  ** @<href>{https://www.linebiz.com/jp/login/}
@@ -90,9 +94,9 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 //image[line-for-business-login-2][［LINEアカウントでログイン］を選ぶ][scale=0.8]{
 //}
 
-@<hd>{article01|create-account}で登録したメールアドレスと、LINEのパスワード@<fn>{password}を入力して、［ログイン］しましょう。入力が面倒な場合は、［QRコードログイン］からQRコードを表示して、それをLINEのQRコードスキャンで読み込む形でもログイン可能です。（@<img>{line-for-business-login-3}）
+@<hd>{article01|create-account}で登録したメールアドレスと、LINEのパスワード@<fn>{password}を入力して、［ログイン］しましょう。入力が面倒な場合は、［QRコードログイン］からQRコードを表示して、それをスマートフォンのLINEのQRコードスキャンで読み込む形でもログイン可能です。（@<img>{line-for-business-login-3}）
 
-//footnote[password][「LINEのパスワードなんて設定したっけ？何も覚えていません」という人はLINEを開いて、下に並んでいる［ホーム］から右上の歯車アイコンをタップして［設定］を開き、［アカウント］の［パスワード］からすぐに変更できます。 @<href>{https://guide.line.me/ja/account-and-settings/account-and-profile/set-password.html}]
+//footnote[password][「LINEのパスワードなんて設定したっけ？何も覚えていません」という人はLINEを開いて、下に並んでいる［ホーム］から右上の歯車アイコンをタップして［設定］を開き、［アカウント］の［パスワード］からすぐに新しいパスワードを設定できます。 @<href>{https://guide.line.me/ja/account-and-settings/account-and-profile/set-password.html}]
 
 //image[line-for-business-login-3][メールアドレスとパスワードを入力して［ログイン］する][scale=0.8]{
 //}
@@ -107,12 +111,12 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 //image[line-for-business-login-5][認証番号を入力して［本人確認］をタップする][scale=0.8]{
 //}
 
-LINE Official Account Managerにログインできました！（@<img>{line-for-business-login-6}）
+これでLINE Official Account Managerにログインできました！（@<img>{line-for-business-login-6}）
 
 //image[line-for-business-login-6][LINE Official Account Managerにログインできた][scale=0.8]{
 //}
 
-=== Messaging APIチャネルを作って紐付ける
+=== Messaging APIチャネルを作って紐づける
 
 ではアカウントリストから、先ほど作ったLINE公式アカウントを選択します。（@<img>{line-for-business-login-7}）
 
@@ -124,7 +128,7 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 //image[create-messaging-api-channel][右上にある［設定］を開く][scale=0.8]{
 //}
      
-左メニューの［設定］から［Messaging API］を開きます。（@<img>{create-messaging-api-channel-2}）
+左メニューの［設定］の配下にある［Messaging API］を開きます。（@<img>{create-messaging-api-channel-2}）
 
 //image[create-messaging-api-channel-2][左メニューの［Messaging API］を開く][scale=0.8]{
 //}
@@ -137,7 +141,7 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 まだLINE Developersコンソールにログインしたことがなかったため、開発者情報の入力を求められます。ここでいう「開発者」とは、イコール「LINE Developersコンソールにアクセスする人のこと」です。あなたの［名前］@<fn>{mochiko}と［メールアドレス］@<fn>{mail-address}を入力して、リンク先の「LINE開発者契約」を確認した上で、同意できる内容であれば［同意する］を押します。（@<img>{create-messaging-api-channel-5}）
 
 //footnote[mochiko][私は名前の欄に個人事業主としての屋号（mochikoAsTech）を記入していますが、個人開発者として登録するのであれば普通に氏名の入力で構わないと思います。]
-//footnote[mail-address][ここで登録するメールアドレスは、LINEに登録してあるメールアドレスとは別のアドレスでも構いません。開発者宛ての連絡を送ってほしいメールアドレスを記入しましょう。]
+//footnote[mail-address][ここで登録するメールアドレスは、LINEに登録してあるメールアドレスとは別のアドレスでも構いません。開発者に対するお知らせを送ってほしいメールアドレスを記入しましょう。ただしLINE Developersコンソールへのログインに使用するメールアドレスは、LINEに登録してあるメールアドレスであって、ここで記入したメールアドレスではないので、その点は注意してください。]
 
 //image[create-messaging-api-channel-5][［名前］と［メールアドレス］を入力して［同意する］を押す][scale=0.8]{
 //}
@@ -149,28 +153,31 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 
 開発者情報を登録すると、今度はプロバイダーの選択画面が表示されます。プロバイダーとは、サービスを提供し、ユーザーの情報を取得する企業や開発者個人のことを指し、これから作成するMessaging APIチャネルは、このプロバイダーというものの下に属します。プロバイダーの下には、複数のチャネルが所属できます。
 
-運営元が個人だと「チャネルもプロバイダーも全部俺だ！」みたいになって違いが分かりにくいですが、たとえば飲料メーカーのA社が「炭酸飲料B」と「コーヒー飲料C」という2つのブランドを展開していた場合、プロバイダー名は「A社」になり、その配下にあるMessaging APIチャネル名は「炭酸飲料B」や「コーヒー飲料C」になります。@<fn>{provider}
+運営元が個人だと「チャネルもプロバイダーも全部俺だ！」みたいになって違いが分かりにくいですが、たとえば飲料メーカーのA社が「炭酸飲料B」と「コーヒー飲料C」という2つのブランドを展開していた場合、プロバイダー名は「A社」になり、その配下にあるMessaging APIチャネル名は「炭酸飲料B」や「コーヒー飲料C」になります。@<fn>{provider}（@<img>{providers-and-channels}）
 
-//footnote[provider][複数のチャネルがあって、それぞれプロバイダーを分けたときと、一緒にしたときで何が変わるかというと、ユーザーIDの扱いが変わります。ユーザーを一意に識別するためのユーザーIDは、同じユーザーであってもプロバイダーごとに異なる値が発行されます。つまりDさんというひとりのユーザーがいたとき、「A社」というプロバイダーの配下にあるチャネルから見たDさんのユーザーIDと、また別の「B社」というプロバイダーの配下にあるチャネルからみたDさんのユーザーIDは別々の値になるのです。そのため、本書では詳しく触れませんがLINEログインチャネルとMessaging APIチャネルでユーザー情報を連携したい場合、その2つのチャネルが同一のプロバイダー配下にいなければならない、などの制約があります。一度チャネルをプロバイダーと紐付けてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので注意してください。]
+//image[providers-and-channels][チャネルはプロバイダーの配下に属する][scale=0.6]{
+//}
 
-あなたが個人の開発者なのであれば、プロバイダー名は個人名でも構いません。誰かに「このLINE公式アカウントの運営母体はどこなんですか？」と聞かれたときに、あなたが答えるであろう名称をプロバイダー名にしましょう。
+//footnote[provider][複数のチャネルがあって、1つのプロバイダー配下に収めたときと、それぞれプロバイダーを分けたときで何が変わるかというと、ユーザーIDの扱いが変わります。ユーザーを一意に識別するためのユーザーIDは、同じユーザーであってもプロバイダーごとに異なる値が発行されます。つまりmochikoさんというひとりのユーザーがいたとき、「A社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDと、また別の「B社」というプロバイダーの配下にあるチャネルからみたmochikoさんのユーザーIDは別々の値になるのです。そのため、本書では詳しく触れませんがLINEログインチャネルとMessaging APIチャネルでユーザー情報を連携したい場合は、その2つのチャネルが同一のプロバイダー配下にいなければならない、などの制約があります。一度チャネルをプロバイダーと紐づけてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので注意してください。]
+
+あなたが個人の開発者なのであれば、プロバイダー名は個人名でも構いません。誰かに「このLINE公式アカウントの運営元はどこなんですか？」と聞かれたときに、あなたが答えるであろう名称をプロバイダー名にしましょう。
 
 まだプロバイダーというものを1つも持っていないので、今回は［プロバイダーを作成］します。プロバイダー名を入力して、「LINE公式アカウントAPI利用規約」を確認し、［同意する］を押します。（@<img>{create-messaging-api-channel-7}）
 
 //image[create-messaging-api-channel-7][プロバイダー名を入力して［同意する］を押す][scale=0.8]{
 //}
      
-もしあなたがサービス提供者としてプライバシーポリシーや利用規約を既に持っていたら、プロバイダーのプライバシーポリシーと利用規約としてここでURLを登録できます。個人開発者であればどちらも持っていないと思いますので、その場合は何も入力せずに［OK］を押して進んで構いません。（@<img>{create-messaging-api-channel-8}）
+もしあなたがサービス提供者として、プライバシーポリシーや利用規約を既に持っていたら、プロバイダーのプライバシーポリシーと利用規約としてここでURLを登録できます。個人開発者であればどちらも持っていないと思いますので、その場合は何も入力せずに［OK］を押して進んで構いません。（@<img>{create-messaging-api-channel-8}）
 
 //image[create-messaging-api-channel-8][入力せずに［OK］を押す][scale=0.8]{
 //}
 
-このLINE公式アカウントを、このプロバイダーと紐付けますがいいですか、という最終確認の画面が表示されます。記載のとおり、一度チャネルをプロバイダーと紐付けてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので、プロバイダー名はよく確認してください。問題なければ［OK］を押します。（@<img>{create-messaging-api-channel-9}）
+このLINE公式アカウントを、このプロバイダーと紐づけますがいいですか、という最終確認の画面が表示されます。記載のとおり、一度チャネルをプロバイダーと紐づけてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので、プロバイダー名はよく確認してください。問題なければ［OK］を押します。（@<img>{create-messaging-api-channel-9}）
 
 //image[create-messaging-api-channel-9][確認して［OK］を押す][scale=0.8]{
 //}
      
-これでMessaging APIチャネルができました！（@<img>{create-messaging-api-channel-10}）
+これでLINE公式アカウントと紐づくMessaging APIチャネルができました！（@<img>{create-messaging-api-channel-10}）
 
 //image[create-messaging-api-channel-10][確認して［OK］を押す][scale=0.8]{
 //}
@@ -181,17 +188,17 @@ LINE Official Account Managerにログインできました！（@<img>{line-for
 
 === LINE Developersコンソールでチャネルアクセストークンを発行する
 
-送信にあたって、チャネルアクセストークンというものが必要なので、LINE Developersコンソールを開きます。
+Messaging APIを使ってメッセージを送信するにあたって、前述したチャネルアクセストークンというものが必要なので、LINE Developersコンソールを開きます。
 
  * LINE Developersコンソール
  ** @<href>{https://developers.line.biz/console/}
 
-既にLINE Official Account Managerにログインしていれば、そのままLINE Developersコンソールのプロバイダー一覧が表示されるはずです。もしログインを求められたら、@<hd>{article02|login-oamanager}と同じようにLINEのアカウントでログインしてください。プロバイダー一覧が表示されたら、左メニューで、先ほど作ったプロバイダーを選びます。（@<img>{console}）
+既にLINE Official Account Managerにログインしていれば、上記のURLを開くと、そのままLINE Developersコンソールのプロバイダー一覧が表示されるはずです。もしログインを求められたら、@<hd>{article02|login-oamanager}と同じようにLINEのアカウントでログインしてください。プロバイダー一覧が表示されたら、左メニューで、先ほど作ったプロバイダーを選びます。（@<img>{console}）
 
 //image[console][LINE Developersコンソールのプロバイダー一覧が表示された][scale=0.8]{
 //}
 
-選択したプロバイダーの配下にあるチャネルの一覧が表示されます。続いて、同じく先ほど作ったMessaging APIチャネルを選びます。（@<img>{console-2}）
+プロバイダーを選ぶと、そのプロバイダーの配下にあるチャネルの一覧が表示されます。続いて、同じく先ほど作ったMessaging APIチャネルを選びます。（@<img>{console-2}）
 
 //image[console-2][プロバイダー配下のチャネル一覧が表示された][scale=0.8]{
 //}
@@ -206,7 +213,7 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 //image[console-4][［発行］を押して長期のチャネルアクセストークンを発行する][scale=0.8]{
 //}
 
-このチャネルアクセストークン@<fn>{access-token}は、Messaging APIを使うときに、自分がそのMessaging APIチャネルの持ち主であることを証明する身分証のような役割を果たします。うっかりブログに書いて公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
+このチャネルアクセストークン@<fn>{access-token}は、Messaging APIを使うときに、自分がそのMessaging APIチャネルの持ち主であることを証明する身分証のような役割を果たします。うっかりチャネルアクセストークンが載った画面をブログで公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
 
 //footnote[access-token][チャネルアクセストークンにはいくつか種類がありますが、本書では説明を割愛し、この長期のチャネルアクセストークンを使用します。 @<href>{https://developers.line.biz/ja/docs/messaging-api/channel-access-tokens/}]
 
@@ -219,7 +226,27 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 
 === Messaging APIでブロードキャストメッセージを送信する
 
-ただメッセージを送るだけならウェブサーバーは必要ありません。以下のcurlコマンドで、3行目の「チャネルアクセストークン」の部分を、いまLINE Developersコンソールでコピーしたばかりの、あなたのMessaging APIチャネルのチャネルアクセストークンに置き換えた上で、あなたのパソコンがWindowsならWSL、Macならターミナルを起動して、以下のcurlコマンドをまるごとコピーして貼り付け、Enterを押してみてください。
+実は、ただメッセージを送るだけならウェブサーバーは必要ありません。あなたのパソコンでcurlコマンドをたたくことで、Messaging APIを使ってメッセージを送信できます。あなたが使っているパソコンがWindowsならWSL（@<img>{wsl}）@<fn>{wsl}、Macならターミナル（@<img>{mac}）を起動してください。
+
+//image[wsl][WindowsならWSLを起動する][scale=0.8]{
+//}
+
+//footnote[wsl][WSLとはWindows Subsystem for Linuxの略で、Windows上で動くLinux環境のことです。]
+
+Macを使っている方は、最初から「ターミナル」（@<img>{mac}）というソフトがインストールされていますのでそちらを利用しましょう。
+
+//image[mac][Macならターミナルを起動する][scale=0.8]{
+//}
+
+WSLやターミナルがどこにあるのか分からないときは、Windowsなら画面下部の検索ボックスで「WSL」と検索（@<img>{search-wsl}）、Macなら画面右上にある虫眼鏡のマークからSpotlightで「ターミナル」と検索（@<img>{search-mac}）すれば起動できます。
+
+//image[search-mac][Windowsなら検索ボックスで「WSL」と検索][scale=0.8]{
+//}
+
+//image[search-wsl][MacならSpotlightで「ターミナル」と検索][scale=0.8]{
+//}
+
+次のcurlコマンドの3行目にある「チャネルアクセストークン」の部分を、先ほどLINE Developersコンソールでコピーしたばかりの、あなたのMessaging APIチャネルのチャネルアクセストークンに置き換えてください。そしてcurlコマンドをまるごとコピーしてWSLもしくはターミナルに貼り付け、Enterを押してみてください。
 
 //cmd{
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
