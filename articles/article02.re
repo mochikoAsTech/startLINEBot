@@ -34,7 +34,7 @@ Messaging APIの「API」は、Application Programming Interfaceの略です。�
 
 通常、私たちはブラウザでURLを入力したり、リンクをクリックしたりすることで「このウェブページを見せてくれ！」とサーバーにリクエストを投げ、リクエストを受けたウェブサーバーが「はい、どうぞ」とウェブページをレスポンスで返してくれます。（@<img>{request-and-response}）
 
-//image[request-and-response][ブラウザでウェブページを見るときのリクエストとレスポンス][scale=0.8]{
+//image[request-and-response][ブラウザでウェブページを見るときのリクエストとレスポンス][scale=1]{
 //}
 
 REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンド@<fn>{curl}や、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。（@<img>{api-request-and-response}）
@@ -42,7 +42,7 @@ REST APIは、このウェブページと同じように、ウェブサーバー
 //footnote[curl][curk（カール）はHTTPやHTTPS、SCP、LDAPなど、さまざまなプロトコルでデータ転送ができるコマンドです。今までにcurlを使ったことのない人とっては、この説明を読んでもいまいちピンとこないと思うので、「ターミナル」という種類のソフトで、ブラウザのようなことができるコマンドだと思っておいてください。ちなみにターミナルは、エンジニア以外の方には、いわゆる「黒い画面」と言った方がお馴染みかもしれません。]
 //footnote[postman][Postmanは、GUIの画面でREST APIを叩ける便利なツール。 @<href>{https://www.postman.com/}]
 
-//image[api-request-and-response][REST APIをたたくときのリクエストとレスポンス][scale=0.8]{
+//image[api-request-and-response][REST APIをたたくときのリクエストとレスポンス][scale=1]{
 //}
 
 前述のとおり、APIは広義には「情報をやりとりする窓口」であり、様々なものを内包していますが、本書においてはただ「API」と呼んだら、それはREST APIのことを指していると思ってください。
@@ -64,7 +64,7 @@ LINE公式アカウントとMessaging APIチャネルの関係は、初見だと
 
 LINE公式アカウントとMessaging APIチャネルは、表と裏のような存在です。LINE公式アカウントを単体で作って、LINE Official Account Managerや管理アプリを使って中の人が頑張ることもできますが、裏側にMessaging APIチャネルを紐づけて、ボットが自動で応答するように設定することも可能です。（@<img>{messaging-api-channel}）
 
-//image[messaging-api-channel][LINE公式アカウントとMessaging APIチャネルは表と裏][scale=0.8]{
+//image[messaging-api-channel][LINE公式アカウントとMessaging APIチャネルは表と裏][scale=1]{
 //}
 
 あなたはさっき、LINEでLINE公式アカウントを作ったので、いまは表のLINE公式アカウントだけが在って、裏に控えるMessaging APIチャネルは存在していない状態です。
