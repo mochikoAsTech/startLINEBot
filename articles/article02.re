@@ -224,7 +224,7 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 
 チャネルアクセストークンも手に入ったし、早速Messaging APIでメッセージを送ってみましょう。
 
-=== Messaging APIでブロードキャストメッセージを送信する
+==={curl} Messaging APIでブロードキャストメッセージを送信する
 
 実は、ただメッセージを送るだけならウェブサーバーは必要ありません。あなたのパソコンでcurlコマンドをたたくことで、Messaging APIを使ってメッセージを送信できます。あなたが使っているパソコンがWindowsならWSL（@<img>{wsl}）@<fn>{wsl}、Macならターミナル（@<img>{mac}）を起動してください。
 
@@ -390,24 +390,95 @@ Messaging APIを使ってLINE公式アカウントから自動応答している
 
 //footnote[mark-as-read][既読API | LINE Developers @<href>{https://developers.line.biz/ja/docs/partner-docs/mark-as-read/}]
 
-== ボットサーバーを作ってみよう
+== オウム返しするチャットボットを作ってみよう
 
-今回はWebhookを受け取って、200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS Lambda@<fn>{aws-lambda}を使用します。
+メッセージをWebhookで受け取って返信するまでの一連の流れを理解するため、先ずは一番簡単な「オウム返しするチャットボット」を作ってみましょう。
 
-//footnote[aws-lambda][AWSアカウントの作成方法は「DNSをはじめよう」で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」で詳しく紹介しています。もしまだAWSのアカウントをお持ちでない場合は、そちらを参考にしてください。 @<href>{https://mochikoastech.booth.pm/}]
+=== Messaging APIのSDKを準備する
+
+Messaging APIでは、開発をサポートするSDK@<fn>{sdk}がJava、PHP、Go、Perl、Ruby、Python、Node.jsで用意@<fn>{messaging-api-sdk}されています。今回はPythonのSDKを使ってコードを書いていきます。
+
+//footnote[sdk][SDKはSoftware Development Kitの略。名前のとおり開発に必要なライブラリが詰まった工作キットのようなものです。たとえば料理でも、材料を揃えて野菜の皮を剥くところからやるととても大変ですが、下ごしらえの済んだ材料とレシピがひとまとめになっているミールキットを使えば、誰でも短時間で失敗もなく美味しい食事が作れます。それと同じで、開発においてもSDKが用意されていたら、そのSDKを使うことで色々とラクができます。]
+//footnote[messaging-api-sdk][LINE Messaging API SDK | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/line-bot-sdk/}]
+
+ * LINE Messaging API SDK for Python
+ ** @<href>{https://github.com/line/line-bot-sdk-python}
+
+=== Windowsの場合
+
+@<hd>{article02|curl}で使用したWSLを再び起動して、以下のコマンドを順番にたたいていきます。@<b>{$}はプロンプトを表していますので入力しないでください。
+
+先ずはcdコマンドでホームディレクトリ@<fn>{dir}に移動して、mkdirコマンドでpythonというディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-sdk-1}）
+
+//footnote[dir][前述のとおりWSLはWindows上で動くLinux環境であり、Linuxではフォルダのことをディレクトリと呼びます。なので、ここではディレクトリと書いてあったら「ああ、フォルダのことだな」と思ってください。]
+
+//cmd{
+$ cd
+$ mkdir python
+$ ls
+$ cd python
+//}
+
+//image[get-sdk-1][pythonディレクトリを作ってその中に移動する][scale=1]{
+//}
+
+続いて、SDKをパソコンの中に取ってくるためにpipコマンドが使いたいので、aptコマンドでpipコマンドを連れてきます。@<b>{sudo apt update}をたたくとパスワードを聞かれるので、パソコンを起動したときに入力するのと同じパスワードを入力してEnterを押してください。@<b>{sudo apt install python3-pip}をたたくと、メッセージがだだーっと流れた後に@<b>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
+
+//cmd{
+$ sudo apt update
+$ sudo apt install python3-pip
+//}
+
+いよいよpipコマンドでSDKをパソコンの中に取ってきます。lsコマンドでpythonディレクトリの中身を確認して、なんだかたくさん入っていればOKです。（@<img>{get-sdk-2}）
+
+//cmd{
+$ pip install line-bot-sdk -t . --no-user
+$ ls
+//}
+
+//image[get-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
+//}
+
+取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。そしてaptコマンドでzipコマンドを連れてきます。@<b>{sudo apt install zip}をたたくと、メッセージがだだーっと流れた後に@<b>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
+
+//cmd{
+$ cd ..
+$ sudo apt install zip
+//}
+
+それではzipコマンドでpythonディレクトリをぎゅっとZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できればOKです。（@<img>{get-sdk-3}）
+
+//cmd{
+$ zip python.zip python
+$ ls
+$ explorer.exe .
+//}
+
+//image[get-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//}
+
+最後に@<b>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。
+
+//cmd{
+$ explorer.exe .
+//}
+
+//image[get-sdk-4][「explorer.exe .」をたたく][scale=1]{
+//}
+
+//image[get-sdk-5][するとエクスプローラでpython.zipのあるフォルダが表示される][scale=0.8]{
+//}
+
+これでMessaging APIのSDKが準備できました。
 
 === AWS LambdaとAPI Gatewayでボットサーバーを作る
 
-AWS LambdaとAPI Gatewayを組み合わせて、ボットサーバーを用意し、そのURLをWebhook URLとして登録します。（要追記）
+今回はWebhookを受け取って、ステータスコード200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS Lambda@<fn>{aws-lambda}とAPI Gatewayを使用します。
 
-Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、Ruby、Python、Node.jsで用意されています。今回はPythonのSDKを使ってコードを書いていきます。
+//footnote[aws-lambda][AWSアカウントの作成方法は「DNSをはじめよう」で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」で詳しく紹介しています。もしまだAWSのアカウントをお持ちでない場合は、そちらを参考にしてください。 @<href>{https://mochikoastech.booth.pm/}]
 
- * @<href>{https://github.com/line/line-bot-sdk-python}
+AWS LambdaとAPI Gatewayを組み合わせて、ボットサーバーを用意し、そのURLをWebhook URLとして登録します。
 
- 1. mkdir python
- 1. cd python
- 1. pip install line-bot-sdk -t . --no-user
- 1. SDKのコードが詰まったpythonディレクトリをzipファイルに圧縮する
  1. AWS Lambdaで「レイヤーを作成」
  1. zipファイルを選択
  1. 互換性のあるランタイムでPython 3.9を選択する
@@ -415,6 +486,152 @@ Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、
  1. カスタムレイヤーで選ぶ
  1. APIタイプはHTTP APIでAPI gatewayを作る
  1. Lambdaの設定>一般設定からタイムアウトを1分0秒に変更する
+ 1. Lambdaの設定>一般設定から環境変数を設定する
+
+//listnum[source-code-1][AWS Lambdaで動かすpythonのコード]{
+import json
+import logging
+import openai
+import os
+import sys
+
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError, LineBotApiError
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+
+# INFOレベル以上のログメッセージを拾うように設定する
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+# 環境変数からMessaging APIのチャネルアクセストークンとチャネルシークレットを取得する
+CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
+CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
+
+# 環境変数からOpenAI APIのシークレットキーを取得する
+openai.api_key = os.getenv('SECRET_KEY')
+
+# それぞれ環境変数に登録されていないとエラー
+if CHANNEL_SECRET is None:
+    logger.error(
+        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
+    sys.exit(1)
+if CHANNEL_ACCESS_TOKEN is None:
+    logger.error(
+        'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
+    sys.exit(1)
+if openai.api_key is None:
+    logger.error(
+        'Open API key is not defined as environmental variables.')
+    sys.exit(1)
+
+line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+webhook_handler = WebhookHandler(CHANNEL_SECRET)
+
+# 質問に回答をする処理
+
+
+@webhook_handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+
+    # ChatGPTに質問を投げて回答を取得する
+    question = event.message.text
+    answer_response = openai.ChatCompletion.create(
+        model='gpt-3.5-turbo',
+        messages=[
+            {'role': 'user', 'content': question},
+        ],
+        stop=['。']
+    )
+    answer = answer_response["choices"][0]["message"]["content"]
+    # 受け取った回答のJSONを目視確認できるようにINFOでログに吐く
+    logger.info(answer)
+
+    # 応答トークンを使って回答を応答メッセージで送る
+    line_bot_api.reply_message(
+        event.reply_token, TextSendMessage(text=answer))
+
+# LINE Messaging APIからのWebhookを処理する
+
+
+def lambda_handler(event, context):
+
+    # リクエストヘッダーにx-line-signatureがあることを確認
+    if 'x-line-signature' in event['headers']:
+        signature = event['headers']['x-line-signature']
+
+    body = event['body']
+    # 受け取ったWebhookのJSONを目視確認できるようにINFOでログに吐く
+    logger.info(body)
+
+    try:
+        webhook_handler.handle(body, signature)
+    except InvalidSignatureError:
+        # 署名を検証した結果、飛んできたのがLINEプラットフォームからのWebhookでなければ400を返す
+        return {
+            'statusCode': 400,
+            'body': json.dumps('Only webhooks from the LINE Platform will be accepted.')
+        }
+    except LineBotApiError as e:
+        # 応答メッセージを送ろうとしたがLINEプラットフォームからエラーが返ってきたらエラーを吐く
+        logger.error('Got exception from LINE Messaging API: %s\n' % e.message)
+        for m in e.error.details:
+            logger.error('  %s: %s' % (m.property, m.message))
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+//}
+
+この後、LINE Developersコンソールの「Webhook URL」でボットサーバーのURLを登録するため、用意したAPI GatewayのURLをコピーしておきましょう。
+
+=== Webhook URLを設定する
+
+LINE Developersコンソールを開いて、Webhook URLに、先ほどのAPI GatewayのURLをペーストします。［検証］を押して、LINEプラットフォームからのWebhookをボットサーバーが受け取って、ちゃんとステータスコード200を返してくることを確認しましょう。
+
+LINE Official Account Managerで応答メッセージをオフにしておきます。
+
+=== LINE公式アカウントに話しかけてオウム返しを確認しよう
+
+それではLINE公式アカウントに話しかけて、まったく同じメッセージがオウム返しされるか確認してみましょう。
+
+== ChatGPTのAPIを使ったAIチャットボットを作ってみよう
+
+オウム返しが動くとうれしいですが、うれしいけど「オウム返しされたけど……だからなに？」という気持ちにもなるので、今度はもっとちゃんと役に立つAIチャットボットに作り変えてみましょう。
+
+=== ChatGPTとGPT-3.5とは
+
+ChatGPTはOpenAIが提供している対話型のウェブサービスです。このChatGPTの裏側で応答を生成している言語モデルがGPT-3.5です。ユーザーが質問を会話をテキストで送ると、GPT-3.5がその文脈に基づいて応答を生成します。
+
+=== OpenAIに登録してシークレットキーを取得する
+
+OpenAIの開発者向けサイトに登録して、APIをたたくためのシークレットキーを取得します。
+
+
+=== OpenAIのSDKを準備する
+
+ChatGPTのAPIをたたくための、OpenAIのSDKも用意されています。先ほどのMessaging APIのSDKと同じように準備していきましょう。
+
+ 1. mkdir python
+ 1. cd python
+ 1. pip install line-bot-sdk -t . --no-user
+ 1. SDKのコードが詰まったpythonディレクトリをzipファイルに圧縮する
+
+=== AWS LambdaのコードにChatGPTのAPIをたたく処理を追加する
+
+Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、Ruby、Python、Node.jsで用意されています。今回はPythonのSDKを使ってコードを書いていきます。
+
+ * @<href>{https://github.com/line/line-bot-sdk-python}
+
+ 1. AWS LambdaでOpenAIの「レイヤーを作成」
+ 1. zipファイルを選択
+ 1. 互換性のあるランタイムでPython 3.9を選択する
+ 1. x86_64にチェックを入れる
+ 1. カスタムレイヤーで選ぶ
+ 1. APIタイプはHTTP APIでAPI gatewayを作る
+ 1. Lambdaの設定>一般設定からタイムアウトを1分0秒に変更する
+
+さきほど作ったLambda関数のコードを、次のコードに置き換えてください。
 
 //listnum[source-code][AWS Lambdaで動かすpythonのコード]{
 import json
@@ -511,8 +728,6 @@ def lambda_handler(event, context):
     }
 //}
 
-この後、LINE Developersコンソールの「Webhook URL」でボットサーバーのURLを登録するため、用意したAPI Gateway）のURLをコピーしておきましょう。
-
 ===[column] 【コラム】これは本当にLINEプラットフォームから来たWebhook？
 
 ボットサーバーに、LINEプラットフォームからWebhookが届いたら、その内容に応じて返信を送ったり、何か処理をしたりします。
@@ -568,7 +783,7 @@ OpenAIの開発者登録をして、シークレットキーを取得します�
 
 たとえば1人の友だちに対してLINE公式アカウントから、こんなふうにテキストと画像とスタンプという3つのメッセージオブジェクトが含まれるメッセージを送った場合、メッセージの通数は1通でしょうか？それとも3通でしょうか？（@<img>{three-message-objects}）
 
-//image[three-message-objects][テキストと画像とスタンプのメッセージ][scale=0.6]{
+//image[three-message-objects][テキストと画像とスタンプのメッセージ][scale=0.4]{
 //}
 
 メッセージの通数は、送信対象となった友だちの人数でカウントされますので、このように3つのメッセージオブジェクトをまとめて送った場合のカウントは1通となります。もしテキストを送る、画像を送る、スタンプを送る、というように3回に分けて送るとカウントは3通になります。ちなみにメッセージオブジェクトはLINE Official Account Managerや管理アプリでは最大3つ、Messaging APIでは最大5つまで指定できます。
