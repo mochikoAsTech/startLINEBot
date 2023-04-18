@@ -222,7 +222,14 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 //image[console-5][発行したチャネルアクセストークンをコピーする][scale=0.8]{
 //}
 
-チャネルアクセストークンも手に入ったし、早速Messaging APIでメッセージを送ってみましょう。
+いまコピーしたチャネルアクセストークンはこの後で何度も必要となります。忘れないように、パソコンのメモ帳にしっかりメモしておいてください。
+
+ついでに［チャネル基本設定］タブのチャネルシークレットもコピーして、一緒にメモしておきましょう。（@<img>{console-6}）
+
+//image[console-6][チャネルアクセストークンもコピーする][scale=0.8]{
+//}
+
+チャネルアクセストークンとチャネルシークレットが手に入ったので、早速Messaging APIでメッセージを送ってみましょう。
 
 ==={curl} Messaging APIでブロードキャストメッセージを送信する
 
@@ -394,7 +401,7 @@ Messaging APIを使ってLINE公式アカウントから自動応答している
 
 メッセージをWebhookで受け取って返信するまでの一連の流れを理解するため、先ずは一番簡単な「オウム返しするチャットボット」を作ってみましょう。
 
-=== Messaging APIのSDKを準備する
+==={prepare-messaging-api-sdk} Messaging APIのSDKを準備する
 
 Messaging APIでは、開発をサポートするSDK@<fn>{sdk}がJava、PHP、Go、Perl、Ruby、Python、Node.jsで用意@<fn>{messaging-api-sdk}されています。今回はPythonのSDKを使ってコードを書いていきます。
 
@@ -408,9 +415,10 @@ Messaging APIでは、開発をサポートするSDK@<fn>{sdk}がJava、PHP、Go
 
 @<hd>{article02|curl}で使用したWSLを再び起動して、以下のコマンドを順番にたたいていきます。@<b>{$}はプロンプトを表していますので入力しないでください。
 
-先ずはcdコマンドでホームディレクトリ@<fn>{dir}に移動して、mkdirコマンドでpythonというディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-sdk-1}）
+先ずはcdコマンドでホームディレクトリ@<fn>{dir}に移動して、mkdirコマンドでpython@<fn>{python-dir}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-sdk-1}）
 
 //footnote[dir][前述のとおりWSLはWindows上で動くLinux環境であり、Linuxではフォルダのことをディレクトリと呼びます。なので、ここではディレクトリと書いてあったら「ああ、フォルダのことだな」と思ってください。]
+//footnote[python-dir][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
 
 //cmd{
 $ cd
@@ -449,15 +457,14 @@ $ sudo apt install zip
 それではzipコマンドでpythonディレクトリをぎゅっとZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できればOKです。（@<img>{get-sdk-3}）
 
 //cmd{
-$ zip python.zip python
+$ zip -r python.zip python
 $ ls
-$ explorer.exe .
 //}
 
 //image[get-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
 //}
 
-最後に@<b>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。
+最後に@<b>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。（@<img>{get-sdk-4}、@<img>{get-sdk-5}）
 
 //cmd{
 $ explorer.exe .
@@ -469,29 +476,174 @@ $ explorer.exe .
 //image[get-sdk-5][するとエクスプローラでpython.zipのあるフォルダが表示される][scale=0.8]{
 //}
 
+作成したpython.zipはこの後すぐに使うので、デスクトップにコピーしておきましょう。（@<img>{copy-to-desktop}）
+
+//image[copy-to-desktop][python.zipはデスクトップにコピーしておく][scale=0.8]{
+//}
+
 これでMessaging APIのSDKが準備できました。
 
 === AWS LambdaとAPI Gatewayでボットサーバーを作る
 
-今回はWebhookを受け取って、ステータスコード200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS Lambda@<fn>{aws-lambda}とAPI Gatewayを使用します。
+今回はWebhookを受け取って、ステータスコード200を返して、応答メッセージを送るボットサーバーとして、AWSのサーバーレスサービス、AWS LambdaとAPI Gatewayを使用します。
 
-//footnote[aws-lambda][AWSアカウントの作成方法は「DNSをはじめよう」で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」で詳しく紹介しています。もしまだAWSのアカウントをお持ちでない場合は、そちらを参考にしてください。 @<href>{https://mochikoastech.booth.pm/}]
+AWSを初めて使用する場合、AWSアカウントを作成してから1年間は利用料が無料となります。ただし無料利用枠の範囲は決まっており、何をどれだけ使っても無料という訳ではありません。どのサービスをどれくらい無料で使えるのか？は「AWS無料利用枠」のページ（@<href>{https://aws.amazon.com/jp/free/}）」に記載されていますので、そちらを参照してください。AWSアカウントを持っていない場合は、同じ「AWS無料利用枠」のページにある［無料アカウントの作成］から作成してください。@<fn>{create-aws-account}（@<img>{awsFree}）
 
-AWS LambdaとAPI Gatewayを組み合わせて、ボットサーバーを用意し、そのURLをWebhook URLとして登録します。
+//image[awsFree][AWS無料利用枠][scale=0.8]{
+//}
 
- 1. AWS Lambdaで「レイヤーを作成」
- 1. zipファイルを選択
- 1. 互換性のあるランタイムでPython 3.9を選択する
- 1. x86_64にチェックを入れる
- 1. カスタムレイヤーで選ぶ
- 1. APIタイプはHTTP APIでAPI gatewayを作る
- 1. Lambdaの設定>一般設定からタイムアウトを1分0秒に変更する
- 1. Lambdaの設定>一般設定から環境変数を設定する
+//footnote[create-aws-account][なおAWSアカウントの作成の詳しい手順は「DNSをはじめよう」という書籍で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」という書籍で詳しく紹介しています。もしAWSアカウントの作成や設定に不安がある場合は、そちらを参考にしてください。 @<href>{https://mochikoastech.booth.pm/}]
 
-//listnum[source-code-1][AWS Lambdaで動かすpythonのコード]{
+それでは早速、AWSのマネジメントコンソール（@<href>{https://console.aws.amazon.com/}）を開いて、上部の検索窓で@<b>{lambda}と検索し、Lambdaを開きます。（@<img>{search-lambda}）
+
+//image[search-lambda][検索窓からLambdaを開く][scale=0.8]{
+//}
+
+==== Messaging API SDKのレイヤーを作成する
+
+AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レイヤーの作成］をクリックします。（@<img>{create-layer}）
+
+//image[create-layer][［レイヤーの作成］をクリック][scale=0.8]{
+//}
+
+「名前」と「説明」は次のように入力します。（@<table>{layer-settings}）
+
+//table[layer-settings][レイヤー設定]{
+名前	Messaging-API-SDK-for-python
+説明	Messaging API SDK for python
+アップロード方法	.zip ファイルをアップロード
+アップロードするファイル	@<hd>{article02|prepare-messaging-api-sdk}で用意したpython.zip
+互換性のあるアーキテクチャ	x86_64にチェックを入れる
+互換性のあるランタイム	Python 3.10を選択
+ライセンス	https://github.com/line/line-bot-sdk-python/blob/master/LICENSE
+//}
+
+［アップロード］をクリックしたら、@<hd>{article02|prepare-messaging-api-sdk}で作成してデスクトップに置いたZIPファイルを選択し、アップロードしてください。（@<img>{select-python-zip}）
+
+//image[select-python-zip][デスクトップにあるpython.zipを選択してアップロード][scale=0.8]{
+//}
+
+必要事項を入力したら［作成］をクリックします。（@<img>{create-layer-2}）
+
+//image[create-layer-2][必要事項を入力したら［作成］をクリックする][scale=0.8]{
+//}
+
+これでレイヤーができました！（@<img>{create-layer-3}）
+
+//image[create-layer-3][レイヤーができた！][scale=0.8]{
+//}
+
+次はLambda関数を作成しますので、左メニューから［関数］を開いてください。
+
+==== Lambda関数を作成する
+
+［関数の作成］をクリックして、Lambda関数を作ります。（@<img>{create-lambda}）
+
+//image[create-lambda][［関数の作成］をクリックする][scale=0.8]{
+//}
+
+関数の作成は次のように入力します。（@<table>{create-app}）
+
+//table[create-app][関数の作成]{
+関数名	Bot-Server-on-Lambda
+ランタイム	Python 3.10
+アーキテクチャ	x86_64
+その他の設定	すべてデフォルトのまま
+//}
+
+必要事項を入力したら［関数の作成］をクリックします。（@<img>{create-lambda-2}）
+
+//image[create-lambda-2][［関数の作成］をクリックする][scale=0.8]{
+//}
+
+これでLambda関数ができました！先に作っておいたレイヤーを選択したいので、［Layers］をクリックします。（@<img>{create-lambda-3}）
+
+//image[create-lambda-3][Lambda関数ができた！][scale=0.8]{
+//}
+
+［レイヤーの追加］をクリックします。（@<img>{create-lambda-4}）
+
+//image[create-lambda-4][［レイヤーの追加］をクリックする][scale=0.8]{
+//}
+
+レイヤーの選択は次のようにします。（@<table>{select-layer}）
+
+//table[select-layer][レイヤーを選択]{
+レイヤーソース	カスタムレイヤー
+カスタムレイヤー	Messaging-API-SDK-for-python
+バージョン	1
+//}
+
+使用するレイヤーを選択したら［追加］をクリックします。（@<img>{create-lambda-5}）
+
+//image[create-lambda-5][［追加］をクリックする][scale=0.8]{
+//}
+
+これでレイヤーが追加できました！（@<img>{create-lambda-6}）
+
+//image[create-lambda-6][レイヤーが追加できた！][scale=0.8]{
+//}
+
+次はAPI Gatewayを作成しますので、［トリガーを追加］を開いてください。
+
+===={create-api-gateway} API Gatewayを作成する
+
+［ソースを選択］で［API Gateway］を選択します。（@<img>{create-api-gateway}）
+
+//image[create-api-gateway][［API Gateway］を選択する][scale=0.8]{
+//}
+
+トリガーの設定は次のようにします。（@<table>{trigger-settings}）
+
+//table[trigger-settings][トリガーの設定]{
+インテント	新規APIを作成
+APIタイプ	HTTP API
+セキュリティ	開く
+その他の設定	すべてデフォルトのまま
+//}
+
+トリガーの設定を選択したら［追加］をクリックします。（@<img>{create-api-gateway-2}）
+
+//image[create-api-gateway-2][［追加］をクリックする][scale=0.8]{
+//}
+
+これでAPI Gatewayが作成できました！（@<img>{create-api-gateway-3}）
+
+//image[create-api-gateway-3][API Gatewayができた！][scale=0.8]{
+//}
+
+［トリガー］の中にある［APIエンドポイント］のURLを開くと、AWS Lambdaから［"Hello from Lambda!"］というレスポンスが返ってきます。（@<img>{create-api-gateway-4}）
+
+//image[create-api-gateway-4][［APIエンドポイント］のURLを開くとレスポンスが返ってきた][scale=0.8]{
+//}
+
+この［APIエンドポイント］のURLは、後でWebhook URLとして使用します。チャネルアクセストークンやチャネルシークレット同様に、パソコンのメモ帳にしっかりメモしておいてください。
+
+==== Lambda関数で動かすpythonのコードを書く
+
+［"Hello from Lambda!"］というレスポンスが返ってきたのは、［コード］タブのコードソースに次のようなコードが書いてあったからです。（@<list>{default-source-code-1}）
+
+//listnum[default-source-code-1][Lambda関数のデフォルトのコード]{
+import json
+
+def lambda_handler(event, context):
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+//}
+
+リクエストが来たら、ステータスコード200と共に「Hello from Lambda!」というメッセージを含むJSONを返すようになっています。（@<img>{parrot-bot}）
+
+//image[parrot-bot][ステータスコード200とJSONを返すコード][scale=0.8]{
+//}
+
+このコードを、次のようにWebhookを受け取ってオウム返しするコードに書き直してみましょう。
+
+//listnum[source-code-1][AWS Lambdaで動かすpythonのコード][python]{
 import json
 import logging
-import openai
 import os
 import sys
 
@@ -507,9 +659,6 @@ logger.setLevel(logging.INFO)
 CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
 
-# 環境変数からOpenAI APIのシークレットキーを取得する
-openai.api_key = os.getenv('SECRET_KEY')
-
 # それぞれ環境変数に登録されていないとエラー
 if CHANNEL_SECRET is None:
     logger.error(
@@ -519,38 +668,17 @@ if CHANNEL_ACCESS_TOKEN is None:
     logger.error(
         'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
     sys.exit(1)
-if openai.api_key is None:
-    logger.error(
-        'Open API key is not defined as environmental variables.')
-    sys.exit(1)
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 webhook_handler = WebhookHandler(CHANNEL_SECRET)
-
-# 質問に回答をする処理
 
 
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
-    # ChatGPTに質問を投げて回答を取得する
-    question = event.message.text
-    answer_response = openai.ChatCompletion.create(
-        model='gpt-3.5-turbo',
-        messages=[
-            {'role': 'user', 'content': question},
-        ],
-        stop=['。']
-    )
-    answer = answer_response["choices"][0]["message"]["content"]
-    # 受け取った回答のJSONを目視確認できるようにINFOでログに吐く
-    logger.info(answer)
-
     # 応答トークンを使って回答を応答メッセージで送る
     line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text=answer))
-
-# LINE Messaging APIからのWebhookを処理する
+        event.reply_token, TextSendMessage(text=event.message.text))
 
 
 def lambda_handler(event, context):
@@ -583,21 +711,111 @@ def lambda_handler(event, context):
     }
 //}
 
-この後、LINE Developersコンソールの「Webhook URL」でボットサーバーのURLを登録するため、用意したAPI GatewayのURLをコピーしておきましょう。
+コードを直したら、［Deploy］を押して修正後のコードを反映します。（@<img>{parrot-bot-2}）
+
+//image[parrot-bot-2][［Deploy］を押して修正後のコードを反映する][scale=0.8]{
+//}
+
+［関数 Bot-Server-on-Lambda が正常に更新されました。］と表示されたらデプロイ完了です。（@<img>{parrot-bot-3}）
+
+//image[parrot-bot-3][デプロイ完了][scale=0.8]{
+//}
+
+==== 環境変数を設定する
+
+コードを動かすには、Messaging APIのチャネルアクセストークンとチャネルシークレットが必要ですが、ソースコードには直接書かず、環境変数として設定して、@<b>{CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')}というように環境変数を参照する形にしています。
+
+Lambda関数の［設定］タブから［環境変数］を開いて、［編集］をクリックします。（@<img>{parrot-bot-4}）
+
+//image[parrot-bot-4][［環境変数］の［編集］をクリックする][scale=0.8]{
+//}
+
+［環境変数の追加］を2回クリックして、［キー］と［値］を次のように設定します。チャネルアクセストークンとチャネルシークレットは、@<hd>{article02|issue-token}でコピーしてメモ帳に保存してあるはずです。（@<table>{set-env}）
+
+//table[set-env][環境変数の編集]{
+キー	値
+--------------------
+CHANNEL_ACCESS_TOKEN	チャネルアクセストークン
+CHANNEL_SECRET	チャネルシークレット
+//}
+
+環境変数を編集したら［保存］をクリックします。（@<img>{parrot-bot-5}）
+
+//image[parrot-bot-5][環境変数を編集したら［保存］をクリックする][scale=0.8]{
+//}
+
+［関数 Bot-Server-on-Lambda が正常に更新されました。］と表示されたら環境変数の設定完了です。（@<img>{parrot-bot-6}）
+
+//image[parrot-bot-6][環境変数の設定完了][scale=0.8]{
+//}
+
+これでボットサーバーの準備は万端です。LINE Developersコンソールに戻って、Webhook URLの設定をしましょう。
 
 === Webhook URLを設定する
 
-LINE Developersコンソールを開いて、Webhook URLに、先ほどのAPI GatewayのURLをペーストします。［検証］を押して、LINEプラットフォームからのWebhookをボットサーバーが受け取って、ちゃんとステータスコード200を返してくることを確認しましょう。
+LINE Developersコンソールを開いて、Messaging APIチャネルの［Messaging API設定］タブにある［Webhook設定］の［Webhook URL］を登録します。［編集］をクリックしてください。@<img>{webhook-url}）
 
-LINE Official Account Managerで応答メッセージをオフにしておきます。
+//image[webhook-url][［Webhook URL］の［編集］をクリックする][scale=0.8]{
+//}
+
+@<hd>{article02|create-api-gateway}でメモしておいたAPIエンドポイントのURLを貼り付けて、［更新］をクリックしてください。@<img>{webhook-url-2}）
+
+//image[webhook-url-2][APIエンドポイントのURLを貼り付けて［更新］をクリックする][scale=0.8]{
+//}
+
+Webhook URLを設定したら、［検証］を押してボットサーバーの動作検証をしてみましょう。@<img>{webhook-url-3}）
+
+//image[webhook-url-3][［検証］を押す][scale=0.8]{
+//}
+
+［成功］と返ってきたら、LINEプラットフォームからのWebhookをボットサーバーが受け取って、ちゃんとステータスコード200を返してきています。やりましたね！おめでとうございます。@<img>{webhook-url-4}）
+
+//image[webhook-url-4][［成功］と返ってきたら［OK］をクリックする][scale=0.8]{
+//}
+
+ボットサーバーは問題なく動いているようなので、同じ［Messaging API設定］タブにある［応答メッセージ］の［編集］からLINE Official Account Managerを開きます。@<img>{webhook-url-5}）
+
+//image[webhook-url-5][［成功］と返ってきたら［OK］をクリックする][scale=0.8]{
+//}
+
+ユーザーがメッセージを送ってきたら、今後はWebhookを受け取ったボットサーバーから応答したいので、［Webhook］をオンにして、代わりに［応答メッセージ］をオフにしてください。@<img>{webhook-url-6}）
+
+//image[webhook-url-6][［成功］と返ってきたら［OK］をクリックする][scale=0.8]{
+//}
+
+これでWebhookの設定は完了です。
 
 === LINE公式アカウントに話しかけてオウム返しを確認しよう
 
-それではLINE公式アカウントに話しかけて、まったく同じメッセージがオウム返しされるか確認してみましょう。
+それではLINE公式アカウントに話しかけて、まったく同じメッセージがオウム返しされるか確認してみましょう。@<img>{parrot-reply}）
+
+//image[parrot-reply][メッセージを送ったらオウム返ししてくれた][scale=0.8]{
+//}
+
+おめでとうございます！オウム返ししてくれるLINE Botの完成です。
+
+===[column] 【コラム】これは本当にLINEプラットフォームから来たWebhook？
+
+ボットサーバーに、LINEプラットフォームからWebhookが届いたら、その内容に応じて返信を送ったり、何か処理をしたりします。
+
+このとき、届いたリクエストが本当にLINEプラットフォームから届いたWebhookなのか、それともLINEプラットフォームを装った第三者からの攻撃なのか、どうやって判別すればよいのでしょう？
+
+アクセス元のIPアドレスが分かれば、IPアドレス制限をかけることで、LINEプラットフォーム以外からのアクセスを遮断できますが、残念ながらLINEプラットフォームはIPアドレスのレンジを開示していません。@<fn>{ip-addr}代わりに、署名の検証を行いましょう。
+
+LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず「x-line-signature」という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として扱い、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーのx-line-signatureの署名の一致を確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
+
+この検証をしないで、無条件に「テキストメッセージのWebhookイベントが届いたらユーザーに返信する」のような処理をしていると、ボットサーバーに偽のWebhookを投げ続けることで、LINE Botを介して特定のユーザーに大量のメッセージを送りつける攻撃が可能になってしまいます。
+
+署名検証の各言語ごとのコードサンプルは、公式ドキュメントの「署名を検証する@<fn>{signature}」にありますし、SDKを用いることで簡単に検証できます。
+
+===[/column]
+
+//footnote[ip-addr][Webook | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhooks}]
+//footnote[signature][署名を検証する | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#signature-validation}]
 
 == ChatGPTのAPIを使ったAIチャットボットを作ってみよう
 
-オウム返しが動くとうれしいですが、うれしいけど「オウム返しされたけど……だからなに？」という気持ちにもなるので、今度はもっとちゃんと役に立つAIチャットボットに作り変えてみましょう。
+オウム返しが動くとうれしいですね！うれしいものの、「オウム返しされたけど……だからなに？」という気持ちにもなるので、今度はChatGPTのAPIを使って、ちゃんと役に立つAIチャットボットに作り変えてみましょう。
 
 === ChatGPTとGPT-3.5とは
 
@@ -607,31 +825,25 @@ ChatGPTはOpenAIが提供している対話型のウェブサービスです。�
 
 OpenAIの開発者向けサイトに登録して、APIをたたくためのシークレットキーを取得します。
 
-
 === OpenAIのSDKを準備する
 
-ChatGPTのAPIをたたくための、OpenAIのSDKも用意されています。先ほどのMessaging APIのSDKと同じように準備していきましょう。
+ChatGPTのAPIをたたくためのOpenAIのSDKも用意されています。先ほどのMessaging APIのSDKと同じようにpython.zipを準備しましょう。
 
- 1. mkdir python
- 1. cd python
- 1. pip install line-bot-sdk -t . --no-user
- 1. SDKのコードが詰まったpythonディレクトリをzipファイルに圧縮する
+==== OpenAI API SDKのレイヤーを作成する
 
-=== AWS LambdaのコードにChatGPTのAPIをたたく処理を追加する
+先ほどのMessaging API SDKと同様に、AWS Lambdaを開いてOpenAI API SDKのレイヤーを作成します。
 
-Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、Ruby、Python、Node.jsで用意されています。今回はPythonのSDKを使ってコードを書いていきます。
+==== レイヤーを追加する
 
- * @<href>{https://github.com/line/line-bot-sdk-python}
+Lambda関数にOpenAI APIのレイヤーを追加します。
 
- 1. AWS LambdaでOpenAIの「レイヤーを作成」
- 1. zipファイルを選択
- 1. 互換性のあるランタイムでPython 3.9を選択する
- 1. x86_64にチェックを入れる
- 1. カスタムレイヤーで選ぶ
- 1. APIタイプはHTTP APIでAPI gatewayを作る
- 1. Lambdaの設定>一般設定からタイムアウトを1分0秒に変更する
+==== Lambda関数のタイムアウトまでの時間を延ばす
 
-さきほど作ったLambda関数のコードを、次のコードに置き換えてください。
+Lambda関数の［設定］の［一般設定］からタイムアウトを1分0秒に変更します。
+
+=== AWS LambdaのコードにChatGPTのAPIで質問の回答を取得する処理を追加する
+
+ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。さきほど作ったLambda関数のコードを、次のコードに置き換えてください。
 
 //listnum[source-code][AWS Lambdaで動かすpythonのコード]{
 import json
@@ -728,42 +940,11 @@ def lambda_handler(event, context):
     }
 //}
 
-===[column] 【コラム】これは本当にLINEプラットフォームから来たWebhook？
+=== LINE公式アカウントに話しかけてAIチャットボットの回答を確認しよう
 
-ボットサーバーに、LINEプラットフォームからWebhookが届いたら、その内容に応じて返信を送ったり、何か処理をしたりします。
+それではLINE公式アカウントに質問をしてみて、AIチャットボットが回答してくれることを確認してみましょう。
 
-このとき、届いたリクエストが本当にLINEプラットフォームから届いたWebhookなのか、それともLINEプラットフォームを装った第三者からの攻撃なのか、どうやって判別すればよいのでしょう？
-
-アクセス元のIPアドレスが分かれば、IPアドレス制限をかけることで、LINEプラットフォーム以外からのアクセスを遮断できますが、残念ながらLINEプラットフォームはIPアドレスのレンジを開示していません。@<fn>{ip-addr}代わりに、署名の検証を行いましょう。
-
-LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず「x-line-signature」という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として扱い、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーのx-line-signatureの署名の一致を確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
-
-この検証をしないで、無条件に「テキストメッセージのWebhookイベントが届いたらユーザーに返信する」のような処理をしていると、ボットサーバーに偽のWebhookを投げ続けることで、LINE Botを介して特定のユーザーに大量のメッセージを送りつける攻撃が可能になってしまいます。
-
-署名検証の各言語ごとのコードサンプルは、公式ドキュメントの「署名を検証する@<fn>{signature}」にありますし、SDKを用いることで簡単に検証できます。
-
-===[/column]
-
-//footnote[ip-addr][Webook | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhooks}]
-//footnote[signature][署名を検証する | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#signature-validation}]
-
-=== ボットサーバーをWebhook URLに登録する
-
-再びLINE Developersコンソールを開いて、作成したボットサーバーのURLをWebhook URLに登録します。
-
-チャネルアクセストークンとチャネルシークレットをコピーして、AWS Lambdaの環境変数に登録します。
-
-=== ユーザーのメッセージをオウム返しする
-
-それではLINEでLINE公式アカウントにメッセージを送って、そのメッセージがオウム返しされて戻ってくるか、確認してみましょう。（要追記）
-
-=== OpenAI APIのシークレットキーを取得する
-
-OpenAIの開発者登録をして、シークレットキーを取得します。
-
-=== AIチャットボットでユーザーの質問に自動応答する
-
-ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。
+おめでとうございます！これでAIチャットボットの完成です。
 
 ===[column] 【コラム】Webhookへのレスポンスが先？応答メッセージが先？
 
@@ -778,6 +959,10 @@ OpenAIの開発者登録をして、シークレットキーを取得します�
 ===[/column]
 
 //footnote[reply_token_rule][応答トークン | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-reply-message-reply-token}]
+
+== Messaging APIのさまざまな機能
+
+Messaging APIには、メッセージの送信や応答だけでなくさまざまな機能が存在しています。
 
 ===[column] 【コラム】メッセージの通数はどうカウントされるのか
 
