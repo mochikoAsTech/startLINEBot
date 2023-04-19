@@ -853,9 +853,76 @@ APIキーが生成されたら、ダッシュボード上に表示されます�
 
 LINE Developersコンソールで取得したチャネルアクセストークンと同様に、このシークレットキーはOpenAI APIをたたくときに身分証のような役割を果たします。うっかりシークレットキーが載った画面をブログで公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
 
-=== OpenAIのSDKを準備する
+=== OpenAI APIのSDKを準備する
 
-ChatGPTのAPIをたたくためのOpenAIのSDKも用意されています。先ほどのMessaging APIのSDKと同じようにpython.zipを準備しましょう。
+OpenAI APIのSDKも用意されています。先ほどのMessaging APIのSDKと同じようにpython.zipを準備しましょう。
+
+https://platform.openai.com/docs/libraries
+
+ * Python library - OpenAI API
+ ** @<href>{https://platform.openai.com/docs/libraries/python-library}
+
+===={openai-win} Windowsの場合
+
+@<hd>{article02|curl}で使用したWSLを再び起動して、以下のコマンドを順番にたたいていきます。@<ttb>{$}はプロンプトを表していますので入力しないでください。
+
+先ずはcdコマンドでさきほどMessaging APIのSDKを準備したのと同じホームディレクトリに移動して、lsコマンドでpythonフォルダとpython.zipが残っていることを確認します。rmコマンドでpythonフォルダとpython.zipを削除したら、再びlsコマンドをたたいてもう無いことを確認します。（@<img>{rm-rf}）
+
+//cmd{
+$ cd
+$ ls
+$ rm -rf python python.zip
+$ ls
+//}
+
+//image[rm-rf][残っていたpythonフォルダとpython.zipを削除する][scale=1]{
+//}
+
+そして再びmkdirコマンドでpython@<fn>{python-dir-2}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-openai-sdk-1}）
+
+//footnote[python-dir-2][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
+
+//cmd{
+$ mkdir python
+$ ls
+$ cd python
+//}
+
+//image[get-openai-sdk-1][pythonディレクトリを作ってその中に移動する][scale=1]{
+//}
+
+それではzipコマンドでpythonディレクトリをぎゅっとZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できればOKです。（@<img>{get-sdk-3}）
+
+//cmd{
+$ zip -r python.zip python
+$ ls
+//}
+
+//image[get-openai-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//}
+
+最後に@<ttb>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。（@<img>{get-sdk-4}、@<img>{get-sdk-5}）
+
+//cmd{
+$ explorer.exe .
+//}
+
+//image[get-openai-sdk-4][「explorer.exe .」をたたく][scale=1]{
+//}
+
+//image[get-openai-sdk-5][するとエクスプローラでpython.zipのあるフォルダが表示される][scale=0.8]{
+//}
+
+作成したpython.zipはこの後すぐに使うので、デスクトップに［ファイルを置き換える］でコピーしておきましょう。（@<img>{copy-to-desktop-2}）
+
+//image[copy-to-desktop-2][python.zipはデスクトップに［ファイルを置き換える］でコピーしておく][scale=0.8]{
+//}
+
+これでOpenAI APIのSDKが準備できました。
+
+===={openai-mac} Macの場合
+
+Macの場合は、デフォルトでpipコマンドやzipコマンドが入っているので、Windowsの手順から@<ttb>{sudo apt install ○○}というコマンドを除いて同様に実行してください。
 
 ==== OpenAI API SDKのレイヤーを作成する
 
@@ -966,6 +1033,21 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')
     }
+//}
+
+このコードの中で、次の部分がOpenAI APIをたたいて質問の回答を取得するコードです。OpenAI APIに質問を投げると、回答の生成に非常に時間がかかるため、@<ttb>{stop=['。']}を指定することで、「最初に句点（。）が出てきたらそこで生成を終了する」というリクエストにして回答生成を早めに切り上げるようにしています。
+
+//listnum[qanda-code][OpenAI APIをたたいて質問の回答を取得する部分のコード]{
+    # ChatGPTに質問を投げて回答を取得する
+    question = event.message.text
+    answer_response = openai.ChatCompletion.create(
+        model='gpt-3.5-turbo',
+        messages=[
+            {'role': 'user', 'content': question},
+        ],
+        stop=['。']
+    )
+    answer = answer_response["choices"][0]["message"]["content"]
 //}
 
 === LINE公式アカウントに話しかけてAIチャットボットの回答を確認しよう
