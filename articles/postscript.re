@@ -27,7 +27,7 @@ mochikoAsTech
 
 === レビュアー
 
- * レビュアーのお名前
+ * Yuta Kasai
 
 === 参考文献
 

@@ -247,10 +247,10 @@ Macを使っている方は、最初から「ターミナル」（@<img>{mac}）
 
 WSLやターミナルがどこにあるのか分からないときは、Windowsなら画面下部の検索ボックスで「WSL」と検索（@<img>{search-wsl}）、Macなら画面右上にある虫眼鏡のマークからSpotlightで「ターミナル」と検索（@<img>{search-mac}）すれば起動できます。
 
-//image[search-mac][Windowsなら検索ボックスで「WSL」と検索][scale=0.8]{
+//image[search-wsl][Windowsなら検索ボックスで「WSL」と検索][scale=0.8]{
 //}
 
-//image[search-wsl][MacならSpotlightで「ターミナル」と検索][scale=0.8]{
+//image[search-mac][MacならSpotlightで「ターミナル」と検索][scale=0.8]{
 //}
 
 curlコマンド（@<list>{curl-send-message}）の3行目にある「チャネルアクセストークン」の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
@@ -413,7 +413,7 @@ Messaging APIでは、開発をサポートするSDK@<fn>{sdk}がJava、PHP、Go
 
 ==== Windowsの場合
 
-@<hd>{article02|curl}で使用したWSLを再び起動して、以下のコマンドを順番にたたいていきます。@<b>{$}はプロンプトを表していますので入力しないでください。
+@<hd>{article02|curl}で使用したWSLを再び起動して、以下のコマンドを順番にたたいていきます。@<ttb>{$}はプロンプトを表していますので入力しないでください。
 
 先ずはcdコマンドでホームディレクトリ@<fn>{dir}に移動して、mkdirコマンドでpython@<fn>{python-dir}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-sdk-1}）
 
@@ -430,7 +430,7 @@ $ cd python
 //image[get-sdk-1][pythonディレクトリを作ってその中に移動する][scale=1]{
 //}
 
-続いて、SDKをパソコンの中に取ってくるためにpipコマンドが使いたいので、aptコマンドでpipコマンドを連れてきます。@<b>{sudo apt update}をたたくとパスワードを聞かれるので、パソコンを起動したときに入力するのと同じパスワードを入力してEnterを押してください。@<b>{sudo apt install python3-pip}をたたくと、メッセージがだだーっと流れた後に@<b>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
+続いて、SDKをパソコンの中に取ってくるためにpipコマンドが使いたいので、aptコマンドでpipコマンドを連れてきます。@<ttb>{sudo apt update}をたたくとパスワードを聞かれるので、パソコンを起動したときに入力するのと同じパスワードを入力してEnterを押してください。@<ttb>{sudo apt install python3-pip}をたたくと、メッセージがだだーっと流れた後に@<ttb>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
 
 //cmd{
 $ sudo apt update
@@ -447,7 +447,7 @@ $ ls
 //image[get-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
 //}
 
-取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。そしてaptコマンドでzipコマンドを連れてきます。@<b>{sudo apt install zip}をたたくと、メッセージがだだーっと流れた後に@<b>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
+取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。そしてaptコマンドでzipコマンドを連れてきます。@<ttb>{sudo apt install zip}をたたくと、メッセージがだだーっと流れた後に@<ttb>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
 
 //cmd{
 $ cd ..
@@ -464,7 +464,7 @@ $ ls
 //image[get-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
 //}
 
-最後に@<b>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。（@<img>{get-sdk-4}、@<img>{get-sdk-5}）
+最後に@<ttb>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。（@<img>{get-sdk-4}、@<img>{get-sdk-5}）
 
 //cmd{
 $ explorer.exe .
@@ -485,7 +485,7 @@ $ explorer.exe .
 
 ==== Macの場合
 
-Macの場合は、デフォルトでpipコマンドやzipコマンドが入っているので、Windowsの手順から@<b>{sudo apt install ○○}というコマンドを除いて同様に実行してください。
+Macの場合は、デフォルトでpipコマンドやzipコマンドが入っているので、Windowsの手順から@<ttb>{sudo apt install ○○}というコマンドを除いて同様に実行してください。
 
 === AWS LambdaとAPI Gatewayでボットサーバーを作る
 
@@ -498,7 +498,7 @@ AWSを初めて使用する場合、AWSアカウントを作成してから1年�
 
 //footnote[create-aws-account][なおAWSアカウントの作成の詳しい手順は「DNSをはじめよう」という書籍で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」という書籍で詳しく紹介しています。もしAWSアカウントの作成や設定に不安がある場合は、そちらを参考にしてください。 @<href>{https://mochikoastech.booth.pm/}]
 
-それでは早速、AWSのマネジメントコンソール（@<href>{https://console.aws.amazon.com/}）を開いて、上部の検索窓で@<b>{lambda}と検索し、Lambdaを開きます。（@<img>{search-lambda}）
+それでは早速、AWSのマネジメントコンソール（@<href>{https://console.aws.amazon.com/}）を開いて、上部の検索窓で@<ttb>{lambda}と検索し、Lambdaを開きます。（@<img>{search-lambda}）
 
 //image[search-lambda][検索窓からLambdaを開く][scale=0.8]{
 //}
@@ -727,7 +727,7 @@ def lambda_handler(event, context):
 
 ==== 環境変数を設定する
 
-コードを動かすには、Messaging APIのチャネルアクセストークンとチャネルシークレットが必要ですが、ソースコードには直接書かず、環境変数として設定して、@<b>{CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')}というように環境変数を参照する形にしています。
+コードを動かすには、Messaging APIのチャネルアクセストークンとチャネルシークレットが必要ですが、ソースコードには直接書かず、環境変数として設定して、@<ttb>{CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')}というように環境変数を参照する形にしています。
 
 Lambda関数の［設定］タブから［環境変数］を開いて、［編集］をクリックします。（@<img>{parrot-bot-4}）
 
