@@ -8,6 +8,8 @@ CHAPS:
   - article01.re
 # Messaging APIでLINE Botをつくってみよう
   - article02.re
+# Messaging APIのさまざまな機能を使ってみよう
+  - article03.re
 
 POSTDEF:
 # あとがき
