@@ -74,13 +74,6 @@ OGPタグの書き方については、LINE DevelopersサイトのFAQを参考�
 
 ただしFlex Message Simulatorで出力されるJSONは、messages直下のFlex Message全体ではなく、コンテナ（contents以下）なので注意が必要です。
 
-=== エラーの統計情報
-
-ボットサーバーでWebhookを受け取って、きちんとステータスコード200が返せなかった場合、エラーの統計情報でそのログが確認できます。友だちがメッセージを送ってきたのに、LINE公式アカウントからきちんと返信が送れていない場合は、ボットサーバーのログと共に、このエラーの統計情報も確認しましょう。
-
- * Webhookの送信におけるエラーの統計情報を確認する
- ** @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}
-
 === ボットサーバーがWebhookを受け取れなかったときの再送機能
 
 たとえばLINE公式アカウントが急に有名になり、一気に友だちが増えて、メッセージが大量に送られてきたとします。急なアクセス集中でサイトが落ちるように、LINEプラットフォーム飛んでくるWebhookのリクエストによって、ボットサーバーが過負荷になって応答できなくなってしまったらどうなるのでしょうか。
