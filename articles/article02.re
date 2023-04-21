@@ -869,22 +869,76 @@ Messaging APIを使うにはチャネルアクセストークンが必要だっ�
 //image[openai-api-site][右上の［Sign up］を開く][scale=0.8]{
 //}
 
-アカウント作成のページが表示されたら、ユーザーネーム、メールアドレス、パスワードを入力して登録します。アカウントが作成できると、OpenAIのダッシュボードが表示されます。
+［Create your account］と表示されたら、メールアドレスを入力して［Continue］をクリックします。（@<img>{openai-account-1}）
 
-［Create a new API key］ボタンをクリックすると、シークレットキー作成のページが表示されるので、APIキー名を入力して［Create API Key］をクリックします。
+//image[openai-account-1][メールアドレスを入力して［Continue］をクリックする][scale=0.8]{
+//}
 
-APIキーが生成されたら、ダッシュボード上に表示されます。このシークレットキーは後ほど使用しますので、パソコンのメモ帳にしっかりメモしておいてください。（@<img>{openai-api-keys}）
+続いてパスワードを入力して、［Continue］をクリックします。（@<img>{openai-account-2}）
 
-//image[openai-api-keys][シークレットキーをメモしておく][scale=0.8]{
+//image[openai-account-2][パスワードを入力して［Continue］をクリックする][scale=0.8]{
+//}
+
+［Verify your email］と表示されます。（@<img>{openai-account-3}）
+
+//image[openai-account-3][［Verify your email］と表示されたらメールを確認しよう][scale=0.8]{
+//}
+
+すると、入力したメールアドレス宛てに［OpenAI - Verify your email］という件名のメールが届きます。［Verify email address］をクリックしてください。（@<img>{openai-account-4}）
+
+//image[openai-account-4][届いたメールの［Verify email address］をクリックする][scale=0.8]{
+//}
+
+メールアドレスの確認ができたら、［Tell us about you］と表示されます。苗字と名前、そして生年月日を入力して、［Continue］をクリックします。（@<img>{openai-account-5}）
+
+//image[openai-account-5][苗字と名前と生年月日を入力して［Continue］をクリックする][scale=0.8]{
+//}
+
+［Verify your phone number］と表示されたら、携帯電話の電話番号を入力します。プラス記号と国番号の81からはじまる国際的な電話番号の形式なので、あなたの電話番号が「080-0123-4567」なら「8012345678」と入力してください。入力したら［Send code］をクリックします。（@<img>{openai-account-6}）
+
+//image[openai-account-6][電話番号を入力して［Send code］をクリックする][scale=0.8]{
+//}
+
+すると入力した電話番号のスマートフォン宛てに、［あなたのOpenAI API 認証コード］というSMSが届きます。（@<img>{openai-account-7}）
+
+//image[openai-account-7][［あなたのOpenAI API 認証コード］][scale=0.8]{
+//}
+
+SMSに書いてある6桁の認証コードを、［Enter code］と表示された画面で入力してください。（@<img>{openai-account-8}）
+
+//image[openai-account-8][SMSで届いた6桁の認証コードを［Enter code］の画面で入力する][scale=0.8]{
+//}
+
+右上のアイコンをクリックして自分のメールアドレスが表示されていたら、OpenAI APIのアカウント登録は完了です。［VIEW API keys］を開いてしてください。（@<img>{openai-account-9}）
+
+//image[openai-account-9][OpenAI APIのアカウント登録が完了したら［VIEW API keys］を開く][scale=0.8]{
+//}
+
+OpenAI APIをたたくためのシークレットキーはまだ存在していないので、［Create new secret key］をクリックして作成しましょう。（@<img>{openai-account-10}）
+
+//image[openai-account-10][［Create new secret key］をクリックする][scale=0.8]{
+//}
+
+シークレットキーの［Name］は任意ですが、何の用途で作った鍵なのか後で分からなくなってしまわないように、［OpenAI API secret key for LINE Bot］と書いておきましょう。［Create secret key］をクリックします。（@<img>{openai-account-11}）
+
+//image[openai-account-11][［Create secret key］をクリックする][scale=0.8]{
+//}
+
+シークレットキーが作成されました。このシークレットキーはこの画面でコピーしておかないと、以降二度と表示されません。もし無くしたらシークレットキーを再び作成することになります。コピーボタンを押して、チャネルアクセストークンやチャネルシークレットと同様に、パソコンのメモ帳にしっかりメモしておいてください。メモできたら［Done］をクリックして、ポップアップを閉じます。（@<img>{openai-account-12}）
+
+//image[openai-account-12][シークレットキーは二度と表示されないのでしっかりメモしておこう][scale=0.8]{
+//}
+
+これでOpenAI APIをたたくためのシークレットキーが手に入りました。（@<img>{openai-account-13}）
+
+//image[openai-account-13][シークレットキーが手に入った！][scale=0.8]{
 //}
 
 LINE Developersコンソールで取得したチャネルアクセストークンと同様に、このシークレットキーはOpenAI APIをたたくときに身分証のような役割を果たします。うっかりシークレットキーが載った画面をブログで公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
 
 === OpenAI APIのSDKを準備する
 
-OpenAI APIのSDKも用意されています。先ほどのMessaging APIのSDKと同じようにpython.zipを準備しましょう。
-
-https://platform.openai.com/docs/libraries
+続いてOpenAI APIのSDKの準備をします。先ほどのMessaging APIのSDKと同じように、OpenAI APIのSDKも公式がPythonとNode.jsで用意してくれています。OpenAI APIのpython.zipを作成しましょう。
 
  * Python library - OpenAI API
  ** @<href>{https://platform.openai.com/docs/libraries/python-library}
