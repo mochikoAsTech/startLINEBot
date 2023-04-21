@@ -634,7 +634,7 @@ APIタイプ	HTTP API
 
 ブラウザで［APIエンドポイント］のURLを開いたとき、［"Hello from Lambda!"］というレスポンスが返ってきたのは、Lambda関数の［コード］タブのコードソースに次のようなコードが書いてあったからです。（@<list>{default-source-code-1}）
 
-//listnum[default-source-code-1][Lambda関数のデフォルトのコード]{
+//listnum[default-source-code-1][Lambda関数のデフォルトのコード][python]{
 import json
 
 def lambda_handler(event, context):
@@ -650,9 +650,9 @@ def lambda_handler(event, context):
 //image[parrot-bot][ステータスコード200とJSONを返すコード][scale=0.8]{
 //}
 
-このコードを、次のようにWebhookを受け取ってオウム返しするコードに書き直してみましょう。
+このコードを、次のようにWebhookを受け取ってオウム返しするコードに書き直してみましょう。（@<list>{parrot-source-code-1}）
 
-//listnum[source-code-1][Webhookでメッセージを受け取ってオウム返しするコード][python]{
+//listnum[parrot-source-code-1][Webhookでメッセージを受け取ってオウム返しするコード][python]{
 import json
 import logging
 import os
@@ -857,7 +857,7 @@ ChatGPTはOpenAIが提供している対話型のウェブサービスです。O
 
 //footnote[chatgpt][本書を書いている最中に「ChatGPTだー！」「GPT-3.5だー！」「いやGPT-4だー！」とインターネットがお祭り騒ぎになったので、筆者はなんとか間に合わせるために寝不足で吐きそうになりながら動作検証をして、この「ChatGPTのAPIを使ったAIチャットボットを作る」という節を書き足しました。だってみんな、いまAIチャットボット作れる本が出たら絶対に嬉しいと思ったから！]
 
-=== OpenAIに登録してシークレットキーを取得する
+==={issue-secret-key} OpenAIに登録してシークレットキーを取得する
 
 Messaging APIを使うにはチャネルアクセストークンが必要だったように、OpenAI APIを使うには、OpenAI APIのサイトでアカウントを作ってシークレットキーを取得する必要があります。
 
@@ -901,7 +901,7 @@ Messaging APIを使うにはチャネルアクセストークンが必要だっ�
 
 すると入力した電話番号のスマートフォン宛てに、［あなたのOpenAI API 認証コード］というSMSが届きます。（@<img>{openai-account-7}）
 
-//image[openai-account-7][［あなたのOpenAI API 認証コード］][scale=0.8]{
+//image[openai-account-7][［あなたのOpenAI API 認証コード］][scale=0.4]{
 //}
 
 SMSに書いてある6桁の認証コードを、［Enter code］と表示された画面で入力してください。（@<img>{openai-account-8}）
@@ -936,9 +936,57 @@ OpenAI APIをたたくためのシークレットキーはまだ存在してい�
 
 LINE Developersコンソールで取得したチャネルアクセストークンと同様に、このシークレットキーはOpenAI APIをたたくときに身分証のような役割を果たします。うっかりシークレットキーが載った画面をブログで公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
 
-=== OpenAI APIのSDKを準備する
+==={openai-api-curl} OpenAI APIに質問を投げて回答を取得する
 
-続いてOpenAI APIのSDKの準備をします。先ほどのMessaging APIのSDKと同じように、OpenAI APIのSDKも公式がPythonとNode.jsで用意してくれています。OpenAI APIのpython.zipを作成しましょう。
+@<hd>{article02|curl}でcurlコマンドを使ってMessaging APIをたたき、メッセージを送信したように、今度はcurlコマンドでOpenAI APIに質問を投げて回答を取得してみましょう。
+
+再びWSLまたはターミナルを起動します。次のcurlコマンド（@<list>{curl-send-message}）の3行目にある「シークレットキー」の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしましたね。
+
+//listnum[openai-api-curl][curlコマンドで質問の回答を取得する][sh]{
+curl https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer シークレットキー" \
+  -d '{
+    "model": "gpt-3.5-turbo",
+    "messages": [{"role": "user", "content": "技術書典ってなんですか？"}]
+  }'
+//}
+
+チャネルアクセストークンを置き換えたら、curlコマンドをまるごとコピーしてWSLもしくはターミナルに貼り付けます。WSLの場合は、複数行をまとめて貼り付けると警告が出ますが、［強制的に貼り付け］を押します。（@<img>{openai-curl-1}）
+
+//image[openai-curl-1][複数行の貼り付けに対する警告が出たら［強制的に貼り付け］を押す][scale=0.8]{
+//}
+
+貼り付けたらEnterを押して実行します。（@<img>{openai-curl-2}）
+
+//image[openai-curl-2][貼り付けたらEnterを押して実行する][scale=0.8]{
+//}
+
+回答の生成には少し時間がかかりますが、少し立つとレスポンスが画面に出力されます。curlコマンドを使ってAPIをたたいた結果、レスポンスとして回答を含むJSONオブジェクトが返ってきたことが分かります。（@<img>{openai-curl-3}）
+
+//image[openai-curl-3][回答を含むJSONが返ってきた][scale=0.8]{
+//}
+
+リクエストで指定した@<ttb>{role}や@<ttb>{content}、返ってきたレスポンスの値がそれぞれ何を表しているのかは、OpenAI APIのAPIリファレンスを参照してください。
+
+ * Create chat completion | API Reference - OpenAI API
+ ** @<href>{https://platform.openai.com/docs/api-reference/chat/create}
+
+curlコマンドでOpenAI APIに質問を投げて、回答を取得できました。「APIをたたく」ことに少し慣れてきましたか？
+
+ちなみに2023年4月現在、OpenAI APIはアカウントを作ってから最初の3ヶ月は5ドル分まで無料@<fn>{openai-free}で使えるようです。自分が既に無料枠をどれくらい使ったのかは、OpenAI APIのUsage@<fn>{openai-free-2}で確認できます。（@<img>{openai-usage}）
+
+//footnote[openai-free][Pricing @<href>{https://openai.com/pricing}]
+//footnote[openai-free-2][Usage - OpenAI API@<href>{https://platform.openai.com/account/usage}]
+
+//image[openai-usage][無料枠をどれくらい使ったのかはUsageで確認しよう][scale=0.8]{
+//}
+
+では続いて、OpenAI APIのSDKの準備をしていきましょう。
+
+==={prepare-openai-api-sdk} OpenAI APIのSDKを準備する
+
+先ほどのMessaging APIのSDKと同じように、OpenAI APIも公式がPythonとNode.jsでSDKを用意してくれています。OpenAI APIのpython.zipを作成しましょう。
 
  * Python library - OpenAI API
  ** @<href>{https://platform.openai.com/docs/libraries/python-library}
@@ -972,9 +1020,20 @@ $ cd python
 //image[get-openai-sdk-1][pythonディレクトリを作ってその中に移動する][scale=1]{
 //}
 
-それではzipコマンドでpythonディレクトリをぎゅっとZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できればOKです。（@<img>{get-sdk-3}）
+いよいよpipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{get-openai-sdk-2}）
 
 //cmd{
+$ pip install openai -t . --no-user
+$ ls
+//}
+
+//image[get-openai-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
+//}
+
+それではcdコマンドで1つの上のディレクトリに移動して、zipコマンドでpythonディレクトリをぎゅっとZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できればOKです。（@<img>{get-sdk-3}）
+
+//cmd{
+$ cd ..
 $ zip -r python.zip python
 $ ls
 //}
@@ -1005,23 +1064,86 @@ $ explorer.exe .
 
 Macの場合は、デフォルトでpipコマンドやzipコマンドが入っているので、Windowsの手順から@<ttb>{sudo apt install ○○}というコマンドを除いて同様に実行してください。
 
-==== OpenAI API SDKのレイヤーを作成する
+=== OpenAI API SDKのレイヤーを作成する
 
-先ほどのMessaging API SDKと同様に、AWS Lambdaを開いてOpenAI API SDKのレイヤーを作成します。
+先ほどのMessaging API SDKと同様に、OpenAI API SDKのレイヤーをAWS Lambdaに追加します。AWSのマネジメントコンソールからAWS Lambdaを開いたら、左メニューの［レイヤー］から、［レイヤーの作成］をクリックします。（@<img>{openai-create-layer}）
 
-==== レイヤーを追加する
+//image[openai-create-layer][［レイヤーの作成］をクリック][scale=0.8]{
+//}
 
-Lambda関数にOpenAI APIのレイヤーを追加します。
+「名前」と「説明」は次のように入力します。（@<table>{openai-layer-settings}）
 
-==== Lambda関数のタイムアウトまでの時間を延ばす
+//table[openai-layer-settings][レイヤー設定]{
+名前	OpenAI-API-SDK-for-python
+説明	OpenAI API SDK for python
+アップロード方法	.zip ファイルをアップロード
+アップロードするファイル	@<hd>{article02|prepare-openai-api-sdk}で用意したpython.zip
+互換性のあるアーキテクチャ	x86_64にチェックを入れる
+互換性のあるランタイム	Python 3.10を選択
+ライセンス	https://github.com/openai/openai-python/blob/main/LICENSE
+//}
+
+［アップロード］をクリックしたら、@<hd>{article02|prepare-openai-api-sdk}で準備しておいた、デスクトップのpython.zipを選択し、アップロードしてください。（@<img>{openai-select-python-zip}）
+
+//image[openai-select-python-zip][デスクトップにあるpython.zipを選択してアップロード][scale=0.8]{
+//}
+
+必要事項を入力したら［作成］をクリックします。（@<img>{openai-create-layer-2}）
+
+//image[openai-create-layer-2][必要事項を入力したら［作成］をクリックする][scale=0.8]{
+//}
+
+これでOpenAI API SDKのレイヤーができました！（@<img>{openai-create-layer-3}）
+
+//image[openai-create-layer-3][レイヤーができた！][scale=0.8]{
+//}
+
+次は、作成したOpenAI API SDKのレイヤーをLambda関数から利用するための設定を行います。左メニューから［関数］を開いてください。
+
+==== Lambda関数にレイヤーを追加する
+
+Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。（@<img>{add-openai-layer-to-lambda}）
+
+//image[add-openai-layer-to-lambda][レイヤーができた！][scale=0.8]{
+//}
+
+このLambda関数に、先に作っておいたMessaging API SDKのレイヤーを追加したいので、［Layers］をクリックします。（@<img>{add-openai-layer-to-lambda-2}）
+
+//image[add-openai-layer-to-lambda-2][［Layers］をクリックする][scale=0.8]{
+//}
+
+［レイヤーの追加］をクリックします。（@<img>{add-openai-layer-to-lambda-3}）
+
+//image[add-openai-layer-to-lambda-3][［レイヤーの追加］をクリックする][scale=0.8]{
+//}
+
+レイヤーは次のように選択します。（@<table>{select-openai-layer}）
+
+//table[select-openai-layer][レイヤーを選択]{
+レイヤーソース	カスタムレイヤー
+カスタムレイヤー	OpenAI-API-SDK-for-python
+バージョン	1
+//}
+
+使用するレイヤーを選択したら［追加］をクリックします。（@<img>{add-openai-layer-to-lambda-4}）
+
+//image[add-openai-layer-to-lambda-4][［追加］をクリックする][scale=0.8]{
+//}
+
+［Layers］の後ろの数字が@<ttb>{(1)}から@<ttb>{(2)}になりました。これでLambda関数にOpenAI API SDKのレイヤーが追加できました！こうしてレイヤーを追加することで、Lambda関数でOpenAI API SDKが使えるようになります。（@<img>{add-openai-layer-to-lambda-5}）
+
+//image[add-openai-layer-to-lambda-5][OpenAI API SDKのレイヤーが追加できた！][scale=0.8]{
+//}
+
+=== Lambda関数のタイムアウトまでの時間を延ばす
 
 Lambda関数の［設定］の［一般設定］からタイムアウトを1分0秒に変更します。
 
 === AWS LambdaのコードにChatGPTのAPIで質問の回答を取得する処理を追加する
 
-ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。さきほど作ったLambda関数のコードを、次のコードに置き換えてください。
+ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、次のコードに置き換えてください。（@<list>{ai-chat-source-code}）
 
-//listnum[source-code][AWS Lambdaで動かすpythonのコード]{
+//listnum[ai-chat-source-code][AIチャットボットが自動で応答するコード][python]{
 import json
 import logging
 import openai
@@ -1116,9 +1238,9 @@ def lambda_handler(event, context):
     }
 //}
 
-このコードの中で、次の部分がOpenAI APIをたたいて質問の回答を取得するコードです。OpenAI APIに質問を投げると、回答の生成に非常に時間がかかるため、@<ttb>{stop=['。']}を指定することで、「最初に句点（。）が出てきたらそこで生成を終了する」というリクエストにして回答生成を早めに切り上げるようにしています。
+このコードの中で、次の部分がOpenAI APIをたたいて質問の回答を取得するコードです。OpenAI APIに質問を投げると、回答の生成に非常に時間がかかるため、@<ttb>{stop=['。']}を指定することで、「最初に句点（。）が出てきたらそこで生成を終了する」というリクエストにして回答生成を早めに切り上げるようにしています。（@<list>{qanda-code}）
 
-//listnum[qanda-code][OpenAI APIをたたいて質問の回答を取得する部分のコード]{
+//listnum[qanda-code][OpenAI APIをたたいて質問の回答を取得する部分のコード][python]{
     # ChatGPTに質問を投げて回答を取得する
     question = event.message.text
     answer_response = openai.ChatCompletion.create(
@@ -1131,11 +1253,53 @@ def lambda_handler(event, context):
     answer = answer_response["choices"][0]["message"]["content"]
 //}
 
+コードを直したら、［Deploy］を押してデプロイ（変更後のコードを反映）します。（@<img>{aichat-bot-deploy-1}）
+
+//image[aichat-bot-deploy-1][［Deploy］を押して変更後のコードを反映する][scale=0.8]{
+//}
+
+［関数 Bot-Server-on-Lambda が正常に更新されました。］と表示されたらデプロイ完了です。（@<img>{aichat-bot-deploy-2}）
+
+//image[aichat-bot-deploy-2][デプロイ完了][scale=0.8]{
+//}
+
+=== 環境変数にOpenAIのシークレットキーを追加する
+
+いまデプロイしたAIチャットボットのコードを実際に動かすには、OpenAI APIのシークレットキーが必要です。チャネルアクセストークンやチャネルシークレットと同様に、シークレットキーもソースコードには直接書かず、環境変数として設定しておいて、コードからは@<ttb>{openai.api_key = os.getenv('SECRET_KEY')}というように環境変数を参照する形にしています。
+
+Lambda関数の［設定］タブから［環境変数］を開いて、［編集］をクリックします。（@<img>{add-secret-key-to-env-1}）
+
+//image[add-secret-key-to-env-1][［環境変数］の［編集］をクリックする][scale=0.8]{
+//}
+
+［環境変数の追加］をクリックして、［キー］と［値］を次のように設定します。シークレットキーは、@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存してあるはずです。（@<table>{set-openai-env}）
+
+//table[set-openai-env][環境変数の編集]{
+キー	値
+--------------------
+SECRET_KEY	シークレットキー
+//}
+
+環境変数を編集したら［保存］をクリックします。（@<img>{add-secret-key-to-env-2}）
+
+//image[add-secret-key-to-env-2][環境変数を編集したら［保存］をクリックする][scale=0.8]{
+//}
+
+［関数 Bot-Server-on-Lambda が正常に更新されました。］と表示されたら、環境変数にOpenAIのシークレットキーを追加する設定は完了です。（@<img>{add-secret-key-to-env-3}）
+
+//image[add-secret-key-to-env-3][環境変数の設定完了][scale=0.8]{
+//}
+
+これでボットサーバーのボットを、オウム返しするボットからAIチャットボットに切り替える作業が終わりました。
+
 === LINE公式アカウントに話しかけてAIチャットボットの回答を確認しよう
 
-それではLINE公式アカウントに質問をしてみて、AIチャットボットが回答してくれることを確認してみましょう。
+それではLINE公式アカウントに質問をしてみて、AIチャットボットが回答してくれることを確認してみましょう。（@<img>{aichat-reply}）
 
-おめでとうございます！これでAIチャットボットの完成です。
+//image[aichat-reply][メッセージを送ったらAIチャットボットが返事をしてくれた][scale=0.8]{
+//}
+
+さっきはオウム返しをするだけだったのに、AIチャットボットが回答をしてくれるようになりました！おめでとうございます！これでAIチャットボットの完成です。
 
 ===[column] 【コラム】Webhookへのレスポンスが先？応答メッセージが先？
 
