@@ -296,7 +296,7 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 
 やったぁ！Messaging APIがたたけましたね！おめでとうございます。
 
-いまあなたがたたいたのは、LINE公式アカウントと友だちになっている人全員にメッセージを送るための「ブロードキャストメッセージを送る」いうAPIです。もしcurlコマンドを実行した後にステータスコード200以外が返ってきて、LINEにメッセージが届かなかった場合は、APIリファレンス@<fn>{broadcast-message}でこの「ブロードキャストメッセージを送る」いうAPIのエラーレスポンス例を確認してみてください。
+いまあなたがたたいたのは、LINE公式アカウントと友だちになっている人全員にメッセージを送るための「ブロードキャストメッセージを送る」いうAPIです。もしcurlコマンドを実行した後にステータスコード200以外が返ってきて、LINEにメッセージが届かなかった場合は、公式ドキュメントのAPIリファレンス@<fn>{broadcast-message}でこの「ブロードキャストメッセージを送る」いうAPIのエラーレスポンス例を確認してみてください。
 
 //footnote[broadcast-message][ブロードキャストメッセージを送る | Messaging APIリファレンス | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message}]
 
@@ -479,7 +479,7 @@ $ explorer.exe .
 
 作成したpython.zipはこの後すぐに使うので、デスクトップにコピーしておきましょう。（@<img>{copy-to-desktop}）
 
-//image[copy-to-desktop][python.zipはデスクトップにコピーしておく][scale=0.8]{
+//image[copy-to-desktop][python.zipはデスクトップにコピーしておく][scale=1]{
 //}
 
 これでMessaging APIのSDKが準備できました。
@@ -544,11 +544,9 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 //image[create-layer-3][レイヤーができた！][scale=0.8]{
 //}
 
-次はLambda関数を作成しますので、左メニューから［関数］を開いてください。
-
 ==== Lambda関数を作成する
 
-［関数の作成］をクリックして、Lambda関数を作ります。（@<img>{create-lambda}）
+次はLambda関数を作成しますので、左メニューの［関数］から［関数の作成］を開いてください。（@<img>{create-lambda}）
 
 //image[create-lambda][［関数の作成］をクリックする][scale=0.8]{
 //}
@@ -590,7 +588,7 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 //image[create-lambda-5][［追加］をクリックする][scale=0.8]{
 //}
 
-これでLambda関数にMessaging API SDKのレイヤーが追加できました！こうしてレイヤーを追加することで、Lambda関数でMessaging API SDKが使えるようになります。（@<img>{create-lambda-6}）
+［Layers］の後ろの数字が@<ttb>{(0)}から@<ttb>{(1)}になりました。これでLambda関数にMessaging API SDKのレイヤーが追加できました！こうしてレイヤーを追加することで、Lambda関数でMessaging API SDKが使えるようになります。（@<img>{create-lambda-6}）
 
 //image[create-lambda-6][Messaging API SDKのレイヤーが追加できた！][scale=0.8]{
 //}
@@ -600,7 +598,7 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 ===={create-api-gateway} API Gatewayを作成する
 
 ［ソースを選択］で［API Gateway］を選択します。（@<img>{create-api-gateway}）
-
+\^^^^^^^^^
 //image[create-api-gateway][［API Gateway］を選択する][scale=0.8]{
 //}
 
@@ -650,7 +648,9 @@ def lambda_handler(event, context):
 //image[parrot-bot][ステータスコード200とJSONを返すコード][scale=0.8]{
 //}
 
-このコードを、次のようにWebhookを受け取ってオウム返しするコードに書き直してみましょう。（@<list>{parrot-source-code-1}）
+このコードを、次のようにWebhookを受け取ってオウム返しするコード@<fn>{parrot-bot-url}に書き直してみましょう。（@<list>{parrot-source-code-1}）
+
+//footnote[parrot-bot-url][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/parrotbot.py}]
 
 //listnum[parrot-source-code-1][Webhookでメッセージを受け取ってオウム返しするコード][python]{
 import json
