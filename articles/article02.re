@@ -764,7 +764,9 @@ CHANNEL_SECRET	チャネルシークレット
 
 === Webhook URLを設定する
 
-LINE Developersコンソールを開いて、Messaging APIチャネルの［Messaging API設定］タブにある［Webhook設定］の［Webhook URL］を登録します。［編集］をクリックしてください。（@<img>{webhook-url}）
+LINE Developersコンソール@<fn>{console}を開いて、Messaging APIチャネルの［Messaging API設定］タブにある［Webhook設定］の［Webhook URL］を登録します。［編集］をクリックしてください。（@<img>{webhook-url}）
+
+//footnote[console][@<href>{https://developers.line.biz/console/}]
 
 //image[webhook-url][［Webhook URL］の［編集］をクリックする][scale=0.8]{
 //}
@@ -774,7 +776,7 @@ LINE Developersコンソールを開いて、Messaging APIチャネルの［Mess
 //image[webhook-url-2][APIエンドポイントのURLを貼り付けて［更新］をクリックする][scale=0.8]{
 //}
 
-Webhook URLを設定したら、［検証］を押してボットサーバーの動作検証をしてみましょう。（@<img>{webhook-url-3}）
+Webhook URLを設定したら、［検証］を押してボットサーバーとの動作検証をしてみましょう。（@<img>{webhook-url-3}）
 
 //image[webhook-url-3][［検証］を押す][scale=0.8]{
 //}
@@ -784,9 +786,10 @@ Webhook URLを設定したら、［検証］を押してボットサーバーの
 //image[webhook-url-4][［成功］と返ってきたら［OK］をクリックする][scale=0.8]{
 //}
 
-ボットサーバーがWebhookをきちんと受け取れなかったときに備えて、［Webhook URL］の少し下にある［エラーの統計情報］@<fn>{error}をオンにしておきましょう。この［エラーの統計情報］をオンにしておくと、もしボットサーバーがWebhookの受け取りに失敗した場合に、LINE Developersコンソール上でそのログが確認できます。Webhook URLの［検証］を押してエラーが返ってきたときや、友だちがメッセージを送ってきたのにLINE公式アカウントからきちんと返信が送れていない場合は、ボットサーバーのログと共に、［統計情報］タブでエラーの統計情報も確認しましょう。（@<img>{webhook-error}）
+ボットサーバーがWebhookをきちんと受け取れなかったときに備えて、［Webhook URL］の少し下にある［エラーの統計情報］@<fn>{error}をオンにしておきましょう。この［エラーの統計情報］をオンにしておくと、もしボットサーバーがWebhookの受け取りに失敗した場合に、LINE Developersコンソール上でそのログが確認できます。Webhook URLの［検証］を押してエラーが返ってきたときや、友だちがメッセージを送ってきたのにLINE公式アカウントからきちんと返信が送れていない場合は、ボットサーバーのログ@<fn>{logs}と共に、［統計情報］タブでエラーの統計情報も確認しましょう。（@<img>{webhook-error}）
 
 //footnote[error][Webhookの送信におけるエラーの統計情報を確認する | LINE Developers@<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}]
+//footnote[logs][ボットサーバーのログについては、@<hd>{article02|cloudwatch-logs}で後述します。]
 
 //image[webhook-error][［エラーの統計情報］をオンにしておく][scale=0.8]{
 //}
@@ -802,6 +805,39 @@ Webhook URLを設定したら、［検証］を押してボットサーバーの
 //}
 
 これでWebhookの設定は完了です。LINEプラットフォームからのWebhookが、AWS Lambdaで用意したボットサーバーに向かって飛んでくるようになりました。
+
+===={cloudwatch-logs} LINEプラットフォームから飛んできたWebhookを目視確認する
+
+LINE Developersコンソールで、Webhook URLの［検証］を押したとき、LINEプラットフォームからボットサーバーに飛んできたWebhookを目視確認してみましょう。ボットサーバーのログは、AWSのCloudWatchで確認できます。AWSのマネジメントコンソールを開いて、上部の検索窓で@<ttb>{cloudwatch}と検索し、CloudWatchを開きます。（@<img>{cloudwatch}）
+
+//image[cloudwatch][検索窓からCloudWatchを開く][scale=0.8]{
+//}
+
+CloudWatchを開いたら、左メニューの［ロググループ］から［/aws/lambda/Bot-Server-on-Lambda］を開きます。（@<img>{cloudwatch-1}）
+
+//image[cloudwatch-1][［/aws/lambda/Bot-Server-on-Lambda］を開く][scale=0.8]{
+//}
+
+いちばん上にある最新のリクエストのログストリームを開きます。（@<img>{cloudwatch-2}）
+
+//image[cloudwatch-2][いちばん上にあるログストリームを開く][scale=0.8]{
+//}
+
+@<ttb>{[INFO]}からはじまる行を確認します。すると、@<list>{parrot-source-code-1}の48行目で出力しておいたログが確認できます。これがLINEプラットフォームから届いたWebhookのJSONです。（@<img>{cloudwatch-3}）
+
+//image[cloudwatch-3][LINEプラットフォームから届いたWebhookのJSONが確認できる][scale=0.8]{
+//}
+
+//listnum[webhook-json][［検証］を押したときに飛んできたWebhookのJSON][json]{
+{
+    "destination": "U618afd7d21c8c6ab535a3f4aceaf5a19",
+    "events": []
+}
+//}
+
+今回は動作検証だけだったので@<ttb>{events}の中身は空配列でしたが、友だち追加されたときや、友だちからメッセージが届いたときは、ここにメッセージイベントやフォローイベントなどが入ってきます。@<ttb>{events}の中に入ってくるWebhookイベントオブジェクトについては、公式ドキュメントのAPIリファレンス@<fn>{event-objects}を参照してください。
+
+//footnote[event-objects][Webhookイベントオブジェクト | Messaging APIリファレンス | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhook-event-objects}]
 
 ==={greeting} 友だち追加されたときのあいさつメッセージを併用する
 
@@ -828,11 +864,13 @@ Webhook URLを設定したら、［検証］を押してボットサーバーの
 
 アクセス元のIPアドレスが分かれば、IPアドレスの制限をかけることで、LINEプラットフォーム以外からのアクセスを遮断できますが、残念ながらLINEプラットフォームはIPアドレスのレンジを開示していません。@<fn>{ip-addr}代わりに提供されているのが「署名の検証」という方法です。
 
-LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず「x-line-signature」という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として扱い、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーのx-line-signatureの署名が一致することを確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
+LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず@<ttb>{x-line-signature}という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として扱い、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーの@<ttb>{x-line-signature}の署名が一致することを確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
 
 この検証をしないで、無条件に「テキストメッセージのWebhookイベントが届いたらユーザーに返信する」のような処理をしていると、ボットサーバーに偽のWebhookを投げ続けることで、LINE Botを介して特定のユーザーに大量のメッセージを送りつける攻撃が可能になってしまいます。
 
 署名検証の各言語ごとのコードサンプルは、公式ドキュメントの「署名を検証する@<fn>{signature}」にありますし、SDKを用いることで簡単に検証できます。
+
+@<list>{parrot-source-code-1}では、リクエストヘッダーに含まれていた@<ttb>{x-line-signature}を44行目で@<ttb>{signature}に詰めて、51行目で署名検証しています。署名検証した結果、もしLINEプラットフォームを装った第三者からのリクエストだったら、52行目からのエラー処理でステータスコード400を返して、返信の処理は行わないようになっています。
 
 ===[/column]
 
@@ -850,7 +888,7 @@ ChatGPTはOpenAIが提供している対話型のウェブサービスです。O
  * ChatGPT - OpenAI
  ** @<href>{https://chat.openai.com/}
 
-//image[chat-gpt][ChatGPTにChatGPTのことを質問している様子][scale=0.8]{
+//image[chat-gpt][ChatGPTでChatGPTのことを質問している様子][scale=1]{
 //}
 
 このChatGPTの裏側で応答を生成している言語モデルがGPT-3.5です。OpenAIが提供するOpenAI APIを使って質問を投げ、GPT-3.5からの回答を取得することも可能です。本書では、ユーザーがLINEで質問を送ると、GPT-3.5がその文脈に基づいて回答を生成し、その回答がLINE公式アカウントからのメッセージとして返ってくる、というAIチャットボットを作ります。@<fn>{chatgpt}
