@@ -12,17 +12,17 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # 環境変数からMessaging APIのチャネルアクセストークンとチャネルシークレットを取得する
-CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
+CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 
 # それぞれ環境変数に登録されていないとエラー
-if CHANNEL_SECRET is None:
-    logger.error(
-        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
-    sys.exit(1)
 if CHANNEL_ACCESS_TOKEN is None:
     logger.error(
         'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
+    sys.exit(1)
+if CHANNEL_SECRET is None:
+    logger.error(
+        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
     sys.exit(1)
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)

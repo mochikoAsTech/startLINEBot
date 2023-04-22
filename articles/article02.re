@@ -667,17 +667,17 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # 環境変数からMessaging APIのチャネルアクセストークンとチャネルシークレットを取得する
-CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
+CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 
 # それぞれ環境変数に登録されていないとエラー
-if CHANNEL_SECRET is None:
-    logger.error(
-        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
-    sys.exit(1)
 if CHANNEL_ACCESS_TOKEN is None:
     logger.error(
         'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
+    sys.exit(1)
+if CHANNEL_SECRET is None:
+    logger.error(
+        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
     sys.exit(1)
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
@@ -1141,7 +1141,9 @@ Lambda関数の［設定］の［一般設定］からタイムアウトを1分0
 
 === AWS LambdaのコードにChatGPTのAPIで質問の回答を取得する処理を追加する
 
-ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、次のコードに置き換えてください。（@<list>{ai-chat-source-code}）
+ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
+
+//footnote[ai-chat-bot-url][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/aichatbot.py}]
 
 //listnum[ai-chat-source-code][AIチャットボットが自動で応答するコード][python]{
 import json
@@ -1159,20 +1161,20 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # 環境変数からMessaging APIのチャネルアクセストークンとチャネルシークレットを取得する
-CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
+CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 
 # 環境変数からOpenAI APIのシークレットキーを取得する
 openai.api_key = os.getenv('SECRET_KEY')
 
 # それぞれ環境変数に登録されていないとエラー
-if CHANNEL_SECRET is None:
-    logger.error(
-        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
-    sys.exit(1)
 if CHANNEL_ACCESS_TOKEN is None:
     logger.error(
         'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
+    sys.exit(1)
+if CHANNEL_SECRET is None:
+    logger.error(
+        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
     sys.exit(1)
 if openai.api_key is None:
     logger.error(

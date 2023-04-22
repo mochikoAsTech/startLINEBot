@@ -13,20 +13,20 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # 環境変数からMessaging APIのチャネルアクセストークンとチャネルシークレットを取得する
-CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 CHANNEL_ACCESS_TOKEN = os.getenv('CHANNEL_ACCESS_TOKEN')
+CHANNEL_SECRET = os.getenv('CHANNEL_SECRET')
 
 # 環境変数からOpenAI APIのシークレットキーを取得する
 openai.api_key = os.getenv('SECRET_KEY')
 
 # それぞれ環境変数に登録されていないとエラー
-if CHANNEL_SECRET is None:
-    logger.error(
-        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
-    sys.exit(1)
 if CHANNEL_ACCESS_TOKEN is None:
     logger.error(
         'LINE_CHANNEL_ACCESS_TOKEN is not defined as environmental variables.')
+    sys.exit(1)
+if CHANNEL_SECRET is None:
+    logger.error(
+        'LINE_CHANNEL_SECRET is not defined as environmental variables.')
     sys.exit(1)
 if openai.api_key is None:
     logger.error(
@@ -52,7 +52,7 @@ def handle_message(event):
         stop=['。']
     )
     answer = answer_response["choices"][0]["message"]["content"]
-    # 受け取った回答のJSONを目視確認できるようにinfoでログに吐く
+    # 受け取った回答のJSONを目視確認できるようにINFOでログに吐く
     logger.info(answer)
 
     # 応答トークンを使って回答を応答メッセージで送る
@@ -69,7 +69,7 @@ def lambda_handler(event, context):
         signature = event['headers']['x-line-signature']
 
     body = event['body']
-    # 受け取ったWebhookのJSONを目視確認できるようにinfoでログに吐く
+    # 受け取ったWebhookのJSONを目視確認できるようにINFOでログに吐く
     logger.info(body)
 
     try:
