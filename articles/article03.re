@@ -1,14 +1,20 @@
-= Messaging APIのさまざまな機能を使ってみよう
+= Messaging APIの色んな機能を試してみよう
 
-Messaging APIには、メッセージの送信や応答だけでなくさまざまな機能が存在しています。
+色んな機能を組み合わせて自分だけのLINE Botをつくってみよう！
+
+//pagebreak
 
 == メッセージ送信に関する機能
 
-LINE公式アカウントからメッセージを送るとき、普通に送るだけでなく特定の属性を指定して送ったり、見た目にこだわったメッセージを送ったりすることができます。
+LINE公式アカウントからメッセージを送るとき、普通に送るだけでなく、特定の人や属性を指定して送ったり、見た目にこだわったメッセージを送ったりすることができます。
 
 === ユーザーIDを指定して特定の人に送る
 
-Messaging APIでメッセージを送るとき、いちばん簡単なのは友だち全員にメッセージを一斉配信するブロードキャストメッセージです。しかしユーザーのユーザーIDが取得できたら、そのユーザーIDを指定して、特定の人にだけメッセージを送ることも可能です。特定のひとりにだけ送りたいときはプッシュメッセージ、特定の数人にまとめて送りたいときはマルチキャストメッセージで送れます。
+Messaging APIでメッセージを送るとき、いちばん簡単なのは友だち全員にメッセージを一斉配信するブロードキャストメッセージです。しかしユーザーIDを指定して、特定の人にだけメッセージを送ることも可能です。特定のひとりにだけ送りたいときはプッシュメッセージ、特定の数人にまとめて送りたいときはマルチキャストメッセージで送れます。
+
+ユーザーIDは、LINEプラットフォームから飛んでくるWebhookの@<ttb>{source}オブジェクトに含まれています。@<fn>{user-ids}
+
+//footnote[user-ids][ユーザーIDを取得する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/getting-user-ids/}]
 
 ===[column] 【コラム】開発チームだけにメッセージのテスト配信がしたい
      
@@ -18,7 +24,7 @@ Messaging APIでメッセージを送るとき、いちばん簡単なのは友�
 
 さらに厳密に言うと、一度Aさん、Bさんの目の前でCさんにブロックの操作をしてもらったとしても、Cさんの操作でブロックは解除できるので、悪意のあるCさんが後日ブロックを解除してしまうことはとめられません。こうなると、退職したCさんにも、発売前の商品や未発表の情報を含むテスト配信のメッセージが届き続けてしまいます。
 
-なのでテスト配信の仕組みは、「一度友だち追加されたら、開発者側からは友だち状態はコントロールできない」という前提で組んでおく必要があります。
+なのでメッセージのテスト配信の仕組みは、「一度友だち追加されたら、開発者側からは友だち状態はコントロールできない」という前提で組んでおく必要があります。
 
 たとえば、テスト配信のメッセージはテスト用のLINE公式アカウントから送るとしても、ブロードキャストメッセージで友だち全員に送るのではなく、開発チームのAさん、Bさん、CさんのユーザーIDを指定したマルチキャストメッセージを送る、という方法がお勧めです。これならCさんの退職後、開発チームに残ったAさんBさんが送信対象からCさんのユーザーIDを消せば、Cさんには公開前のテストメッセージは届かなくなります。
 
@@ -26,17 +32,17 @@ Messaging APIでメッセージを送るとき、いちばん簡単なのは友�
 
 === メッセージの配信対象を属性で絞り込む
 
-ナローキャストメッセージで、性別や年齢、地域、友だちになってからの期間といった属性情報を指定して送ることも可能です。
+ナローキャストメッセージでは、性別や年齢、地域、友だちになってからの期間といった属性情報を指定してメッセージを送ることが可能です。
 
- * 属性情報やリターゲティングを利用して複数のユーザーに送信する（ナローキャストメッセージ）
- ** @<href>{https://developers.line.biz/ja/docs/messaging-api/sending-messages/#send-narrowcast-message}
+さらにオーディエンスという機能を使うと、たとえば新商品予告のメッセージでURLを開いたユーザーだけを「新商品に興味のあるオーディエンス」に入れておいて、発売当日はそのオーディエンスだけを対象にして店頭イベントの告知を送る、というようなこともできます。@<fn>{audience}
+
+//footnote[audience][属性情報やリターゲティングを利用して複数のユーザーに送信する（ナローキャストメッセージ） | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/sending-messages/#send-narrowcast-message}]
 
 === メッセージ送信元のアイコンと表示名を変更する
 
-メッセージを送るときに、送信元のアイコンと表示名を変更して送ることができます。たとえばテーマパークのLINE公式アカウントで、特定のキャラクターにちなんだイベントを告知するときだけ、メッセージの送信元をそのキャラクターのアイコンと名前にする、といった使い方が可能です。
+メッセージを送るときに、送信元のアイコンと表示名を変更して送ることができます。たとえばテーマパークのLINE公式アカウントで、特定のキャラクターにちなんだイベントを告知するときだけ、メッセージの送信元をそのキャラクターのアイコンと名前にする、といった使い方が可能です。@<fn>{nickname}
 
- * アイコンおよび表示名を変更する
- ** @<href>{https://developers.line.biz/ja/docs/messaging-api/icon-nickname-switch/}
+//footnote[nickname][アイコンおよび表示名を変更する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/icon-nickname-switch/}]
 
 ===[column] 【コラム】URLを送る前にOGPの見た目を事前に確認したり、キャッシュを消したりしたい
 
@@ -47,21 +53,18 @@ LINEでURLを含むメッセージを送ると、こんなふうにプレビュ�
 
 実際にメッセージを送る前に、このプレビューでどんな画像やテキストが表示されるのか、確認したかったらどうすればいいのでしょう？
 
-実はPagePokerという公式のツールを使うと、対象ページのOGPタグ@<fn>{ogp}を読み込んで、どんなふうにプレビューが表示されるのかを事前に確認できます。@<fn>{card-validator}
+PagePokerという公式のツールを使うと、対象ページのOGPタグ@<fn>{ogp}を読み込んで、どんなふうにプレビューが表示されるのかを事前に確認できます。@<fn>{card-validator}
 
- * Pagepoker @<href>{https://poker.line.naver.jp/}
+ * PagePoker
+ ** @<href>{https://poker.line.naver.jp/}
 
-「Clear Cache」にチェックを入れることで、LINE側サーバーのキャッシュも削除できるということなので、ウェブサイト側でOGPの画像を差し替えた後にここでキャッシュを削除すれば、「URLを投げたらうっかり古い画像がプレビューで表示されてしまった」という事態も避けられます。
-
-OGPタグの書き方については、LINE DevelopersサイトのFAQを参考にしてください。
-
- * トークとLINE VOOM内のURLプレビューはどのようにして生成されますか？
- ** @<href>{https://developers.line.biz/ja/faq/#how-are-the-url-previews-generated}
+［Clear Cache］にチェックを入れることで、LINE側サーバーのキャッシュも削除できるということなので、対象ページ側でOGPの画像を差し替えた後にここでキャッシュを削除すれば、「URLを投げたらうっかり古い画像がプレビューで表示されてしまった」という事態も避けられそうです。OGPタグの書き方については、LINE DevelopersサイトのFAQ@<fn>{faq}を参考にしてください。
 
 ===[/column]
 
 //footnote[ogp][OGPはOpen Graph Protcolの略です。HTMLにメタデータとして「og:image」のようなOGPタグを書いておくことで、TwitterやLINEなどでそのURLを共有したときに、URLそのままではなく対象ページのタイトルや概要、画像などがカードのように表示されます。]
-//footnote[card-validator][TwitterのCard Validatorとか、Facebookのシェアデバッガーみたいなものですね。Card Validatorは気づいたらプレビュー確認機能がなくなっていたけれど。 @<href>{https://cards-dev.twitter.com/validator} @<href>{https://developers.facebook.com/tools/debug/}]
+//footnote[card-validator][TwitterのCard Validator（@<href>{https://cards-dev.twitter.com/validator}）とか、Facebookのシェアデバッガー（@<href>{https://developers.facebook.com/tools/debug/}）みたいなものですね。TwitterのCard Validatorは気づいたらプレビュー確認機能がなくなっていましたが……。]
+//footnote[faq][トークとLINE VOOM内のURLプレビューはどのようにして生成されますか？ | LINE Developers @<href>{https://developers.line.biz/ja/faq/#how-are-the-url-previews-generated}]
 
 === Flex Messageで見た目にこだわったメッセージを送る
 
