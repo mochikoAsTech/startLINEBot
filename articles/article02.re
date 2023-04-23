@@ -645,7 +645,7 @@ def lambda_handler(event, context):
 
 このデフォルトのコードは、リクエストが来たら、ステータスコード200と共に「Hello from Lambda!」というメッセージを含むJSONを返すようになっています。（@<img>{parrot-bot}）
 
-//image[parrot-bot][ステータスコード200とJSONを返すコード][scale=0.8]{
+//image[parrot-bot][ステータスコード200とJSONを返すコード][scale=1]{
 //}
 
 このコードを、次のようにWebhookを受け取ってオウム返しするコード@<fn>{parrot-bot-url}に書き直してみましょう。（@<list>{parrot-source-code-1}）
@@ -799,16 +799,24 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 //image[webhook-url-5][［応答メッセージ］の［編集］からLINE Official Account Managerを開く][scale=0.8]{
 //}
 
-ユーザーがメッセージを送ってきたら、今後はWebhookを受け取ったボットサーバーから応答したいので、［Webhook］をオンにして、代わりに［応答メッセージ］をオフにしてください。（@<img>{webhook-url-6}）
+ユーザーがメッセージを送ってきたら、今後はWebhookを受け取ったボットサーバーから応答したいので、［応答設定］の［Webhook］をオンにして、代わりに［応答メッセージ］をオフにしてください。（@<img>{webhook-url-6}）
 
 //image[webhook-url-6][［成功］と返ってきたら［OK］をクリックする][scale=0.8]{
 //}
 
 これでWebhookの設定は完了です。LINEプラットフォームからのWebhookが、AWS Lambdaで用意したボットサーバーに向かって飛んでくるようになりました。
 
-===={cloudwatch-logs} LINEプラットフォームから飛んできたWebhookを目視確認する
+==={greeting} 友だち追加されたときのあいさつメッセージを併用する
 
-LINE Developersコンソールで、Webhook URLの［検証］を押したとき、LINEプラットフォームからボットサーバーに飛んできたWebhookを目視確認してみましょう。ボットサーバーのログは、AWSのCloudWatchで確認できます。AWSのマネジメントコンソールを開いて、上部の検索窓で@<ttb>{cloudwatch}と検索し、CloudWatchを開きます。（@<img>{cloudwatch}）
+友だち追加されたときに、自動で任意のメッセージを送ることができる「あいさつメッセージ」も、LINE Official Account Managerの［応答設定］でオン、オフの設定ができます。このあいさつメッセージは、Webhookと併用することが可能です。本書では、友だち追加されたときの応答は「あいさつメッセージ」で行い、メッセージが届いたときの応答はボットサーバーから行いたいので、あいさつメッセージはオンのままで構いません。
+
+なお友だち追加されたときにWebhookで飛んでくるフォローイベント@<fn>{follow}を用いると、「あいさつメッセージ」と同等の処理をボットサーバーでも実現できます。
+
+//footnote[follow][フォローイベント | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#follow-event}]
+
+==={cloudwatch-logs} LINEプラットフォームから飛んできたWebhookを目視確認する
+
+先ほど、LINE DevelopersコンソールでWebhook URLの［検証］を押したとき、LINEプラットフォームからボットサーバーに飛んできたWebhookを目視確認してみましょう。ボットサーバーのログは、AWSのCloudWatchで確認できます。AWSのマネジメントコンソールを開いて、上部の検索窓で@<ttb>{cloudwatch}と検索し、CloudWatchを開きます。（@<img>{cloudwatch}）
 
 //image[cloudwatch][検索窓からCloudWatchを開く][scale=0.8]{
 //}
@@ -823,33 +831,27 @@ CloudWatchを開いたら、左メニューの［ロググループ］から［/
 //image[cloudwatch-2][いちばん上にあるログストリームを開く][scale=0.8]{
 //}
 
-@<ttb>{[INFO]}からはじまる行を確認します。すると、@<list>{parrot-source-code-1}の48行目で出力しておいたログが確認できます。これがLINEプラットフォームから届いたWebhookのJSONです。（@<img>{cloudwatch-3}）
+@<ttb>{[INFO]}からはじまる行を開いて確認します。すると、Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-code-1}）の48行目で出力しておいたログが確認できます。これがLINEプラットフォームから届いたWebhookのJSONです。（@<img>{cloudwatch-3}）
 
 //image[cloudwatch-3][LINEプラットフォームから届いたWebhookのJSONが確認できる][scale=0.8]{
 //}
 
 //listnum[webhook-json][［検証］を押したときに飛んできたWebhookのJSON][json]{
 {
-    "destination": "U618afd7d21c8c6ab535a3f4aceaf5a19",
+    "destination": "U61（中略）a19",
     "events": []
 }
 //}
+
+@<ttb>{destination}には、その「destination（お届け先）」という名前のとおり、LINEプラットフォームがWebhookを渡す相手、つまりLINE公式アカウント自身のユーザーIDが入っています。
 
 今回は動作検証だけだったので@<ttb>{events}の中身は空配列でしたが、友だち追加されたときや、友だちからメッセージが届いたときは、ここにメッセージイベントやフォローイベントなどが入ってきます。@<ttb>{events}の中に入ってくるWebhookイベントオブジェクトについては、公式ドキュメントのAPIリファレンス@<fn>{event-objects}を参照してください。
 
 //footnote[event-objects][Webhookイベントオブジェクト | Messaging APIリファレンス | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhook-event-objects}]
 
-==={greeting} 友だち追加されたときのあいさつメッセージを併用する
-
-友だち追加されたときに、自動で任意のメッセージを送ることができる「あいさつメッセージ」も、LINE Official Account Managerの［応答設定］でオン、オフの設定ができます。このあいさつメッセージは、Webhookと併用することが可能です。本書では、友だち追加されたときの応答は「あいさつメッセージ」で行い、メッセージが届いたときの応答はボットサーバーから行いたいので、あいさつメッセージはオンのままで構いません。
-
-なお友だち追加されたときにWebhookで飛んでくるフォローイベント@<fn>{follow}を用いると、「あいさつメッセージ」と同等の処理をボットサーバーでも実現できます。
-
-//footnote[follow][フォローイベント | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#follow-event}]
-
 === LINE公式アカウントに話しかけてオウム返しを確認しよう
 
-それではLINE公式アカウントに話しかけて、まったく同じメッセージがオウム返しされるか確認してみましょう。（@<img>{parrot-reply}）
+それではLINEでLINE公式アカウントに話しかけて、まったく同じメッセージがオウム返しされるか確認してみましょう。（@<img>{parrot-reply}）
 
 //image[parrot-reply][メッセージを送ったらLINE公式アカウントがオウム返ししてくれた][scale=0.8]{
 //}
@@ -862,7 +864,7 @@ CloudWatchを開いたら、左メニューの［ロググループ］から［/
 
 このとき、届いたリクエストが本当にLINEプラットフォームから届いたWebhookなのか、それともLINEプラットフォームを装った第三者からの攻撃なのか、どうやって判別すればよいのでしょう？
 
-アクセス元のIPアドレスが分かれば、IPアドレスの制限をかけることで、LINEプラットフォーム以外からのアクセスを遮断できますが、残念ながらLINEプラットフォームはIPアドレスのレンジを開示していません。@<fn>{ip-addr}代わりに提供されているのが「署名の検証」という方法です。
+アクセス元のIPアドレスが分かれば、IPアドレスで制限をかけることで、LINEプラットフォーム以外からのアクセスを遮断できますが、残念ながらLINEプラットフォームはIPアドレスのレンジを開示していません。@<fn>{ip-addr}代わりに推奨されているのが「署名の検証」という方法です。
 
 LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず@<ttb>{x-line-signature}という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として扱い、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーの@<ttb>{x-line-signature}の署名が一致することを確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
 
@@ -870,7 +872,7 @@ LINEプラットフォームから届くWebhookには、そのリクエストヘ
 
 署名検証の各言語ごとのコードサンプルは、公式ドキュメントの「署名を検証する@<fn>{signature}」にありますし、SDKを用いることで簡単に検証できます。
 
-@<list>{parrot-source-code-1}では、リクエストヘッダーに含まれていた@<ttb>{x-line-signature}を44行目で@<ttb>{signature}に詰めて、51行目で署名検証しています。署名検証した結果、もしLINEプラットフォームを装った第三者からのリクエストだったら、52行目からのエラー処理でステータスコード400を返して、返信の処理は行わないようになっています。
+Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-code-1}）では、リクエストヘッダーに含まれていた@<ttb>{x-line-signature}を44行目で@<ttb>{signature}に詰めて、51行目で署名検証しています。署名検証した結果、もしLINEプラットフォームを装った第三者からのリクエストだったら、52行目からのエラー処理でステータスコード400を返して、返信の処理は行わないようになっています。
 
 ===[/column]
 
@@ -891,9 +893,11 @@ ChatGPTはOpenAIが提供している対話型のウェブサービスです。O
 //image[chat-gpt][ChatGPTでChatGPTのことを質問している様子][scale=1]{
 //}
 
-このChatGPTの裏側で応答を生成している言語モデルがGPT-3.5です。OpenAIが提供するOpenAI APIを使って質問を投げ、GPT-3.5からの回答を取得することも可能です。本書では、ユーザーがLINEで質問を送ると、GPT-3.5がその文脈に基づいて回答を生成し、その回答がLINE公式アカウントからのメッセージとして返ってくる、というAIチャットボットを作ります。@<fn>{chatgpt}
+このChatGPTの裏側で応答を生成している言語モデルがGPT-3.5です。OpenAIが提供するOpenAI APIを使って質問を投げ、GPT-3.5からの回答を取得することも可能です。
 
-//footnote[chatgpt][本書を書いている最中に「ChatGPTだー！」「GPT-3.5だー！」「いやGPT-4だー！」とインターネットがお祭り騒ぎになったので、筆者はなんとか間に合わせるために寝不足で吐きそうになりながら動作検証をして、この「ChatGPTのAPIを使ったAIチャットボットを作る」という節を書き足しました。だってみんな、いまAIチャットボット作れる本が出たら絶対に嬉しいと思ったから！]
+それでは先ほどのオウム返しボットを少し作り変えて、ユーザーがLINEで質問を送るとGPT-3.5がその文脈に基づいて回答を生成し、その回答がLINE公式アカウントからのメッセージとして返ってくる、というAIチャットボットにしていきましょう。@<fn>{chatgpt}
+
+//footnote[chatgpt][本書を書いている最中に「ChatGPTだー！」「GPT-3.5だー！」「いやGPT-4だー！」とインターネットがお祭り騒ぎになったので、なんとか間に合わせるために寝不足で吐きそうになりながら動作検証をして、この「ChatGPTのAPIを使ったAIチャットボットを作る」という節を書き足しました。だってみんな、いまAIチャットボット作れる本が出たら絶対に嬉しいと思ったから！]
 
 ==={issue-secret-key} OpenAIに登録してシークレットキーを取得する
 
