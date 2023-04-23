@@ -961,7 +961,7 @@ OpenAI APIをたたくためのシークレットキーはまだ存在してい�
 //image[openai-account-10][［Create new secret key］をクリックする][scale=0.8]{
 //}
 
-シークレットキーの［Name］は任意ですが、何の用途で作った鍵なのか後で分からなくなってしまわないように、［OpenAI API secret key for LINE Bot］と書いておきましょう。［Create secret key］をクリックします。（@<img>{openai-account-11}）
+シークレットキーの［Name］は任意入力ですが、何の用途で作った鍵なのか後で分からなくなってしまわないように、［OpenAI API secret key for LINE Bot］と書いておきましょう。［Create secret key］をクリックします。（@<img>{openai-account-11}）
 
 //image[openai-account-11][［Create secret key］をクリックする][scale=0.8]{
 //}
@@ -982,7 +982,7 @@ LINE Developersコンソールで取得したチャネルアクセストーク�
 
 @<hd>{article02|curl}でcurlコマンドを使ってMessaging APIをたたき、メッセージを送信したように、今度はcurlコマンドでOpenAI APIに質問を投げて回答を取得してみましょう。
 
-再びWSLまたはターミナルを起動します。次のcurlコマンド（@<list>{curl-send-message}）の3行目にある「シークレットキー」の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしましたね。
+再びWSLまたはターミナルを起動します。次のcurlコマンド（@<list>{openai-api-curl}）の3行目にある「シークレットキー」の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存しましたね。
 
 //listnum[openai-api-curl][curlコマンドで質問の回答を取得する][sh]{
 curl https://api.openai.com/v1/chat/completions \
@@ -1016,7 +1016,7 @@ curl https://api.openai.com/v1/chat/completions \
 
 curlコマンドでOpenAI APIに質問を投げて、回答を取得できました。「APIをたたく」ことに少し慣れてきましたか？
 
-ちなみに2023年4月現在、OpenAI APIはアカウントを作ってから最初の3ヶ月は5ドル分まで無料@<fn>{openai-free}で使えるようです。自分が既に無料枠をどれくらい使ったのかは、OpenAI APIのUsage@<fn>{openai-free-2}で確認できます。（@<img>{openai-usage}）
+ちなみに2023年5月現在、OpenAI APIはアカウントを作ってから最初の3ヶ月は5ドル分まで無料@<fn>{openai-free}で使えるようです。自分が既に無料枠をどれくらい使ったのかは、OpenAI APIのUsage@<fn>{openai-free-2}で確認できます。（@<img>{openai-usage}）
 
 //footnote[openai-free][Pricing @<href>{https://openai.com/pricing}]
 //footnote[openai-free-2][Usage - OpenAI API@<href>{https://platform.openai.com/account/usage}]
@@ -1028,7 +1028,7 @@ curlコマンドでOpenAI APIに質問を投げて、回答を取得できまし
 
 ==={prepare-openai-api-sdk} OpenAI APIのSDKを準備する
 
-先ほどのMessaging APIのSDKと同じように、OpenAI APIも公式がPythonとNode.jsでSDKを用意してくれています。OpenAI APIのpython.zipを作成しましょう。
+先ほどのMessaging APIのSDKと同じように、OpenAI APIも公式がPythonとNode.jsでSDKを用意してくれています。AWS Lambdaで使うために、OpenAI APIのpython.zipを作成しましょう。
 
  * Python library - OpenAI API
  ** @<href>{https://platform.openai.com/docs/libraries/python-library}
@@ -1177,10 +1177,6 @@ Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。
 //image[add-openai-layer-to-lambda-5][OpenAI API SDKのレイヤーが追加できた！][scale=0.8]{
 //}
 
-=== Lambda関数のタイムアウトまでの時間を延ばす
-
-Lambda関数の［設定］の［一般設定］からタイムアウトを1分0秒に変更します。
-
 === AWS LambdaのコードにChatGPTのAPIで質問の回答を取得する処理を追加する
 
 ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
@@ -1306,6 +1302,20 @@ def lambda_handler(event, context):
 
 //image[aichat-bot-deploy-2][デプロイ完了][scale=0.8]{
 //}
+
+=== Lambda関数のタイムアウトまでの時間を延ばす
+
+いまデプロイしたAIチャットボットのコード（@<list>{ai-chat-source-code}）で、45行目からのOpenAI APIに質問を投げて回答を取得する処理は、回答が返ってくるまでに数秒以上かかる場合があります。@<fn>{response-time}
+
+//footnote[response-time][@<hd>{article02|openai-api-curl}でcurlコマンドをたたいたとき、レスポンスが返ってくるまでにちょっと待ち時間があったことを思い出してください。]
+
+実はLambda関数には、コードを実行してからn秒立ったらタイムアウトする、つまり処理を打ち切ります、という最大実行時間があります。タイムアウトのデフォルト値は3秒なので、Webhookが届いてコードを実行しはじめてから3秒以内にすべての処理が終わらないと、そこで処理が打ち切られてしまうのです。
+
+OpenAI APIに質問を投げてから回答が戻ってくるまでが3秒以上かかった場合、タイムアウトして処理が打ち切られてしまうため、このタイムアウトの秒数を3秒から29秒に変更しておきましょう。
+
+なぜ29秒という中途半端な数字かというと、AWS Lambdaの手前にいるAPI Gatewayのタイムアウトはデフォルトで最大29秒となっていて、こちらは上限の変更もできないため、いくらAWS Lambdaを30秒以上にしても先にAPI Gatewayがタイムアウトしてしまうのだ。
+
+Lambda関数の［設定］の［一般設定］からタイムアウトを29秒に変更します。
 
 === 環境変数にOpenAIのシークレットキーを追加する
 
