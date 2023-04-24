@@ -10,9 +10,9 @@ LINE公式アカウントからメッセージを送るとき、普通に送る�
 
 === ユーザーIDを指定して特定の人に送る
 
-Messaging APIでメッセージを送るとき、いちばん簡単なのは友だち全員にメッセージを一斉配信するブロードキャストメッセージです。しかしユーザーIDを指定して、特定の人にだけメッセージを送ることも可能です。特定のひとりにだけ送りたいときはプッシュメッセージ、特定の数人にまとめて送りたいときはマルチキャストメッセージで送れます。
+Messaging APIでメッセージを送るとき、いちばん簡単なのは友だち全員にメッセージを一斉配信するブロードキャストメッセージです。ですがユーザーIDを指定して、特定の人にだけメッセージを送ることも可能です。特定のひとりにだけ送りたいときはプッシュメッセージ、特定の数人にまとめて送りたいときはマルチキャストメッセージで送れます。
 
-ユーザーIDは、LINEプラットフォームから飛んでくるWebhookの@<ttb>{source}オブジェクトに含まれています。@<fn>{user-ids}
+友だちのユーザーIDは、LINEプラットフォームから飛んでくるWebhookの@<ttb>{source}オブジェクトに含まれています。@<fn>{user-ids}
 
 //footnote[user-ids][ユーザーIDを取得する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/getting-user-ids/}]
 
@@ -26,23 +26,50 @@ Messaging APIでメッセージを送るとき、いちばん簡単なのは友�
 
 なのでメッセージのテスト配信の仕組みは、「一度友だち追加されたら、開発者側からは友だち状態はコントロールできない」という前提で組んでおく必要があります。
 
-たとえば、テスト配信のメッセージはテスト用のLINE公式アカウントから送るとしても、ブロードキャストメッセージで友だち全員に送るのではなく、開発チームのAさん、Bさん、CさんのユーザーIDを指定したマルチキャストメッセージを送る、という方法がお勧めです。これならCさんの退職後、開発チームに残ったAさんBさんが送信対象からCさんのユーザーIDを消せば、Cさんには公開前のテストメッセージは届かなくなります。
+たとえば、テスト配信のメッセージはテスト用のLINE公式アカウントから送るとしても、ブロードキャストメッセージで友だち全員に送るのではなく、開発チームのAさん、Bさん、CさんのユーザーIDを指定したマルチキャストメッセージを送る、という方法がお勧めです。これならCさんの退職後、開発チームに残ったAさんBさんがマルチキャストメッセージの送信対象からCさんのユーザーIDを消せば、Cさんには公開前のテストメッセージは届かなくなります。
 
 ===[/column]
 
 === メッセージの配信対象を属性で絞り込む
 
-ナローキャストメッセージでは、性別や年齢、地域、友だちになってからの期間といった属性情報を指定してメッセージを送ることが可能です。
-
-さらにオーディエンスという機能を使うと、たとえば新商品予告のメッセージでURLを開いたユーザーだけを「新商品に興味のあるオーディエンス」に入れておいて、発売当日はそのオーディエンスだけを対象にして店頭イベントの告知を送る、というようなこともできます。@<fn>{audience}
+ナローキャストメッセージを使うと、性別や年齢、地域、友だちになってからの期間といった属性情報を指定してメッセージを送ることが可能です。たとえば新商品予告のメッセージを送って、そのメッセージのURLを開いたユーザーを「新商品に興味のあるオーディエンス」に入れておき、新商品の発売当日はそのオーディエンスだけを対象にして店頭イベントの告知を送る、というようなこともできます。@<fn>{audience}
 
 //footnote[audience][属性情報やリターゲティングを利用して複数のユーザーに送信する（ナローキャストメッセージ） | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/sending-messages/#send-narrowcast-message}]
 
 === メッセージ送信元のアイコンと表示名を変更する
 
-メッセージを送るときに、送信元のアイコンと表示名を変更して送ることができます。たとえばテーマパークのLINE公式アカウントで、特定のキャラクターにちなんだイベントを告知するときだけ、メッセージの送信元をそのキャラクターのアイコンと名前にする、といった使い方が可能です。@<fn>{nickname}
+メッセージを送るときに、送信元のアイコンと表示名を変更して送ることができます。@<fn>{nickname}
 
 //footnote[nickname][アイコンおよび表示名を変更する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/icon-nickname-switch/}]
+
+次のcurlコマンド（@<list>{send-message-from-cat}）をたたくと、LINE公式アカウントからこんなメッセージが届きます。（@<img>{change-icon-and-name}）
+
+//listnum[send-message-from-cat][アイコンや表示名を変更してメッセージを送るcurlコマンド][sh]{
+curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer チャネルアクセストークン' \
+-d '{
+    "messages": [
+        {
+            "type": "text",
+            "text": "こんにちは。今日は原稿で忙しいにんげんの代わりに、ねこがメッセージをお届けします。",
+            "sender": {
+                "name": "ねこ",
+                "iconUrl": "https://pbs.twimg.com/media/FueHfQNaYAEgNUj?format=jpg&name=900x900"
+            }
+        },
+        {
+            "type": "text",
+            "text": "あ、ねこ！勝手にメッセージ送っちゃだめだよ！"
+        }
+    ]
+}'
+//}
+
+//image[change-icon-and-name][ねこからメッセージが届いた][scale=0.6]{
+//}
+
+たとえばテーマパークのLINE公式アカウントで、特定のキャラクターにちなんだイベントを告知するときだけ、メッセージの送信元をそのキャラクターのアイコンと名前にする、といった使い方が可能です。
 
 ===[column] 【コラム】URLを送る前にOGPの見た目を事前に確認したり、キャッシュを消したりしたい
 
@@ -68,18 +95,31 @@ PagePokerという公式のツールを使うと、対象ページのOGPタグ@<
 
 === Flex Messageで見た目にこだわったメッセージを送る
 
-レイアウトを自由にカスタマイズできるFlex Messageなら、見た目にこだわったメッセージが送れます。
-
-そしてFlex Message Simulator（ログイン必須）を使えば、JSONのコードを自分で書かなくてもFlex Messageが作れます。
+もっと格好良い、見た目にこだわったメッセージを送りたい！と思ったら、Flex Message Simulatorを使ってみましょう。
 
  * Flex Message Simulator
- ** @<href>{https://developers.line.biz/flex-simulator/}
+ ** @<href>{https://developers.line.biz/flex-simulator/}@<fn>{login}
 
-ただしFlex Message Simulatorで出力されるJSONは、messages直下のFlex Message全体ではなく、コンテナ（contents以下）なので注意が必要です。
+//footnote[login][Flex Message Simulatorを使うときは、LINE Developersコンソールと同じようにLINEアカウントでログインする必要があります。]
+
+GUIでレイアウトをカスタマイズするだけで、メッセージのJSON@<fn>{notice}が生成される素晴らしいツールです。（@<img>{flex-message-1}）
+
+//image[flex-message-1][Flex Message Simulatorで見た目にこだわったメッセージをつくってみよう][scale=0.8]{
+//}
+
+//footnote[notice][ただしFlex Message Simulatorで出力されるJSONは、messages直下のFlex Message全体ではなく、コンテナ（contents以下）なので注意が必要です。Flex Messageの仕様については、APIリファレンスを参照してください。 @<href>{https://developers.line.biz/ja/reference/messaging-api/#flex-message}]
+
+しかも「このFlex Messageを送ったら実際はどんな見た目になるんだろう？画像は見切れないかな？」と思ったら、右上の［Send...］からメッセージをテスト送信できるのです。便利！（@<img>{flex-message-2}、@<img>{flex-message-3}）
+
+//image[flex-message-2][Flex Message Simulatorからテスト送信する][scale=0.4]{
+//}
+
+//image[flex-message-3][Flex Message SimulatorのLINE公式アカウントからメッセージが届く][scale=0.4]{
+//}
 
 === ボットサーバーがWebhookを受け取れなかったときの再送機能
 
-たとえばLINE公式アカウントが急に有名になり、一気に友だちが増えて、メッセージが大量に送られてきたとします。急なアクセス集中でサイトが落ちるように、LINEプラットフォーム飛んでくるWebhookのリクエストによって、ボットサーバーが過負荷になって応答できなくなってしまったらどうなるのでしょうか。
+たとえばLINE公式アカウントが急に有名になり、一気に友だちが増えて、メッセージが大量に送られてきたとします。急なアクセス集中でサイトが落ちるように、LINEプラットフォームから飛んでくるWebhookのリクエストによって、ボットサーバーが過負荷になって応答できなくなってしまったらどうなるのでしょうか。
 
 そんなときのために「Webhookの再送@<fn>{retry-webhook}」という機能があります。Webhookの再送はデフォルトではオフになっていますが、LINE Developersコンソールでオンにすることで、ボットサーバーがWebhookを受け取れなかったときに再送してくれるようになります。
 
