@@ -414,7 +414,7 @@ Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、
 
 ==== Windowsの場合
 
-@<hd>{article02|curl}で使用したWSLを再び起動して、以下のコマンドを順番にたたいていきます。@<ttb>{$}はWSLのプロンプトを表していますので入力しないでください。
+@<hd>{article02|curl}で使用したWSLを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はWSLのプロンプトを表していますので入力しないでください。
 
 先ずはcdコマンドでホームディレクトリ@<fn>{dir}に移動して、mkdirコマンドでpython@<fn>{python-dir}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-sdk-1}）
 
@@ -486,11 +486,9 @@ $ explorer.exe .
 
 ==== Macの場合
 
-@<hd>{article02|curl}で使用したターミナルを再び起動して、以下のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
+必要なコマンドを使えるようにするため、先ずはPythonの公式サイトからPythonのインストーラーをダウンロードしてきます。［Download the latest version for macOS］の下にある［Download Python 3.11.3］をクリック@<fn>{version}してください。（@<img>{download-python}）
 
-pipコマンドを使えるようにするため、先ずはPythonの公式サイトからPythonのインストーラーをダウンロードしてきます。［Download the latest version for macOS］の下にある［Download Python 3.11.3］をクリック@<fn>{version}してください。（@<img>{download-python}）
-
-//footnote[version][もし3.11.3よりも新しいバージョンが出ていたら、そちらをダウンロードして構いません。]
+//footnote[version][もし3.11.3よりも新しいバージョンが出ていたら、そちらをダウンロードしてください。]
 
  * Download Python | Python.org
  ** @<href>{https://www.python.org/downloads/}
@@ -498,12 +496,17 @@ pipコマンドを使えるようにするため、先ずはPythonの公式サ�
 //image[download-python][Pythonのインストーラーをダウンロードする][scale=0.8]{
 //}
 
-ダウンロードした［python-3.11.3-macos11.pkg］を開きます。インストーラに従ってPythonをインストールしてください。（@<img>{install-python-1}）
+ダウンロードした［python-3.11.3-macos11.pkg］を開きます。インストーラの指示に従ってPythonをインストールしてください。（@<img>{install-python-1}）
 
-//image[install-python-1][Pythonのインストーラーをダウンロードする][scale=0.8]{
+//image[install-python-1][インストーラの指示に従ってPythonをインストールする][scale=0.8]{
 //}
 
-インストーラに従ってPythonのインストールが完了したら、自動で表示されるFinderの［Install Certificates.command］をダブルクリックで開きます。（@<img>{install-python-2}）
+Pythonのインストールが完了したら［閉じる］をクリックします。（@<img>{python-installed}）
+
+//image[python-installed][インストールが完了したら［閉じる］をクリックする][scale=0.8]{
+//}
+
+インストール完了後、自動的に表示されるFinderで［Install Certificates.command］をダブルクリックで開きます。（@<img>{install-python-2}）
 
 //image[install-python-2][［Install Certificates.command］を開く][scale=0.8]{
 //}
@@ -513,11 +516,13 @@ pipコマンドを使えるようにするため、先ずはPythonの公式サ�
 //image[install-python-3][［プロセスが完了しました］と表示されたらそのターミナルは閉じる][scale=0.8]{
 //}
 
-これで必要なコマンドが使えるようになったはずです。一度ターミナルを閉じて、開き直したらpython3コマンドとpip3コマンドでそれぞれのバージョンを確認してみましょう。（@<img>{install-python-4}）
+これで必要なコマンドが使えるようになったはずです。［プロセスが完了しました］と表示されたターミナルは閉じてください。@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
+
+python3コマンドとpip3コマンドでそれぞれのバージョンを確認してみましょう。（@<img>{install-python-4}）
 
 //cmd{
 $ python3 -V
-% pip3 -V
+$ pip3 -V
 //}
 
 //image[install-python-4][必要なコマンドが使えることを確認する][scale=0.8]{
@@ -1120,9 +1125,9 @@ curlコマンドでOpenAI APIに質問を投げて、回答を取得できまし
 
 ===={openai-win} Windowsの場合
 
-@<hd>{article02|curl}で使用したWSLを再び起動して、以下のコマンドを順番にたたいていきます。@<ttb>{$}はプロンプトを表していますので入力しないでください。
+@<hd>{article02|curl}で使用したWSLを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はプロンプトを表していますので入力しないでください。
 
-先ずはcdコマンドでさきほどMessaging APIのSDKを準備したのと同じホームディレクトリに移動して、lsコマンドでpythonフォルダとpython.zipが残っていることを確認します。rmコマンドでpythonフォルダとpython.zipを削除したら、再びlsコマンドをたたいてもう無いことを確認します。（@<img>{rm-rf}）
+先ずはcdコマンドでさきほどMessaging APIのSDKを準備したのと同じホームディレクトリに移動して、lsコマンドでpythonディレクトリとpython.zipが残っていることを確認します。rmコマンドでpythonディレクトリとpython.zipを削除したら、再びlsコマンドをたたいてもう無いことを確認します。（@<img>{rm-rf}）
 
 //cmd{
 $ cd
@@ -1189,7 +1194,66 @@ $ explorer.exe .
 
 ===={openai-mac} Macの場合
 
-Macの場合は、デフォルトでpipコマンドやzipコマンドが入っているので、Windowsの手順から@<ttb>{sudo apt install ○○}というコマンドを除いて同様に実行してください。
+@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
+
+先ずはlsコマンドで、さきほどMessaging APIのSDKを準備したpythonディレクトリとpython.zipが残っていることを確認します。rmコマンドでpythonディレクトリとpython.zipを削除したら、再びlsコマンドをたたいてもう無いことを確認します。（@<img>{mac-rm-rf}）
+
+//cmd{
+$ ls -d python python.zip
+$ rm -rf python python.zip
+$ ls
+//}
+
+//image[mac-rm-rf][残っていたpythonディレクトリとpython.zipを削除する][scale=1]{
+//}
+
+そして再びmkdirコマンドでpython@<fn>{python-dir-mac-2}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{mac-openai-sdk-1}）
+
+//footnote[python-dir-mac-2][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
+
+//cmd{
+$ mkdir python
+$ ls
+$ cd python
+//}
+
+//image[mac-openai-sdk-1][pythonディレクトリを作ってその中に移動する][scale=1]{
+//}
+
+pipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{mac-openai-sdk-2}）
+
+//cmd{
+$ pip install openai -t . --no-user
+$ ls
+//}
+
+//image[mac-openai-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
+//}
+
+取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{mac-openai-sdk-3}）
+
+//cmd{
+$ cd ..
+$ zip -r python.zip python
+$ ls -ld python python.zip
+//}
+
+//image[mac-openai-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//}
+
+最後に@<ttb>{open .}をたたくと、ターミナルで見ていたディレクトリがFinderで表示されます。
+
+//cmd{
+open .
+//}
+
+//image[mac-openai-sdk-4][「open .」をたたく][scale=1]{
+//}
+
+//image[mac-openai-sdk-5][するとFinderでpython.zipのあるディレクトリが表示される][scale=0.8]{
+//}
+
+作成したpython.zipはこの後すぐに使うので、デスクトップにコピーしておきましょう。これでOpenAI APIのSDKが準備できました。
 
 === OpenAI API SDKのレイヤーを作成する
 
@@ -1463,5 +1527,5 @@ SECRET_KEY	シークレットキー
 
 ===[/column]
 
-//footnote[sorry-but][この「Webhookを受け取ったら、先にレスポンスを返してその後に応答メッセージなどの処理をすべき」という説明を読んで、勘の良い読者の方はもうお気づきかもしれませんが、実は本書ではオウム返しボットのコードもAIチャットボットのコードも、郵便局員を待たせまくって、なんなら返信を書いてポストに投函してからようやく受領の判子を押しています。非同期処理まで含めると手順や説明が非常に複雑になってしまうため、本来はあまり推奨されない方法だと理解した上で、今回は動くものを簡単に作れることを優先して敢えてそうしています。]
+//footnote[sorry-but][この「Webhookを受け取ったら、先にレスポンスを返してその後に応答メッセージなどの処理をすべき」という説明を読んで、勘の良い読者の方はもうお気づきかもしれませんが、実は本書ではオウム返しボットのコードもAIチャットボットのコードも、郵便局員を待たせまくって、なんなら返信を書いてポストに投函してからようやく受領の判子を押しています。非同期処理まで含めると手順や説明が非常に複雑になってしまうため、本来はあまり推奨されない方法だと理解した上で、今回は動くものを簡単に作れることを優先しています。]
 //footnote[reply_token_rule][応答トークン | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-reply-message-reply-token}]
