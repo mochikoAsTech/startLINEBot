@@ -342,7 +342,7 @@ Messaging APIを使って開発をするとき、様々な設定をするため�
 
 この自動の応答メッセージは、LINE公式アカウントを作ったときにデフォルトで設定されているので、あなたも友だち追加したLINE公式アカウントでよく似たメッセージを見たことがあるかもしれません。
 
-これだと個別対応のコストが一切要らなくなるものの、ユーザー起点のコミュニケーションはできなくなるので、LINE公式アカウントとのトークは一方的な宣伝をするだけの場所になります。ただ、少なくとも話しかけたのに何も応答せず無言でいられるよりは、まだ気分がいいかもしれません。
+これだと個別対応のコストが一切要らなくなるものの、ユーザー起点のコミュニケーションはできなくなるので、LINE公式アカウントとのトークは一方的な宣伝をするだけの場所になります。ただユーザーにとっては、話しかけたのに何も応答してもらえず無視されるよりは、このようなメッセージが返ってきた方がまだ印象が良いかもしれません。
 
 === 方法2. 人間が手打ちのチャットで返信する
 
@@ -383,7 +383,7 @@ LINE Official Account Managerや管理アプリには、応答メッセージと
 
 ===[column] 【コラム】LINE公式アカウントの「既読」はいつ付くのか？
 
-普通の友だちとのLINEのメッセージは、相手がトークルームを開いてメッセージを見ることで「既読」がつきます。ではLINE公式アカウントの場合は、「既読」はいつ付くのでしょう？
+通常、友だちに送ったLINEのメッセージには、相手がトークルームを開いてメッセージを見ることで「既読」がつきます。ではLINE公式アカウントの場合は、「既読」はいつ付くのでしょう？
 
 LINE Official Account Managerや管理アプリの応答設定に［チャット］と［Webhook］という設定項目があります。この［チャット］をオンにしていると、中の人がチャットの画面でメッセージを確認するまでは、LINE公式アカウント側でメッセージを読んだことを示す「既読」マークがつきません。逆にこの［チャット］をオフにしていると、メッセージが送られた瞬間に自動的に「既読」がつきます。
 
@@ -486,26 +486,44 @@ $ explorer.exe .
 
 ==== Macの場合
 
-Macの場合は、デフォルトでpipコマンドやzipコマンドが入っているので、Windowsの手順から@<ttb>{sudo apt install ○○}というコマンドを除いて同様に実行してください。
-
 @<hd>{article02|curl}で使用したターミナルを再び起動して、以下のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
 
-先ずはPythonの公式サイトからPythonのインストーラーをダウンロードしてきます。［Download the latest version for macOS］の下にある［Download Python 3.11.3］をクリックしてください。
+pipコマンドを使えるようにするため、先ずはPythonの公式サイトからPythonのインストーラーをダウンロードしてきます。［Download the latest version for macOS］の下にある［Download Python 3.11.3］をクリック@<fn>{version}してください。（@<img>{download-python}）
+
+//footnote[version][もし3.11.3よりも新しいバージョンが出ていたら、そちらをダウンロードして構いません。]
 
  * Download Python | Python.org
  ** @<href>{https://www.python.org/downloads/}
 
-ダウンロードした［python-3.11.3-macos11.pkg］を開きます。インストーラに従ってPythonをインストールします。インストールしたら［Install Certificates.command］を開きます。ターミナルが自動で起動してpipのアップデートが行われます。［[プロセスが完了しました]］と表示されたら、そのターミナルは閉じて構いません。
+//image[download-python][Pythonのインストーラーをダウンロードする][scale=0.8]{
+//}
+
+ダウンロードした［python-3.11.3-macos11.pkg］を開きます。インストーラに従ってPythonをインストールしてください。（@<img>{install-python-1}）
+
+//image[install-python-1][Pythonのインストーラーをダウンロードする][scale=0.8]{
+//}
+
+インストーラに従ってPythonのインストールが完了したら、自動で表示されるFinderの［Install Certificates.command］をダブルクリックで開きます。（@<img>{install-python-2}）
+
+//image[install-python-2][［Install Certificates.command］を開く][scale=0.8]{
+//}
+
+ターミナルが自動で起動して証明書のインストールが行われます。［プロセスが完了しました］と表示されたら、そのターミナルは閉じて構いません。（@<img>{install-python-3}）
+
+//image[install-python-3][［プロセスが完了しました］と表示されたらそのターミナルは閉じる][scale=0.8]{
+//}
+
+これで必要なコマンドが使えるようになったはずです。一度ターミナルを閉じて、開き直したらpython3コマンドとpip3コマンドでそれぞれのバージョンを確認してみましょう。（@<img>{install-python-4}）
 
 //cmd{
 $ python3 -V
-Python 3.11.3
-
 % pip3 -V
-pip 22.3.1
 //}
 
-mkdirコマンドでpython@<fn>{python-dir-mac}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。
+//image[install-python-4][必要なコマンドが使えることを確認する][scale=0.8]{
+//}
+
+mkdirコマンドでpython@<fn>{python-dir-mac}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{install-python-5}）
 
 //footnote[python-dir-mac][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
 
@@ -515,14 +533,20 @@ $ ls -d python
 $ cd python
 //}
 
-pipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。
+//image[install-python-5][pythonディレクトリを作ってその中に移動する][scale=1]{
+//}
+
+pipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{install-python-6}）
 
 //cmd{
 $ pip3 install line-bot-sdk -t . --no-user
 $ ls
 //}
 
-取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。
+//image[install-python-6][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
+//}
+
+取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{install-python-7}）
 
 //cmd{
 $ cd ..
@@ -530,10 +554,19 @@ $ zip -r python.zip python
 $ ls -ld python python.zip
 //}
 
+//image[install-python-7][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//}
+
 最後に@<ttb>{open .}をたたくと、ターミナルで見ていたディレクトリがFinderで表示されます。
 
 //cmd{
 open .
+//}
+
+//image[install-python-8][「open .」をたたく][scale=1]{
+//}
+
+//image[install-python-9][するとFinderでpython.zipのあるフォルダが表示される][scale=0.8]{
 //}
 
 作成したpython.zipはこの後すぐに使うので、デスクトップにコピーしておきましょう。
@@ -650,7 +683,7 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 ===={create-api-gateway} API Gatewayを作成する
 
 ［ソースを選択］で［API Gateway］を選択します。（@<img>{create-api-gateway}）
-\^^^^^^^^^
+
 //image[create-api-gateway][［API Gateway］を選択する][scale=0.8]{
 //}
 
