@@ -497,7 +497,15 @@ Macの場合は、デフォルトでpipコマンドやzipコマンドが入っ�
 
 ダウンロードした［python-3.11.3-macos11.pkg］を開きます。インストーラに従ってPythonをインストールします。インストールしたら［Install Certificates.command］を開きます。ターミナルが自動で起動してpipのアップデートが行われます。［[プロセスが完了しました]］と表示されたら、そのターミナルは閉じて構いません。
 
-先ずはmkdirコマンドでpython@<fn>{python-dir-mac}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。
+//cmd{
+$ python3 -V
+Python 3.11.3
+
+% pip3 -V
+pip 22.3.1
+//}
+
+mkdirコマンドでpython@<fn>{python-dir-mac}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。
 
 //footnote[python-dir-mac][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
 
@@ -507,61 +515,30 @@ $ ls -d python
 $ cd python
 //}
 
-続いて、SDKをパソコンの中に取ってくるためにpipコマンドが使いたいので、aptコマンドでpipコマンドを連れてきます。@<ttb>{sudo apt update}をたたくとパスワードを聞かれるので、パソコンを起動したときに入力するのと同じパスワードを入力してEnterを押してください。@<ttb>{sudo apt install python3-pip}をたたくと、メッセージがだだーっと流れた後に@<ttb>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押します。
+pipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。
 
 //cmd{
-$ sudo apt update
-$ sudo apt install python3-pip
-//}
-
-いよいよpipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{get-sdk-2}）
-
-//cmd{
-$ pip install line-bot-sdk -t . --no-user
+$ pip3 install line-bot-sdk -t . --no-user
 $ ls
 //}
 
-//image[get-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
-//}
-
-取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。そしてaptコマンドでzipコマンドを連れてきます。@<ttb>{sudo apt install zip}をたたくと、メッセージがだだーっと流れた後に@<ttb>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
+取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。
 
 //cmd{
 $ cd ..
-$ sudo apt install zip
-//}
-
-それではzipコマンドでpythonディレクトリをぎゅっとZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{get-sdk-3}）
-
-//cmd{
 $ zip -r python.zip python
-$ ls
+$ ls -ld python python.zip
 //}
 
-//image[get-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
-//}
-
-最後に@<ttb>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。（@<img>{get-sdk-4}、@<img>{get-sdk-5}）
+最後に@<ttb>{open .}をたたくと、ターミナルで見ていたディレクトリがFinderで表示されます。
 
 //cmd{
-$ explorer.exe .
+open .
 //}
 
-//image[get-sdk-4][「explorer.exe .」をたたく][scale=1]{
-//}
-
-//image[get-sdk-5][するとエクスプローラでpython.zipのあるフォルダが表示される][scale=0.8]{
-//}
-
-作成したpython.zipはこの後すぐに使うので、デスクトップにコピーしておきましょう。（@<img>{copy-to-desktop}）
-
-//image[copy-to-desktop][python.zipはデスクトップにコピーしておく][scale=1]{
-//}
+作成したpython.zipはこの後すぐに使うので、デスクトップにコピーしておきましょう。
 
 これでMessaging APIのSDKが準備できました。
-
-
-      
       
 === AWS LambdaとAPI Gatewayでボットサーバーを作る
 
