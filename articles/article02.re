@@ -969,9 +969,9 @@ Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-
 //footnote[ip-addr][Webook | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhooks}]
 //footnote[signature][署名を検証する | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#signature-validation}]
 
-== ChatGPTのAPIを使ったAIチャットボットを作ってみよう
+== OpenAIのAPIを使ったAIチャットボットを作ってみよう
 
-LINE公式アカウントにメッセージを送って、無事にオウム返しのチャットボットが動いてくれるとうれしいですね！うれしいものの、「オウム返しされたけど……だからなに？」という気持ちにもなるので、今度はChatGPTのAPIを使って、LINE公式アカウントの中身をちゃんと役に立つAIチャットボットに作り変えてみましょう。
+LINE公式アカウントにメッセージを送って、無事にオウム返しのチャットボットが動いてくれるとうれしいですね！うれしいものの、「オウム返しされたけど……だからなに？」という気持ちにもなるので、今度はOpenAIのAPIを使って、LINE公式アカウントの中身をちゃんと役に立つAIチャットボットに作り変えてみましょう。
 
 === ChatGPTとGPT-3.5とは
 
@@ -987,7 +987,7 @@ ChatGPTはOpenAIが提供している対話型のウェブサービスです。O
 
 それでは先ほどのオウム返しボットを少し作り変えて、ユーザーがLINEで質問を送るとGPT-3.5がその文脈に基づいて回答を生成し、その回答がLINE公式アカウントからのメッセージとして返ってくる、というAIチャットボットにしていきましょう。@<fn>{chatgpt}
 
-//footnote[chatgpt][本書を書いている最中に「ChatGPTだー！」「GPT-3.5だー！」「いやGPT-4だー！」とインターネットがお祭り騒ぎになったので、なんとか間に合わせるために寝不足で吐きそうになりながら動作検証をして、この「ChatGPTのAPIを使ったAIチャットボットを作る」という節を書き足しました。だってみんな、いまAIチャットボット作れる本が出たら絶対に嬉しいと思ったから！]
+//footnote[chatgpt][本書を書いている最中に「ChatGPTだー！」「GPT-3.5だー！」「いやGPT-4だー！」とインターネットがお祭り騒ぎになったので、なんとか間に合わせるために寝不足で吐きそうになりながら動作検証をして、この「OpenAIのAPIを使ってChatGPTみたいなAIチャットボットを作る」という節を書き足しました。だってみんな、いまAIチャットボット作れる本が出たら絶対に嬉しいと思ったから！]
 
 ==={issue-secret-key} OpenAIに登録してシークレットキーを取得する
 
@@ -1326,7 +1326,7 @@ Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。
 //image[add-openai-layer-to-lambda-5][OpenAI API SDKのレイヤーが追加できた！][scale=0.8]{
 //}
 
-=== AWS LambdaのコードにChatGPTのAPIで質問の回答を取得する処理を追加する
+=== AWS LambdaのコードにOpenAIのAPIで質問の回答を取得する処理を追加する
 
 ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
 
