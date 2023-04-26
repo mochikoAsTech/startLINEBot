@@ -143,7 +143,7 @@ Webhookの再送は便利な機能ですが、このように意図しない再�
 
 =={richmenus} リッチメニュー
 
-LINE公式アカウントと友だちになると、トーク画面の下部にこんなメニューが表示されることがありますよね。これは簡素なテキストではなく、画像でできた贅沢で多彩なメニュー…つまりリッチなメニュー…リッチなメニューなので…リッチメニュー！そう、これがリッチメニュー@<fn>{richmenu-link}す。（@<img>{richmenu}）
+LINE公式アカウントと友だちになると、トーク画面の下部にこんなメニューが表示されることがありますよね。これは簡素なテキストではなく、画像でできた贅沢で多彩なメニュー…つまりリッチなメニュー…リッチなメニューなので…リッチメニュー！そう、これがリッチメニュー@<fn>{richmenu-link}です。（@<img>{richmenu}）
 
 //footnote[richmenu-link][リッチメニューを使う | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/using-rich-menus/}]
 
