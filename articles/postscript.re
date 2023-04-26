@@ -28,6 +28,8 @@ mochikoAsTech
 === レビュアー
 
  * Yuta Kasai
+ * アリシィ（@shigure_alicey）
+ * Hiroki Zenigami
 
 === 参考文献
 
