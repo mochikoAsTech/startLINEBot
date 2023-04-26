@@ -73,7 +73,7 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 
 たとえばテーマパークのLINE公式アカウントで、特定のキャラクターにちなんだイベントを告知するときだけ、メッセージの送信元をそのキャラクターのアイコンと名前にする、といった使い方が可能です。
 
-===[column] 【コラム】URLを送る前にOGPの見た目を事前に確認したり、キャッシュを消したりしたい
+===[column] 【コラム】URLを送る前にOGPの見た目を確認したり、キャッシュを消したりしたい
 
 LINEでURLを含むメッセージを送ると、こんなふうにプレビューが表示されます。（@<img>{url-preview}）
 
@@ -224,9 +224,9 @@ LINE Creative Labを使うと、画像メッセージとして送れる素材が
  * パソコンでLINEを利用する｜LINEみんなの使い方ガイド
  ** @<href>{https://guide.line.me/ja/services/pc-line.html}
 
-=== LINE Developers communityに参加しよう
+=== LINE Developers Communityに参加しよう
 
-LINE APIを活用している有志によって、LINE Developers communityのイベントが定期的に開催されています。LINE API Expertとして認定されたみなさんが、最新機能や開発手法をオンラインで教えてくれるので、開発で行き詰まったらひとりで悩まずにコミュニティに参加してみるのがお勧めです。LINE Developers communityのサイトにはユーザー同士のQ&Aもあり、開発でつまづいたときは質問を投稿したり、過去の質問からヒントを探したりできます。
+LINE APIを活用している有志によって、LINE Developers Communityのイベントが定期的に開催されています。LINE API Expertとして認定されたみなさんが、最新機能や開発手法をオンラインで教えてくれるので、開発で行き詰まったらひとりで悩まずにコミュニティに参加してみるのがお勧めです。LINE Developers communityのサイトにはユーザー同士のQ&Aもあり、開発でつまづいたときは質問を投稿したり、過去の質問からヒントを探したりできます。
 
- * LINE Developers community
+ * LINE Developers Community
  ** @<href>{https://www.line-community.me/}
