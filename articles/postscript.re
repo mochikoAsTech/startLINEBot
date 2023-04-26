@@ -17,7 +17,7 @@ mochikoAsTech
 本書（紙の書籍）をお買い上げいただいた方は、下記のURLからPDF版を無料でダウンロードできます。
 
  * ダウンロードURL
- ** @<href>{https://mochikoastech.booth.pm/items/xxxxx}
+ ** @<href>{https://mochikoastech.booth.pm/items/4717104}
  * パスワード
  ** @<ttb>{******}
 
@@ -30,6 +30,8 @@ mochikoAsTech
  * Yuta Kasai
  * アリシィ（@shigure_alicey）
  * Hiroki Zenigami
+ * Yuta Kamiyama
+ * Takuya Kanatani（@torisankanasan）
 
 === 参考文献
 
