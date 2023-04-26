@@ -28,6 +28,7 @@ mochikoAsTech
 === レビュアー
 
  * Yuta Kasai
+ * Kota Momoki
  * アリシィ（@shigure_alicey）
  * Hiroki Zenigami
  * Yuta Kamiyama

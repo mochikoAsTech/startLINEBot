@@ -133,9 +133,9 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 //image[create-messaging-api-channel-2][左メニューの［Messaging API］を開く][scale=0.8]{
 //}
      
-［Messaging APIを利用する］を開きます。（@<img>{create-messaging-api-channel-3}）
+［Messaging APIを利用する］を押します。（@<img>{create-messaging-api-channel-3}）
 
-//image[create-messaging-api-channel-3][［Messaging APIを利用する］を開く][scale=0.8]{
+//image[create-messaging-api-channel-3][［Messaging APIを利用する］を押す][scale=0.8]{
 //}
 
 まだLINE Developersコンソールにログインしたことがなかったため、開発者情報の入力を求められます。ここでいう「開発者」とは、イコール「LINE Developersコンソールにアクセスする人のこと」です。あなたの［名前］@<fn>{mochiko}と［メールアドレス］@<fn>{mail-address}を入力して、リンク先の「LINE開発者契約」を確認した上で、同意できる内容であれば［同意する］を押します。（@<img>{create-messaging-api-channel-5}）
@@ -155,7 +155,7 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 
 運営元が個人だと「チャネルも俺！プロバイダーも俺！全部俺だ！」みたいな気持ちになって違いが分かりにくいですが、たとえば飲料メーカーのA社が「炭酸飲料B」と「コーヒー飲料C」という2つのブランドを展開していた場合、プロバイダー名は「A社」になり、その配下にあるMessaging APIチャネル名は「炭酸飲料B」や「コーヒー飲料C」になります。@<fn>{provider}（@<img>{providers-and-channels}）
 
-//image[providers-and-channels][チャネルはプロバイダーの配下に属する][scale=0.6]{
+//image[providers-and-channels][チャネルはプロバイダーの配下に属する][scale=0.8]{
 //}
 
 //footnote[provider][複数のチャネルがあって、それらを1つのプロバイダー配下に収めたときと、それぞれプロバイダーを別にしたときで何が変わるかというと、ユーザーIDの扱いが変わります。ユーザーを一意に識別するためのユーザーIDは、同じユーザーであってもプロバイダーごとに異なる値が発行されます。つまりmochikoさんというひとりのユーザーがいたとき、「A社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDと、また別の「B社」というプロバイダーの配下にあるチャネルからみたmochikoさんのユーザーIDは別々の値になるのです。そのため、本書では詳しく触れませんがLINEログインチャネルとMessaging APIチャネルでユーザー情報を連携したい場合は、その2つのチャネルが同一のプロバイダー配下にいなければならない、などの制約があります。一度チャネルをプロバイダーと紐づけてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので注意してください。]
@@ -172,7 +172,7 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 //image[create-messaging-api-channel-8][入力せずに［OK］を押す][scale=0.8]{
 //}
 
-このLINE公式アカウントを、このプロバイダー配下のMessaging APIチャネルと紐づけますがいいですか、という最終確認の画面が表示されます。記載のとおり、一度チャネルをプロバイダーと紐づけてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので、プロバイダー名はよく確認してください。問題なければ［OK］を押します。（@<img>{create-messaging-api-channel-9}）
+このLINE公式アカウントを、このプロバイダー配下のMessaging APIチャネルと紐づけますがいいですか、という最終確認の画面が表示されます。記載のとおり、一度チャネルをプロバイダーと紐づけてしまうと、後から「やっぱりあっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので、プロバイダー名はよく確認してください。問題なければ［OK］を押します。（@<img>{create-messaging-api-channel-9}）
 
 //image[create-messaging-api-channel-9][確認して［OK］を押す][scale=0.8]{
 //}
@@ -518,7 +518,9 @@ Pythonのインストールが完了したら［閉じる］をクリックし�
 //image[install-python-3][［プロセスが完了しました］と表示されたらそのターミナルは閉じる][scale=0.8]{
 //}
 
-これで必要なコマンドが使えるようになったはずです。［プロセスが完了しました］と表示されたターミナルは閉じてください。@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
+これで必要なコマンドが使えるようになったはずです。［プロセスが完了しました］と表示されたターミナルは閉じてください。
+
+それでは@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
 
 python3コマンドとpip3コマンドでそれぞれのバージョンを確認してみましょう。（@<img>{install-python-4}）
 
@@ -737,7 +739,7 @@ def lambda_handler(event, context):
 
 このデフォルトのコードは、リクエストが来たら、ステータスコード200と共に「Hello from Lambda!」というメッセージを含むJSONを返すようになっています。（@<img>{parrot-bot}）
 
-//image[parrot-bot][ステータスコード200とJSONを返すコード][scale=1]{
+//image[parrot-bot][ステータスコード200とJSONを返すデフォルトのコード][scale=1]{
 //}
 
 このコードを、次のようにWebhookを受け取ってオウム返しするコード@<fn>{parrot-bot-url}に書き直してみましょう。（@<list>{parrot-source-code-1}）
@@ -908,7 +910,7 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 
 ==={cloudwatch-logs} LINEプラットフォームから飛んできたWebhookを目視確認する
 
-先ほど、LINE DevelopersコンソールでWebhook URLの［検証］を押したとき、LINEプラットフォームからボットサーバーに飛んできたWebhookを目視確認してみましょう。ボットサーバーのログは、AWSのCloudWatchで確認できます。AWSのマネジメントコンソールを開いて、上部の検索窓で@<ttb>{cloudwatch}と検索し、CloudWatchを開きます。（@<img>{cloudwatch}）
+先ほど、LINE DevelopersコンソールでWebhook URLの［検証］を押したときに、LINEプラットフォームからボットサーバーに飛んできたWebhookを目視確認してみましょう。ボットサーバーのログは、AWSのCloudWatchで確認できます。AWSのマネジメントコンソールを開いて、上部の検索窓で@<ttb>{cloudwatch}と検索し、CloudWatchを開きます。（@<img>{cloudwatch}）
 
 //image[cloudwatch][検索窓からCloudWatchを開く][scale=0.8]{
 //}
@@ -998,7 +1000,7 @@ Messaging APIを使うにはチャネルアクセストークンが必要だっ�
 それではOpenAI APIのサイトにアクセスして、右上の［Sign up］を開いてください。（@<img>{openai-api-site}）
 
  * OpenAI API
- * @<href>{https://platform.openai.com/overview}
+ ** @<href>{https://platform.openai.com/overview}
 
 //image[openai-api-site][右上の［Sign up］を開く][scale=0.8]{
 //}
@@ -1090,23 +1092,22 @@ curl https://api.openai.com/v1/chat/completions \
 
 チャネルアクセストークンを置き換えたら、curlコマンドをまるごとコピーしてWSLもしくはターミナルに貼り付けます。WSLの場合は、複数行をまとめて貼り付けると警告が出ますが、［強制的に貼り付け］を押します。（@<img>{openai-curl-1}）
 
-//image[openai-curl-1][複数行の貼り付けに対する警告が出たら［強制的に貼り付け］を押す][scale=0.8]{
+//image[openai-curl-1][複数行の貼り付けに対する警告が出たら［強制的に貼り付け］を押す][scale=1]{
 //}
 
 貼り付けたらEnterを押して実行します。（@<img>{openai-curl-2}）
 
-//image[openai-curl-2][貼り付けたらEnterを押して実行する][scale=0.8]{
+//image[openai-curl-2][貼り付けたらEnterを押して実行する][scale=1]{
 //}
 
 回答の生成には少し時間がかかりますが、少し立つとレスポンスが画面に出力されます。curlコマンドを使ってAPIをたたいた結果、レスポンスとして回答を含むJSONオブジェクトが返ってきたことが分かります。（@<img>{openai-curl-3}）
 
-//image[openai-curl-3][回答を含むJSONが返ってきた][scale=0.8]{
+//image[openai-curl-3][回答を含むJSONが返ってきた][scale=1]{
 //}
 
-リクエストで指定した@<ttb>{role}や@<ttb>{content}、返ってきたレスポンスの値がそれぞれ何を表しているのかは、OpenAI APIのAPIリファレンスを参照してください。
+リクエストで指定した@<ttb>{role}や@<ttb>{content}、返ってきたレスポンスの値がそれぞれ何を表しているのかは、OpenAI APIのAPIリファレンス@<fn>{openai-reference}を参照してください。
 
- * Create chat completion | API Reference - OpenAI API
- ** @<href>{https://platform.openai.com/docs/api-reference/chat/create}
+//footnote[openai-reference][Create chat completion | API Reference - OpenAI API @<href>{https://platform.openai.com/docs/api-reference/chat/create}]
 
 curlコマンドでOpenAI APIに質問を投げて、回答を取得できました。「APIをたたく」ことに少し慣れてきましたか？
 
@@ -1325,14 +1326,14 @@ Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。
 //image[add-openai-layer-to-lambda-4][［追加］をクリックする][scale=0.8]{
 //}
 
-［Layers］の後ろの数字が@<ttb>{(1)}から@<ttb>{(2)}になりました。これでLambda関数にOpenAI API SDKのレイヤーが追加できました！こうしてレイヤーを追加することで、Lambda関数でOpenAI API SDKが使えるようになります。（@<img>{add-openai-layer-to-lambda-5}）
+［Layers］の後ろの数字が@<ttb>{(1)}から@<ttb>{(2)}になりました。これでLambda関数にOpenAI API SDKのレイヤーが追加できました！こうしてレイヤーを追加することで、Lambda関数からOpenAI API SDKが使えるようになります。（@<img>{add-openai-layer-to-lambda-5}）
 
 //image[add-openai-layer-to-lambda-5][OpenAI API SDKのレイヤーが追加できた！][scale=0.8]{
 //}
 
 === AWS Lambdaのコードに「OpenAIのAPIで質問の回答を取得する処理」を追加する
 
-ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
+ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、丸ごと次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
 
 //footnote[ai-chat-bot-url][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/aichatbot.py}]
 
@@ -1433,6 +1434,7 @@ def lambda_handler(event, context):
 
 このコードの中で、次の部分がOpenAI APIをたたいて質問の回答を取得するコードです。OpenAI APIに質問を投げると、回答の生成に非常に時間がかかるため、@<ttb>{stop=['。']}を指定することで、「最初に句点（。）が出てきたらそこで生成を終了する」というリクエストにして回答生成を早めに切り上げるようにしています。（@<list>{qanda-code}）
 
+//firstlinenum[45]
 //listnum[qanda-code][OpenAI APIをたたいて質問の回答を取得する部分のコード][python]{
     # ChatGPTに質問を投げて回答を取得する
     question = event.message.text
@@ -1467,12 +1469,12 @@ def lambda_handler(event, context):
 //image[timeout][［編集］をクリックしてタイムアウトの秒数を変更しよう][scale=0.8]{
 //}
 
-このままの設定だと、OpenAI APIに質問を投げてから回答が戻ってくるまでに3秒以上かかった場合、タイムアウトして処理が打ち切られてしまうため、この［タイムアウト］の秒数を@<ttb>{3秒}から@<ttb>{30秒}@<fn>{seconds}に変更して［保存］します。（@<img>{timeout-2}）
+このままの設定だと、Webhookを届いてOpenAI APIに質問を投げてから回答が戻ってくるまでに3秒以上かかった場合、タイムアウトして処理が打ち切られてしまうため、この［タイムアウト］の秒数を@<ttb>{3秒}から@<ttb>{30秒}@<fn>{seconds}に変更して［保存］します。（@<img>{timeout-2}）
 
-//image[timeout-2][［タイムアウト］を30秒に変更して［保存］しよう][scale=0.8]{
+//image[timeout-2][［タイムアウト］を30秒に変更して［保存］しよう][scale=1]{
 //}
 
-//footnote[seconds][ちなみにAWS Lambdaの手前にいるAPI Gatewayにもタイムアウトがあり、そちらは最大29秒で変更もできなません。そのため、本書の構成だと仮にLambda関数のタイムアウトをもっと長い60秒や90秒にしたとしても、先にAPI Gatewayがタイムアウトしてしまうのであまり意味がありません。]
+//footnote[seconds][ちなみにAWS Lambdaの手前にいるAPI Gatewayにもタイムアウトがあり、そちらは最大29秒で変更もできなません。そのため本書の構成だと、仮にLambda関数のタイムアウトをもっと長い60秒や90秒にしたとしても、先にAPI Gatewayがタイムアウトしてしまうのであまり意味がありません。]
 
 Lambda関数の［タイムアウト］が@<ttb>{30秒}に変更されました。（@<img>{timeout-3}）
 
@@ -1531,5 +1533,5 @@ SECRET_KEY	シークレットキー
 
 ===[/column]
 
-//footnote[sorry-but][この「Webhookを受け取ったら、先にレスポンスを返してその後に応答メッセージなどの処理をすべき」という説明を読んで、勘の良い読者の方はもうお気づきかもしれませんが、実は本書ではオウム返しボットのコードもAIチャットボットのコードも、郵便局員を待たせまくって、なんなら返信を書いてポストに投函してからようやく受領の判子を押しています。非同期処理まで含めると手順や説明が非常に複雑になってしまうため、本来はあまり推奨されない方法だと理解した上で、今回は動くものを簡単に作れることを優先しています。]
+//footnote[sorry-but][この「Webhookを受け取ったら、先にレスポンスを返してその後に応答メッセージなどの処理をすべき」という説明を読んで、勘の良い読者の方はもうお気づきかもしれませんが、実は本書ではオウム返しボットのコードもAIチャットボットのコードも、郵便局員を待たせまくって、なんなら返信を書いてポストに投函してからようやく受領の判子を押しています。非同期処理まで含めると手順や説明が非常に複雑になってしまうため、本来はあまり推奨されない方法だと理解した上で、今回は動くものを簡単に作れることを優先してこのようにしています。]
 //footnote[reply_token_rule][応答トークン | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-reply-message-reply-token}]
