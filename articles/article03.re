@@ -95,7 +95,7 @@ PagePokerという公式のツールを使うと、対象ページのOGPタグ@<
 ===[/column]
 
 //footnote[ogp][OGPはOpen Graph Protcolの略です。HTMLにメタデータとして「og:image」のようなOGPタグを書いておくことで、TwitterやLINEなどでそのURLを共有したときに、URLそのままではなく対象ページのタイトルや概要、画像などがカードのように表示されます。]
-//footnote[card-validator][TwitterのCard Validator（@<href>{https://cards-dev.twitter.com/validator}）とか、Facebookのシェアデバッガー（@<href>{https://developers.facebook.com/tools/debug/}）みたいなものですね。TwitterのCard Validatorは気づいたらプレビュー確認機能がなくなっていましたが……。]
+//footnote[card-validator][TwitterのCard Validator（@<href>{https://cards-dev.twitter.com/validator}）とか、Facebookのシェアデバッガー（@<href>{https://developers.facebook.com/tools/debug/}）みたいなものですね。TwitterのCard Validatorは気づいたらプレビュー確認機能がなくなっていましたが…。]
 //footnote[faq][トークとLINE VOOM内のURLプレビューはどのようにして生成されますか？ | LINE Developers @<href>{https://developers.line.biz/ja/faq/#how-are-the-url-previews-generated}]
 
 === Flex Messageで見た目にこだわったメッセージを送る
