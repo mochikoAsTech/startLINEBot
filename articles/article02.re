@@ -253,7 +253,9 @@ WSLやターミナルがどこにあるのか分からないときは、Windows�
 //image[search-mac][MacならSpotlightで「ターミナル」と検索][scale=0.8]{
 //}
 
-WSLまたはターミナルが起動できたら、次のcurlコマンド（@<list>{curl-send-message}）の3行目にある「チャネルアクセストークン」の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
+WSLまたはターミナルが起動できたら、次のcurlコマンド@<fn>{send-broadcast-message}（@<list>{curl-send-message}）の3行目にある「チャネルアクセストークン」の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
+
+//footnote[send-broadcast-message][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/send-broadcast-message.sh}]
 
 //listnum[curl-send-message][curlコマンドで友だちにメッセージを送る][sh]{
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
@@ -1072,7 +1074,9 @@ LINE Developersコンソールで取得したチャネルアクセストーク�
 
 @<hd>{article02|curl}でcurlコマンドを使ってMessaging APIをたたき、メッセージを送信したように、今度はcurlコマンドでOpenAI APIに質問を投げて回答を取得してみましょう。
 
-再びWSLまたはターミナルを起動します。次のcurlコマンド（@<list>{openai-api-curl}）の3行目にある「シークレットキー」の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存しましたね。
+再びWSLまたはターミナルを起動します。次のcurlコマンド@<fn>{ask-openai-question}（@<list>{openai-api-curl}）の3行目にある「シークレットキー」の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存しましたね。
+
+//footnote[ask-openai-question][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/ask-openai-question.sh}]
 
 //listnum[openai-api-curl][curlコマンドで質問の回答を取得する][sh]{
 curl https://api.openai.com/v1/chat/completions \
