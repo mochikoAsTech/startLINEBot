@@ -1326,7 +1326,7 @@ Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。
 //image[add-openai-layer-to-lambda-5][OpenAI API SDKのレイヤーが追加できた！][scale=0.8]{
 //}
 
-=== AWS LambdaのコードにOpenAIのAPIで質問の回答を取得する処理を追加する
+=== AWS Lambdaのコードに「OpenAIのAPIで質問の回答を取得する処理」を追加する
 
 ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
 
