@@ -238,7 +238,7 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 //image[wsl][WindowsならWSLを起動する][scale=0.8]{
 //}
 
-//footnote[wsl][WSLとはWindows Subsystem for Linuxの略で、Windows上で動くLinux環境のことです。]
+//footnote[wsl][WSLとはWindows Subsystem for Linuxの略で、Windows上で動くLinux環境のことです。本書においてWSLは「WSL2」というバージョンを想定しています。WSL2はWindows 10のバージョン2004（2020年5月に配信されたパッチ）以上、またはWindows 11であればデフォルトで動作します。Windows 10なのに動かないよ！という場合は、Windows Updateをご検討ください。 @<href>{https://learn.microsoft.com/ja-jp/windows/wsl/install}]
 
 Macを使っている方は、ターミナル（@<img>{mac}）を起動してください。
 
