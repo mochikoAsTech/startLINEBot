@@ -800,7 +800,7 @@ def lambda_handler(event, context):
         # 署名を検証した結果、飛んできたのがLINEプラットフォームからのWebhookでなければ400を返す
         return {
             'statusCode': 400,
-            'body': json.dumps('Only webhooks from the LINE Platform will be accepted.')
+            'body': json.dumps('Only webhooks from the LINE Platform will @<embed>$|latex|\linebreak\hspace*{0ex}$be accepted.')
         }
     except LineBotApiError as e:
         # 応答メッセージを送ろうとしたがLINEプラットフォームからエラーが返ってきたらエラーを吐く
@@ -1417,7 +1417,7 @@ def lambda_handler(event, context):
         # 署名を検証した結果、飛んできたのがLINEプラットフォームからのWebhookでなければ400を返す
         return {
             'statusCode': 400,
-            'body': json.dumps('Only webhooks from the LINE Platform will be accepted.')
+            'body': json.dumps('Only webhooks from the LINE Platform will @<embed>$|latex|\linebreak\hspace*{0ex}$be accepted.')
         }
     except LineBotApiError as e:
         # 応答メッセージを送ろうとしたがLINEプラットフォームからエラーが返ってきたらエラーを吐く

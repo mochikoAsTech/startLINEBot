@@ -61,7 +61,7 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
             "text": "こんにちは。今日は原稿で忙しいにんげんの代わりに、ねこがメッセージをお届けします。",
             "sender": {
                 "name": "ねこ",
-                "iconUrl": "https://pbs.twimg.com/media/FueHfQNaYAEgNUj?format=jpg&name=900x900"
+                "iconUrl": "https://pbs.twimg.com/media/FueHfQNaYAEgNUj?format@<embed>$|latex|\linebreak\hspace*{0ex}$=jpg&name=900x900"
             }
         },
         {
