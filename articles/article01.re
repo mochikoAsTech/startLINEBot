@@ -383,7 +383,7 @@ LINEの検索窓でこのベーシックIDを検索すると、ちゃんとLINE�
 
 そこでなんと、月額100円（税別）を出せば、4文字から18文字で希望の「プレミアムID@<fn>{premium}」というものが取得できます！但し、プレミアムIDは一意なので、他の人が既に取得しているプレミアムIDと重複するものは取得できません。
 
-//footnote[premium][プレミアムIDとは｜LINE for Business @<href>{https://www.linebiz.com/jp/service/line-official-account/plan/}]
+//footnote[premium][プレミアムIDとは｜LINE for Business　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://www.linebiz.com/jp/service/line-official-account/plan/}]
 
 プレミアムIDと有料プランは別枠なので、無料のコミュニケーションプランのまま、プレミアムIDだけ購入することも可能です。またプレミアムIDを取得しても、ベーシックIDや、プレミアムID取得前に作った友だち追加のURL、QRコードなどは引き続き使用できます。
 

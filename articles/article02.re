@@ -300,14 +300,14 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 
 いまあなたがたたいたのは、LINE公式アカウントと友だちになっている人全員にメッセージを送るための「ブロードキャストメッセージを送る」いうAPIです。もしcurlコマンドを実行した後にステータスコード200以外が返ってきて、LINEにメッセージが届かなかった場合は、公式ドキュメントのAPIリファレンス@<fn>{broadcast-message}でこの「ブロードキャストメッセージを送る」いうAPIのエラーレスポンス例を確認してみてください。
 
-//footnote[broadcast-message][ブロードキャストメッセージを送る | Messaging APIリファレンス | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message}]
+//footnote[broadcast-message][ブロードキャストメッセージを送る | Messaging APIリファレンス | LINE Developers　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message}]
 
 メッセージが届いたら、curlコマンドのtextの部分を好きなテキストにしたり、公開されている「送信可能なスタンプリスト@<fn>{stamp}」を見ながらcurlコマンドのpackageIdやstickerIdを好きなものに変えてみたりして、メッセージを何度か送り直してみましょう。（@<img>{broadcast-message-2}）
 
 //image[broadcast-message-2][テキストやスタンプを変えてメッセージを何度か送ってみよう][scale=0.4]{
 //}
 
-//footnote[stamp][送信可能なスタンプリスト | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/sticker-list/}]
+//footnote[stamp][送信可能なスタンプリスト | LINE Developers　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/docs/messaging-api/sticker-list/}]
 
 curlコマンドでAPIをたたくと、手元のスマートフォンでLINEにメッセージが届く。こうして自分がやったことが、ちゃんと動いて、結果が目に見えるのはとってもうれしいですよね。
 
@@ -395,7 +395,7 @@ Messaging APIを使ってLINE公式アカウントから自動応答している
 
 ===[/column]
 
-//footnote[mark-as-read][既読API | LINE Developers @<href>{https://developers.line.biz/ja/docs/partner-docs/mark-as-read/}]
+//footnote[mark-as-read][既読API | LINE Developers　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/docs/partner-docs/mark-as-read/}]
 
 == オウム返しするチャットボットを作ってみよう
 
@@ -405,7 +405,7 @@ Messaging APIを使ってLINE公式アカウントから自動応答している
 
 Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、Ruby、Python、Node.jsで用意@<fn>{messaging-api-sdk}されています。SDKはSoftware Development Kitの略で、名前のとおり開発に必要なライブラリが詰まった工作キットのようなものです。たとえば料理でも、材料を揃えて野菜の皮を剥くところからやるととても大変ですが、下ごしらえの済んだ材料とレシピがひとまとめになっているミールキットを使えば、誰でも短時間で失敗もなく美味しい食事が作れます。それと同じで、開発においてもSDKが用意されていたら、そのSDKを使うことで色々とラクができます。
 
-//footnote[messaging-api-sdk][LINE Messaging API SDK | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/line-bot-sdk/}]
+//footnote[messaging-api-sdk][LINE Messaging API SDK | LINE Developers　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/docs/messaging-api/line-bot-sdk/}]
 
 今回はPythonのSDKを使ってコードを書いていきます。
 
@@ -882,7 +882,7 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 
 ボットサーバーがWebhookをきちんと受け取れなかったときに備えて、［Webhook URL］の少し下にある［エラーの統計情報］@<fn>{error}をオンにしておきましょう。この［エラーの統計情報］をオンにしておくと、もしボットサーバーがWebhookの受け取りに失敗した場合に、LINE Developersコンソール上でそのログが確認できます。Webhook URLの［検証］を押してエラーが返ってきたときや、友だちがメッセージを送ってきたのにLINE公式アカウントからきちんと返信が送れていない場合は、ボットサーバーのログ@<fn>{logs}と共に、［統計情報］タブでエラーの統計情報も確認しましょう。（@<img>{webhook-error}）
 
-//footnote[error][Webhookの送信におけるエラーの統計情報を確認する | LINE Developers@<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}]
+//footnote[error][Webhookの送信におけるエラーの統計情報を確認する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}]
 //footnote[logs][ボットサーバーのログについては、@<hd>{article02|cloudwatch-logs}で後述します。]
 
 //image[webhook-error][［エラーの統計情報］をオンにしておく][scale=0.8]{
@@ -906,7 +906,7 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 
 なお友だち追加されたときにWebhookで飛んでくるフォローイベント@<fn>{follow}を用いると、「あいさつメッセージ」と同等の処理をボットサーバーでも実現できます。
 
-//footnote[follow][フォローイベント | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#follow-event}]
+//footnote[follow][フォローイベント | LINE Developers　　　　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#follow-event}]
 
 ==={cloudwatch-logs} LINEプラットフォームから飛んできたWebhookを目視確認する
 
@@ -970,8 +970,8 @@ Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-
 
 ===[/column]
 
-//footnote[ip-addr][Webook | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhooks}]
-//footnote[signature][署名を検証する | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#signature-validation}]
+//footnote[ip-addr][Webook | LINE Developers　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhooks}]
+//footnote[signature][署名を検証する | LINE Developers　　　　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#signature-validation}]
 
 == OpenAIのAPIを使ったAIチャットボットを作ってみよう
 
@@ -1114,7 +1114,7 @@ curlコマンドでOpenAI APIに質問を投げて、回答を取得できまし
 ちなみに2023年5月現在、OpenAI APIはアカウントを作ってから最初の3ヶ月は5ドル分まで無料@<fn>{openai-free}で使えるようです。自分が既に無料枠をどれくらい使ったのかは、OpenAI APIのUsage@<fn>{openai-free-2}で確認できます。（@<img>{openai-usage}）
 
 //footnote[openai-free][Pricing @<href>{https://openai.com/pricing}]
-//footnote[openai-free-2][Usage - OpenAI API@<href>{https://platform.openai.com/account/usage}]
+//footnote[openai-free-2][Usage - OpenAI API @<href>{https://platform.openai.com/account/usage}]
 
 //image[openai-usage][無料枠をどれくらい使ったのかはUsageで確認しよう][scale=0.8]{
 //}
