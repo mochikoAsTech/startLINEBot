@@ -35,6 +35,9 @@ mochikoAsTech
  * Hiroki Zenigami
  * Yuta Kamiyama
  * Takuya Kanatani（@torisankanasan）
+ * Ann Ojes
+ * Hiroaki Koike
+ * Kazuyuki Sano
 
 === 参考文献
 
