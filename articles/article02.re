@@ -979,15 +979,20 @@ LINE公式アカウントにメッセージを送って、無事にオウム返�
 
 === ChatGPTとGPT-3.5とは
 
-ChatGPTはOpenAIが提供している対話型のウェブサービスです。OpenAIのアカウントを作れば、誰でも利用できます。（@<img>{chat-gpt}）
+ChatGPTはOpenAIが提供している対話型のウェブサービスです。OpenAIのアカウントを作れば、誰でも利用できます。（@<img>{chat-gpt-35}）
 
  * ChatGPT - OpenAI
  ** @<href>{https://chat.openai.com/}
 
-//image[chat-gpt][ChatGPTでChatGPTのことを質問している様子][scale=1]{
+//image[chat-gpt-35][ChatGPT（GPT-3.5）にChatGPTのことを質問している様子][scale=1]{
 //}
 
-このChatGPTの裏側で応答を生成している言語モデルがGPT-3.5です。OpenAIが提供するOpenAI APIを使って質問を投げ、GPT-3.5からの回答を取得することも可能です。
+このChatGPTのベースとして応答を生成している言語モデルがGPT-3.5、およびその後継であるGPT-4@<fn>{gpt-4}です。（@<img>{chat-gpt-4}）
+
+//footnote[gpt-4][2023年5月時点では、ChatGPT Plusという月額20ドルのサブスクリプションプランを契約すると言語モデルとしてGPT-4を選択できます。契約せずに無料で使う場合は、デフォルトのGPT-3.5しか選べません。]
+
+//image[chat-gpt-4][ChatGPT（GPT-4）にChatGPTのことを質問している様子][scale=1]{
+//}
 
 それでは先ほどのオウム返しボットを少し作り変えて、ユーザーがLINEで質問を送るとGPT-3.5がその文脈に基づいて回答を生成し、その回答がLINE公式アカウントからのメッセージとして返ってくる、というAIチャットボットにしていきましょう。@<fn>{chatgpt}
 
