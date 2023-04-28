@@ -45,14 +45,16 @@ Messaging APIでメッセージを送るとき、いちばん簡単なのは友�
 
 //footnote[nickname][アイコンおよび表示名を変更する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/icon-nickname-switch/}]
 
-次のcurlコマンド@<fn>{change-icon-and-send-message}（@<list>{send-message-from-cat}）をたたくと、LINE公式アカウントからこんなメッセージが届きます。（@<img>{change-icon-and-name}）
+次のcurlコマンド@<fn>{change-icon-and-send-message}（@<list>{send-message-from-cat}）の3行目にある@<ttb>{{チャネルアクセストークン\}}の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
+
+WSLまたはターミナルを起動してcurlコマンドをたたくと、LINE公式アカウントからこんなメッセージが届きます。（@<img>{change-icon-and-name}）
 
 //footnote[change-icon-and-send-message][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/change-icon-and-send-message.sh}]
 
 //listnum[send-message-from-cat][アイコンや表示名を変更してメッセージを送るcurlコマンド][sh]{
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 -H 'Content-Type: application/json' \
--H 'Authorization: Bearer チャネルアクセストークン' \
+-H 'Authorization: Bearer {チャネルアクセストークン}' \
 -d '{
     "messages": [
         {

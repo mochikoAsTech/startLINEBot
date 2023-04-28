@@ -158,7 +158,7 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 //image[providers-and-channels][チャネルはプロバイダーの配下に属する][scale=0.8]{
 //}
 
-//footnote[provider][複数のチャネルがあって、それらを1つのプロバイダー配下に収めたときと、それぞれプロバイダーを別にしたときで何が変わるかというと、ユーザーIDの扱いが変わります。ユーザーを一意に識別するためのユーザーIDは、同じユーザーであってもプロバイダーごとに異なる値が発行されます。つまりmochikoさんというひとりのユーザーがいたとき、「A社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDと、また別の「B社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDは別々の値になるのです。そのため、本書では詳しく触れませんがLINEログインチャネルとMessaging APIチャネルでユーザー情報を連携したい場合は、その2つのチャネルが同一のプロバイダー配下にいなければならない、などの制約があります。一度チャネルをプロバイダーと紐づけてしまうと、後から「あっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので注意してください。]
+//footnote[provider][複数のチャネルがあって、それらを1つのプロバイダー配下に収めたときと、それぞれプロバイダーを別にしたときで何が変わるかというと、ユーザーIDの扱いが変わります。ユーザーを一意に識別するためのユーザーIDは、同じユーザーであってもプロバイダーごとに異なる値が発行されます。つまりmochikoさんというひとりのユーザーがいたとき、「A社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDと、また別の「B社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDは別々の値になるのです。そのため、本書では詳しく触れませんがLINEログインチャネルとMessaging APIチャネルでユーザー情報を連携したい場合は、その2つのチャネルが同一のプロバイダー配下にいなければならない、などの制約があります。]
 
 あなたが個人の開発者なのであれば、プロバイダー名は個人名でも構いません。誰かに「このLINE公式アカウントの運営元はどこなんですか？」と聞かれたときに、あなたが答えるであろう名称をプロバイダー名にしましょう。
 
@@ -253,14 +253,14 @@ WSLやターミナルがどこにあるのか分からないときは、Windows�
 //image[search-mac][MacならSpotlightで「ターミナル」と検索][scale=0.8]{
 //}
 
-WSLまたはターミナルが起動できたら、次のcurlコマンド@<fn>{send-broadcast-message}（@<list>{curl-send-message}）の3行目にある「チャネルアクセストークン」の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
+WSLまたはターミナルが起動できたら、次のcurlコマンド@<fn>{send-broadcast-message}（@<list>{curl-send-message}）の3行目にある@<ttb>{{チャネルアクセストークン\}}の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
 
 //footnote[send-broadcast-message][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/send-broadcast-message.sh}]
 
 //listnum[curl-send-message][curlコマンドで友だちにメッセージを送る][sh]{
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 -H 'Content-Type: application/json' \
--H 'Authorization: Bearer チャネルアクセストークン' \
+-H 'Authorization: Bearer {チャネルアクセストークン}' \
 -d '{
     "messages":[
         {
@@ -1081,14 +1081,14 @@ LINE Developersコンソールで取得したチャネルアクセストーク�
 
 @<hd>{article02|curl}でcurlコマンドを使ってMessaging APIをたたき、メッセージを送信したように、今度はcurlコマンドでOpenAI APIに質問を投げて回答を取得してみましょう。
 
-再びWSLまたはターミナルを起動します。次のcurlコマンド@<fn>{ask-openai-question}（@<list>{openai-api-curl}）の3行目にある「シークレットキー」の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存しましたね。
+再びWSLまたはターミナルを起動します。次のcurlコマンド@<fn>{ask-openai-question}（@<list>{openai-api-curl}）の3行目にある@<ttb>{{シークレットキー\}}の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存しましたね。
 
 //footnote[ask-openai-question][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/ask-openai-question.sh}]
 
 //listnum[openai-api-curl][curlコマンドで質問の回答を取得する][sh]{
 curl https://api.openai.com/v1/chat/completions \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer シークレットキー" \
+  -H "Authorization: Bearer {シークレットキー}" \
   -d '{
     "model": "gpt-3.5-turbo",
     "messages": [{"role": "user", "content": "技術書典ってなんですか？"}]

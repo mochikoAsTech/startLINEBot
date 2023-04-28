@@ -1,6 +1,6 @@
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 -H 'Content-Type: application/json' \
--H 'Authorization: Bearer チャネルアクセストークン' \
+-H 'Authorization: Bearer {チャネルアクセストークン}' \
 -d '{
     "messages":[
         {
