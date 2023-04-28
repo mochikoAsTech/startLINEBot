@@ -1305,7 +1305,7 @@ open .
 
 Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。（@<img>{add-openai-layer-to-lambda}）
 
-//image[add-openai-layer-to-lambda][レイヤーができた！][scale=0.8]{
+//image[add-openai-layer-to-lambda][［Bot-Server-on-Lambda］をクリックする][scale=0.8]{
 //}
 
 このLambda関数に、先に作っておいたMessaging API SDKのレイヤーを追加したいので、［Layers］をクリックします。（@<img>{add-openai-layer-to-lambda-2}）
