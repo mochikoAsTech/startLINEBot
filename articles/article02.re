@@ -1,6 +1,6 @@
 = Messaging APIでLINE Botをつくってみよう
 
-LINE公式アカウントの「中の人」を、人間の代わりにボットにしてみましょう。
+LINE公式アカウントの「中の人」を、人間の代わりにボットにしてみよう。
 
 //pagebreak
 
@@ -37,15 +37,22 @@ Messaging APIの「API」は、Application Programming Interfaceの略です。�
 //image[request-and-response][ブラウザでウェブページを見るときのリクエストとレスポンス][scale=1]{
 //}
 
-REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンド@<fn>{curl}や、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「はい、どうぞ！君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンスを返してくれるのです。（@<img>{api-request-and-response}）
+バーで「ビールをくれ！」というリクエストを投げると、ビアサーバーからのレスポンスとしてよく冷えたビールが返ってくる、みたいなものですね。@<fn>{beer}
 
-//footnote[curl][curl（カール）はHTTPやHTTPS、SCP、LDAPなど、さまざまなプロトコルでデータ転送ができるコマンドです。今までにcurlを使ったことのない人にとっては、この説明を読んでもいまいちピンとこないと思うので、「ターミナル」という種類のソフトで、ブラウザのようなことができるコマンドだと思っておいてください。ちなみにターミナルは、エンジニア以外の方には、いわゆる「黒い画面」と言った方がお馴染みかもしれません。]
+//footnote[beer][シンガポールのプールバーで飲んだタイガービールがおいしかった。また行きたい。]
+
+REST APIは、このウェブページと同じように、ウェブサーバー上で提供されます。私たちがcurlコマンド@<fn>{curl}や、Postman@<fn>{postman}や、プログラムを通じてREST APIに対して「天気情報をくれ！」とか「メッセージを送信してくれ！」というリクエストを投げると、ウェブサーバー上でうごくREST APIが「はい、どうぞ！君が求めていた天気情報はこれだよ！」とか「メッセージの送信に成功したよ！」というようにレスポンス@<fn>{json}を返してくれるのです。（@<img>{api-request-and-response}）
+
+//footnote[curl][curl（カール）はHTTPやHTTPS、SCP、LDAPなど、さまざまなプロトコルでデータ転送ができるコマンドです。今までにcurlを使ったことのない人にとっては、この説明を読んでもいまいちピンとこないと思うので、「ターミナル」という種類のソフトで、ブラウザのようなことができる命令文だと思っておいてください。ちなみにターミナルは、エンジニア以外の方には、いわゆる「黒い画面」と言った方がお馴染みかもしれません。]
 //footnote[postman][Postmanは、GUIの画面でREST APIをたたける便利なツールです。 @<href>{https://www.postman.com/}]
+//footnote[json][最近のREST APIでは、レスポンスはデータが扱いやすいJSONという形式のファイルで返ってくることが多いです。実際のJSONがどんなものなのかは、@<hd>{article02|curl}で確認できます。]
 
 //image[api-request-and-response][REST APIをたたくときのリクエストとレスポンス][scale=1]{
 //}
 
 前述のとおり、APIは広義には「情報をやりとりする窓口」であり、さまざまな意味を内包していますが、本書においてはただ「API」と呼んだら、それはREST APIのことを指していると思ってください。
+
+//pagebreak
 
 ===[column] 【コラム】APIは「たたく」もの？「呼び出す」もの？
 
@@ -55,15 +62,15 @@ APIにリクエストを投げることを「APIをたたく」と表現する�
 
 APIを「たたく」や「呼び出す」だけでなく、パソコンが「立ち上がる」、CPUの使用率が100%に「張り付く」、ここの処理で「引っかかって」エラーを「吐いて」「落ちてる」、プロセスを「殺す」、といった独特な表現は、知らない人からすると面白いですよね。
 
-情報の訂正時に「あー…今言ったのは嘘です。忘れてください。正しくは○○です」のように言ってしまうことはありませんか？この言い方、筆者も普通に使っていましたが、「嘘をついた」と言われると「悪意を持って誤情報を伝えたって自己申告してる…？」と割と不思議に思われるそうです。
+情報の訂正時に「あー…今言ったのは嘘です。忘れてください。正しくは○○です」のように言ってしまうことはありませんか？この言い方、筆者も普通に使っていましたが、聞き手によっては「嘘をついた」と言われると「この人、悪意を持って誤情報を伝えたって自己申告してる…？」と不思議に思われるようです。
 
 ===[/column]
 
 === Messaging APIとは
 
-ではあらためて、Messaging APIについて説明していきましょう。Messaging APIは、LINE公式アカウントからのメッセージ送信や、返信などの操作ができるAPI@<fn>{use-messaging-api}です。LINE株式会社が無料で提供しており、LINE Developersコンソールと呼ばれる開発者向けの管理画面でアカウント登録をすれば誰でも利用できます。@<fn>{price}
+ではあらためて、Messaging APIについて説明していきましょう。Messaging APIは、LINE公式アカウントからのメッセージ送信や、受け取ったメッセージへの返信といった操作ができるAPI@<fn>{use-messaging-api}です。LINE株式会社が無料@<fn>{price}で提供しており、LINE Developersコンソールと呼ばれる開発者向けの管理画面でアカウント登録をすれば誰でも利用できます。
 
-//footnote[use-messaging-api][Messaging APIは、あくまでLINE公式アカウントの操作をするためのAPIなので、個人のLINEアカウントで受信したメッセージをSlackに転送する、というようなことはできません。]
+//footnote[use-messaging-api][Messaging APIは、あくまでLINE公式アカウントの操作をするためのAPIなので、個人のLINEアカウントで受信したメッセージをAPIを使ってSlackに転送する、というようなことはできません。]
 //footnote[price][Messaging APIの各APIをたたくこと自体に費用はかかりません。@<chapref>{article01}の@<hd>{article01|oaprice}で紹介したとおり、送れるメッセージの通数を増やすために有料のプランを契約したときに初めてお金がかかります。]
 
 Messaging APIを使用することで、開発者はユーザーがLINE公式アカウントに送ったメッセージを受信したり、LINE公式アカウントから友だちに対して返信を送ったり、友だちとなったユーザーのプロフィール情報を取得したりすることができます。
@@ -96,31 +103,26 @@ Messaging APIチャネルを作成するため、LINE Official Account Manager�
 
 左側の［管理画面にログイン］から、LINE公式アカウントの管理画面こと、LINE Official Account Managerにログインします。（@<img>{line-for-business-login}）
 
-//image[line-for-business-login][［管理画面にログイン］からログインする][scale=0.8]{
+//image[line-for-business-login][［管理画面にログイン］からログインする][scale=1]{
 //}
 
 LINEビジネスID@<fn>{business-id}のログイン画面が表示されるので、［LINEアカウントでログイン］を選択します。（@<img>{line-for-business-login-2}）
 
-//footnote[business-id][LINEビジネスIDはLINE Official Account Manager、LINE公式アカウントの管理アプリ、LINE Developersコンソールなどで採用されている共通認証システムで、1つのアカウントですべてに共通してログインできます。実はさっき管理アプリにログインしたときも、この共通認証システムを使っていたのです。]
+//footnote[business-id][LINEビジネスIDはLINE Official Account Manager、LINE公式アカウントの管理アプリ、LINE Developersコンソールなどで採用されている共通認証システムで、1つのアカウントですべてに共通してログインできます。実は@<hd>{article01|kanri-app}で管理アプリにログインしたときも、この共通認証システムを使っていたのです。]
 
-//image[line-for-business-login-2][［LINEアカウントでログイン］を選ぶ][scale=0.8]{
+//image[line-for-business-login-2][［LINEアカウントでログイン］を選ぶ][scale=1]{
 //}
 
 @<hd>{article01|create-account}で登録したメールアドレスと、LINEのパスワード@<fn>{password}を入力して、［ログイン］しましょう。入力が面倒な場合は、［QRコードログイン］からQRコードを表示して、それをスマートフォンのLINEのQRコードスキャンで読み込む形でもログイン可能です。（@<img>{line-for-business-login-3}）
 
-//footnote[password][「LINEのパスワードなんて設定したっけ？何も覚えていません」という人はLINEを開いて、下に並んでいる［ホーム］から右上の歯車アイコンをタップして［設定］を開き、［アカウント］の［パスワード］からすぐに新しいパスワードを設定できます。 @<href>{https://guide.line.me/ja/account-and-settings/account-and-profile/set-password.html}]
+//footnote[password][「LINEのパスワードなんて設定したっけ？何も覚えていません」という人はLINEを開いて、下に並んでいる［ホーム］タブから右上の歯車アイコンをタップして［設定］を開き、［アカウント］の［パスワード］からすぐに新しいパスワードを設定できます。 @<href>{https://guide.line.me/ja/account-and-settings/account-and-profile/set-password.html}]
 
-//image[line-for-business-login-3][メールアドレスとパスワードを入力して［ログイン］する][scale=0.8]{
+//image[line-for-business-login-3][［ログイン］すると4桁の認証番号が表示される][scale=0.8]{
 //}
 
-二要素認証のため、4桁の認証番号が表示されます。（@<img>{line-for-business-login-4}）
+二要素認証のため、4桁の認証番号が表示されます。スマートフォンのLINEを開くと、認証番号入力の画面が表示されますので、この4桁の認証番号を入力して［本人確認］をタップします。［ログインしました］と表示されたら、［確認］をタップします。（@<img>{line-for-business-login-5}）
 
-//image[line-for-business-login-4][4桁の認証番号が表示される][scale=0.8]{
-//}
-
-スマートフォンのLINEを開くと、認証番号入力の画面が表示されますので、4桁の認証番号を入力して［本人確認］をタップします。［ログインしました］と表示されたら、［確認］をタップします。（@<img>{line-for-business-login-5}）
-
-//image[line-for-business-login-5][認証番号を入力して［本人確認］をタップする][scale=0.8]{
+//image[line-for-business-login-5][認証番号を入力して［本人確認］をタップする][scale=0.85]{
 //}
 
 これでLINE Official Account Managerにログインできました！（@<img>{line-for-business-login-6}）
@@ -130,24 +132,19 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 
 === Messaging APIチャネルを作って紐づける
 
-ではアカウントリストから、先ほど作ったLINE公式アカウントを選択します。（@<img>{line-for-business-login-7}）
+LINE Official Account Managerにログインできたら、アカウントリストから、先ほど作ったLINE公式アカウントを選択します。（@<img>{line-for-business-login-7}）
 
 //image[line-for-business-login-7][先ほど作ったLINE公式アカウントを選択する][scale=0.8]{
 //}
 
 右上にある［設定］を開きます。（@<img>{create-messaging-api-channel}）
 
-//image[create-messaging-api-channel][右上にある［設定］を開く][scale=0.8]{
+//image[create-messaging-api-channel][右上にある［設定］を開く][scale=0.9]{
 //}
      
-左メニューの［設定］の配下にある［Messaging API］を開きます。（@<img>{create-messaging-api-channel-2}）
+左メニューの［設定］の配下にある［Messaging API］を開いて、［Messaging APIを利用する］を押します。（@<img>{create-messaging-api-channel-3}）
 
-//image[create-messaging-api-channel-2][左メニューの［Messaging API］を開く][scale=0.8]{
-//}
-     
-［Messaging APIを利用する］を押します。（@<img>{create-messaging-api-channel-3}）
-
-//image[create-messaging-api-channel-3][［Messaging APIを利用する］を押す][scale=0.8]{
+//image[create-messaging-api-channel-3][［Messaging API］を開いて［Messaging APIを利用する］を押す][scale=0.9]{
 //}
 
 まだLINE Developersコンソールにログインしたことがなかったため、開発者情報の入力を求められます。ここでいう「開発者」とは、イコール「LINE Developersコンソールにアクセスする人のこと」です。あなたの［名前］@<fn>{mochiko}と［メールアドレス］@<fn>{mail-address}を入力して、リンク先の「LINE開発者契約」を確認した上で、同意できる内容であれば［同意する］を押します。（@<img>{create-messaging-api-channel-5}）
@@ -155,24 +152,24 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 //footnote[mochiko][筆者は［名前］の欄に個人事業主としての屋号（mochikoAsTech）を記入していますが、個人開発者として登録するのであれば普通に氏名の入力で構わないと思います。]
 //footnote[mail-address][ここで登録するメールアドレスは、LINEに登録してあるメールアドレスとは別のアドレスでも構いません。開発者に対するお知らせを送ってほしいメールアドレスを記入しましょう。ただしLINE Developersコンソールへのログインに使用するメールアドレスは、LINEに登録してあるメールアドレスであって、ここで記入したメールアドレスではないので、その点は注意してください。]
 
-//image[create-messaging-api-channel-5][［名前］と［メールアドレス］を入力して［同意する］を押す][scale=0.8]{
+//image[create-messaging-api-channel-5][［名前］と［メールアドレス］を入力して［同意する］を押す][scale=1]{
 //}
      
 入力した開発者情報の確認画面が表示されます。表示されている内容で問題なければ、［OK］を押します。（@<img>{create-messaging-api-channel-6}）
 
-//image[create-messaging-api-channel-6][表示されている内容で問題なければ［OK］を押す][scale=0.8]{
+//image[create-messaging-api-channel-6][表示されている内容で問題なければ［OK］を押す][scale=1]{
 //}
 
 開発者情報を登録すると、今度はプロバイダーの選択画面が表示されます。プロバイダーとは、サービスを提供し、ユーザーの情報を取得する企業や開発者個人のことを指します。これから作成するMessaging APIチャネルは、このプロバイダーというものの下に属します。プロバイダーの下には、複数のチャネルが所属できます。
 
 運営元が個人だと「チャネルも俺！プロバイダーも俺！全部俺だ！」みたいな気持ちになって違いが分かりにくいですが、たとえば飲料メーカーのA社が「炭酸飲料B」と「コーヒー飲料C」という2つのブランドを展開していた場合、プロバイダー名は「A社」になり、その配下にあるMessaging APIチャネル名は「炭酸飲料B」や「コーヒー飲料C」になります。@<fn>{provider}（@<img>{providers-and-channels}）
 
-//image[providers-and-channels][チャネルはプロバイダーの配下に属する][scale=0.8]{
+//image[providers-and-channels][チャネルはプロバイダーの配下に属する][scale=0.85]{
 //}
 
 //footnote[provider][複数のチャネルがあって、それらを1つのプロバイダー配下に収めたときと、それぞれプロバイダーを別にしたときで何が変わるかというと、ユーザーIDの扱いが変わります。ユーザーを一意に識別するためのユーザーIDは、同じユーザーであってもプロバイダーごとに異なる値が発行されます。つまりmochikoさんというひとりのユーザーがいたとき、「A社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDと、また別の「B社」というプロバイダーの配下にあるチャネルから見たmochikoさんのユーザーIDは別々の値になるのです。そのため、本書では詳しく触れませんがLINEログインチャネルとMessaging APIチャネルでユーザー情報を連携したい場合は、その2つのチャネルが同一のプロバイダー配下にいなければならない、などの制約があります。]
 
-あなたが個人の開発者なのであれば、プロバイダー名は個人名でも構いません。誰かに「このLINE公式アカウントの運営元はどこなんですか？」と聞かれたときに、あなたが答えるであろう名称をプロバイダー名にしましょう。
+あなたが個人の開発者なのであれば、プロバイダー名は個人の名前やハンドルネームでも構いません。誰かに「このLINE公式アカウントの運営元はどこなんですか？」と聞かれたときに、あなたが答えるであろう名称をプロバイダー名にしましょう。
 
 まだプロバイダーというものを1つも持っていないので、今回は［プロバイダーを作成］します。プロバイダー名を入力して、「LINE公式アカウントAPI利用規約」を確認し、［同意する］を押します。（@<img>{create-messaging-api-channel-7}）
 
@@ -191,7 +188,7 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
      
 これでLINE公式アカウントと紐づくMessaging APIチャネルができました！（@<img>{create-messaging-api-channel-10}）
 
-//image[create-messaging-api-channel-10][確認して［OK］を押す][scale=0.8]{
+//image[create-messaging-api-channel-10][Messaging APIチャネルができた！][scale=0.8]{
 //}
 
 == Messaging APIを使ったメッセージ送信を試してみよう
@@ -254,15 +251,15 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 
 Macを使っている方は、ターミナル（@<img>{mac}）を起動してください。
 
-//image[mac][Macならターミナルを起動する][scale=0.8]{
+//image[mac][Macならターミナルを起動する][scale=1]{
 //}
 
 WSLやターミナルがどこにあるのか分からないときは、Windowsなら画面下部の検索ボックスで「WSL」と検索（@<img>{search-wsl}）、Macなら画面右上にある虫眼鏡のマークからSpotlightで「ターミナル」と検索（@<img>{search-mac}）すれば起動できます。
 
-//image[search-wsl][Windowsなら検索ボックスで「WSL」と検索][scale=0.8]{
+//image[search-wsl][Windowsなら検索ボックスで「WSL」と検索][scale=0.9]{
 //}
 
-//image[search-mac][MacならSpotlightで「ターミナル」と検索][scale=0.8]{
+//image[search-mac][MacならSpotlightで「ターミナル」と検索][scale=0.9]{
 //}
 
 WSLまたはターミナルが起動できたら、次のcurlコマンド@<fn>{send-broadcast-message}（@<list>{curl-send-message}）の3行目にある@<ttb>{{チャネルアクセストークン\}}の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
@@ -290,17 +287,19 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 
 チャネルアクセストークンを置き換えたら、curlコマンドをまるごとコピーしてWSLもしくはターミナルに貼り付けます。WSLの場合は、複数行をまとめて貼り付けると警告が出ますが、［強制的に貼り付け］を押します。（@<img>{curl-1}）
 
-//image[curl-1][複数行の貼り付けに対する警告が出たら［強制的に貼り付け］を押す][scale=0.8]{
+//image[curl-1][複数行の貼り付けに対する警告が出たら［強制的に貼り付け］を押す][scale=0.9]{
 //}
 
-貼り付けたらEnterを押して実行します。（@<img>{curl-2}）
+貼り付けたらEnterを押してcurlコマンドを実行します。（@<img>{curl-2}）
 
-//image[curl-2][貼り付けたらEnterを押して実行する][scale=0.8]{
+//image[curl-2][貼り付けたらEnterを押して実行する][scale=0.9]{
 //}
 
-レスポンスが画面に出力されます。curlコマンドを使ってAPIをたたいた結果、レスポンスとしてステータスコード200と空のJSONオブジェクトが返ってきたことが分かります。（@<img>{curl-3}）
+レスポンスが画面に出力されます。curlコマンドを使ってAPIをたたいた結果、レスポンスとしてステータスコード200@<fn>{status-code}と空のJSONが返ってきたことが分かります。（@<img>{curl-3}）
 
-//image[curl-3][ステータスコード200が返ってきた][scale=0.8]{
+//footnote[status-code][ステータスコードとは、サーバーに対して「ウェブページを見せてくれ！」とか「天気情報をくれ！」といったリクエストを投げた際に、サーバーから返ってくる3桁の数字で、リクエストの結果を表すものです。たとえば@<ttb>{200 OK}ならリクエストが成功したこと、@<ttb>{404 Not Found}ならリクエストされたリソース（ページなど）が見つからなかったこと、@<ttb>{503 Service Unavailable}なら過負荷などによってリクエストを処理できなかったことをそれぞれ表しています。ちなみにステータスコード（3桁の数字）の後ろに付いている@<ttb>{OK}や@<ttb>{Not Found}のようなテキストは@<ttb>{reason-pherase}と言って、ステータスコードの意味を人間が理解しやすいよう簡潔に説明しているものです。]
+
+//image[curl-3][ステータスコード200が返ってきた][scale=1]{
 //}
 
 すると、Messaging APIで送ったメッセージがLINEに届きました！（@<img>{broadcast-message}）
@@ -308,9 +307,9 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 //image[broadcast-message][Messaging APIで送ったメッセージが届いた][scale=0.4]{
 //}
 
-やったぁ！Messaging APIがたたけましたね！おめでとうございます。
+やったぁ！Messaging APIをたたいてメッセージが送れましたね！おめでとうございます。
 
-いまあなたがたたいたのは、LINE公式アカウントと友だちになっている人全員にメッセージを送るための「ブロードキャストメッセージを送る」いうAPIです。もしcurlコマンドを実行した後にステータスコード200以外が返ってきて、LINEにメッセージが届かなかった場合は、公式ドキュメントのAPIリファレンス@<fn>{broadcast-message}でこの「ブロードキャストメッセージを送る」いうAPIのエラーレスポンス例を確認してみてください。
+いまあなたがたたいたのは、LINE公式アカウントと友だちになっている人全員にメッセージを一斉送信するための「ブロードキャストメッセージを送る」いうAPIです。もしcurlコマンドを実行した後にステータスコード200以外が返ってきて、LINEにメッセージが届かなかった場合は、公式ドキュメントのAPIリファレンス@<fn>{broadcast-message}でこの「ブロードキャストメッセージを送る」いうAPIのエラーレスポンス例を確認してみてください。
 
 //footnote[broadcast-message][ブロードキャストメッセージを送る | Messaging APIリファレンス | LINE Developers　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message}]
 
@@ -1117,7 +1116,7 @@ curl https://api.openai.com/v1/chat/completions \
 //image[openai-curl-2][貼り付けたらEnterを押して実行する][scale=1]{
 //}
 
-回答の生成には少し時間がかかりますが、少し立つとレスポンスが画面に出力されます。curlコマンドを使ってAPIをたたいた結果、レスポンスとして回答を含むJSONオブジェクトが返ってきたことが分かります。（@<img>{openai-curl-3}）
+回答の生成には少し時間がかかりますが、少し立つとレスポンスが画面に出力されます。curlコマンドを使ってAPIをたたいた結果、レスポンスとして回答を含むJSONが返ってきたことが分かります。（@<img>{openai-curl-3}）
 
 //image[openai-curl-3][回答を含むJSONが返ってきた][scale=1]{
 //}
