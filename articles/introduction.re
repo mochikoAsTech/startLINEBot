@@ -38,7 +38,7 @@ mochikoAsTech
 
 == 本書の構成
 
-本書は、@<chapref>{article01}でLINE公式アカウントについて解説し、@<chapref>{article02}で実際にLINE Botをつくって動かし、最後に@<chapref>{article03}でLINE Botを育てていく色んな可能性を紹介する、という三部構成になっています。
+本書は、@<chapref>{article01}でLINE公式アカウントについて解説し、@<chapref>{article02}で実際にLINE Botをつくって動かし、最後に@<chapref>{article03}でLINE Botを育てていく色んな方向性を紹介する、という三部構成になっています。
 
 == 本書の特徴
 
@@ -52,7 +52,7 @@ mochikoAsTech
 
 を解説しています。
 
-紙の書籍をお買い上げいただいた方は、フルカラーのPDF版を無料でダウンロードできますので、ぜひご活用ください。詳しくは@<chapref>{postscript}にある@<hd>{postscript|pdf}を参照してください。
+本書はフルカラーのPDF版をどなたでも無料でダウンロードできますので、ぜひご活用ください。詳しくは@<chapref>{postscript}にある@<hd>{postscript|pdf}を参照してください。
 
 == 用語の定義
 
