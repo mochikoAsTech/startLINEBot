@@ -409,7 +409,7 @@ LINEの検索窓でこのベーシックIDを検索（@<img>{id-search}）する
 //image[id-search][友だち検索でベーシックIDを検索するとLINE公式アカウントが表示される][scale=0.5]{
 //}
 
-そこでなんと、月額100円（税別）を出せば、4文字から18文字で希望の「プレミアムID@<fn>{premium}」というものが取得できます！ただし、他の人が既に使っているプレミアムIDは取得できません。
+そこでなんと、月額100円（税別）を出せば、4文字から18文字で希望の「プレミアムID@<fn>{premium}」というものが取得できます！ただし、他の人がすでに使っているプレミアムIDは取得できません。
 
 //footnote[premium][プレミアムIDとは｜LINE for Business　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://www.linebiz.com/jp/service/line-official-account/plan/}]
 
@@ -417,7 +417,7 @@ LINEの検索窓でこのベーシックIDを検索（@<img>{id-search}）する
 
 ==={badge} 未認証アカウントと認証済アカウント
 
-無料プランと有料プラン、ベーシックIDとプレミアムIDについては既に説明しましたが、実はさらに認証ステータスというものがあり、LINE公式アカウントは未認証アカウントと認証済アカウント@<fn>{verified}の2種類に分けられます。
+無料プランと有料プラン、ベーシックIDとプレミアムIDについてはすでに説明しましたが、実はさらに認証ステータスというものがあり、LINE公式アカウントは未認証アカウントと認証済アカウント@<fn>{verified}の2種類に分けられます。
 
 //footnote[verified][「認証済アカウント」とは？｜メリット・申請方法｜LINE for Business @<href>{https://www.linebiz.com/jp/service/line-official-account/verified-account/}]
 

@@ -176,7 +176,7 @@ LINE Official Account Managerにログインできたら、アカウントリス
 //image[create-messaging-api-channel-7][プロバイダー名を入力して［同意する］を押す][scale=0.8]{
 //}
      
-もしあなたがサービス提供者として、プライバシーポリシーや利用規約を既に持っていたら、プロバイダーのプライバシーポリシーと利用規約としてここでURLを登録できます。個人開発者であればおそらくどちらも持っていないと思いますので、その場合は何も入力せずに［OK］を押して進んで構いません。（@<img>{create-messaging-api-channel-8}）
+もしあなたがサービス提供者として、プライバシーポリシーや利用規約をすでに持っていたら、プロバイダーのプライバシーポリシーと利用規約としてここでURLを登録できます。個人開発者であればおそらくどちらも持っていないと思いますので、その場合は何も入力せずに［OK］を押して進んで構いません。（@<img>{create-messaging-api-channel-8}）
 
 //image[create-messaging-api-channel-8][入力せずに［OK］を押す][scale=0.8]{
 //}
@@ -202,7 +202,7 @@ Messaging APIを使ってメッセージを送信するにあたって、前述�
  * LINE Developersコンソール
  ** @<href>{https://developers.line.biz/console/}
 
-既にLINE Official Account Managerにログインしていれば、上記のURLを開くと、そのままLINE Developersコンソールのプロバイダー一覧が表示されるはずです。もしログインを求められたら、@<hd>{article02|login-oamanager}と同じようにLINEのアカウントでログインしてください。プロバイダー一覧が表示されたら、左メニューで、先ほど作ったプロバイダーを選びます。（@<img>{console}）
+すでにLINE Official Account Managerにログインしていれば、上記のURLを開くと、そのままLINE Developersコンソールのプロバイダー一覧が表示されるはずです。もしログインを求められたら、@<hd>{article02|login-oamanager}と同じようにLINEのアカウントでログインしてください。プロバイダー一覧が表示されたら、左メニューで、先ほど作ったプロバイダーを選びます。（@<img>{console}）
 
 //image[console][LINE Developersコンソールのプロバイダー一覧が表示された][scale=0.8]{
 //}
@@ -371,7 +371,7 @@ LINE Official Account Managerや管理アプリには、応答メッセージと
 
 //footnote[reply_and_ai][自動応答が可能に！「応答メッセージ」と「AI応答メッセージ」とは｜LINE for Business @<href>{https://www.linebiz.com/jp/column/technique/20191128/}]
 
-一方、AI応答メッセージはもう少し融通が利いて、ユーザーから送られたメッセージの内容をAIが判別して、適切なメッセージで自動で返信してくれます。たとえば飲食店なら、営業時間、住所、Wi-Fi、コンセント、駐車場、喫煙可否など、質問が想定されることについてそれぞれ事前に返信メッセージを設定しておくことで、単語が完全に一致しなくてもよしなに回答してくれます。たとえば「Wi-Fi」に対して「申し訳ありませんがWi-Fiはご利用いただけません」という回答をオンにしておくと、「Wi-Fiってありますか？」のようなメッセージだけに限らず、「ネットって使えたりする？」「無線ってありますか？」「無料のわいふぁいって使える？」といったメッセージでもきちんとその回答が返ってきます。
+一方、AI応答メッセージはもう少し融通が利いて、ユーザーから送られたメッセージの内容をAIが判別して、適切なメッセージで自動で返信してくれます。たとえば飲食店なら、営業時間、住所、Wi-Fi、コンセント、駐車場、喫煙可否など、質問が想定されることについてそれぞれ事前に返信メッセージを設定しておくことで、単語が完全に一致しなくてもよしなに回答してくれます。たとえば「Wi-Fi」に対して「申し訳ありませんがWi-Fiはご利用いただけません」という回答をオンにしておくと、「Wi-Fiってありますか？」のようなメッセージだけに限らず、「ネットって使えたりする？」「無線ってありますか？」「無料のわいふぁいって使える？」といったメッセージでもきちんとその回答が返ってきます。かしこい…！開発不要で使えるAIチャットボットとも言えますね。
 
 応答メッセージとAI応答メッセージは、どちらか片方だけ使うこともできますし、キーワードに完全一致したら応答メッセージを返して、そうでない場合はAI応答メッセージを返す、というように両方使うこともできます。
 
@@ -383,7 +383,9 @@ LINE Official Account Managerや管理アプリには、応答メッセージと
 
 ==={webhook} Webhookとは
 
-ユーザーが、LINE公式アカウントを友だち追加したり、ブロックしたり、LINE公式アカウントにメッセージを送ったりというように、何かしらの「イベント」を起こすと、LINEプラットフォームからボットサーバーに対して、Webhookが送られます。LINEプラットフォームから送られてくるWebhookを受け止めるために、LINE公式アカウントを運営するあなたは、自分でこのボットサーバーを用意する必要があります。（@<img>{webhook}）
+ユーザーが、LINE公式アカウントを友だち追加したり、ブロックしたり、LINE公式アカウントにメッセージを送ったりというように、何かしらの「イベント」を起こすと、LINEプラットフォームからボットサーバーに対して、Webhookが送られます@<fn>{actual-webhook}。LINEプラットフォームから送られてくるWebhookを受け止めるために、LINE公式アカウントを運営するあなたは、自分でこのボットサーバーを用意する必要があります。（@<img>{webhook}）
+
+//footnote[actual-webhook][実際に飛んでくるWebhookがどんなものなのかは、@<hd>{article02|cloudwatch-logs}で見られます。]
 
 //image[webhook][ユーザーがメッセージを送るとボットサーバーにWebhookが飛んでくる][scale=1]{
 //}
@@ -410,7 +412,7 @@ Messaging APIを使ってLINE公式アカウントから自動応答している
 
 == オウム返しするチャットボットを作ってみよう
 
-それではメッセージをWebhookで受け取って、ボットから自動返信する一連の流れを理解するため、先ずは一番簡単な「オウム返しするチャットボット」を作ってみましょう。
+メッセージをWebhookで受け取って、ボットから自動返信する一連の流れを理解するため、先ずは一番簡単な「オウム返しするチャットボット」を作ってみましょう。
 
 ==={prepare-messaging-api-sdk} Messaging APIのSDKを準備する
 
@@ -418,12 +420,12 @@ Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、
 
 //footnote[messaging-api-sdk][LINE Messaging API SDK | LINE Developers　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/docs/messaging-api/line-bot-sdk/}]
 
-今回はPythonのSDKを使ってコードを書いていきます。
+今回はPythonという言語のSDKを使ってコードを書いていきます。
 
  * LINE Messaging API SDK for Python
  ** @<href>{https://github.com/line/line-bot-sdk-python}
 
-それではSDKを使うための準備をしていきましょう。
+それではSDKを使うための準備をしていきましょう。WindowsとMacで手順が異なるので、それぞれ順番に説明していきます。
 
 ==== Windowsの場合
 
@@ -432,7 +434,7 @@ Messaging APIでは、開発をサポートするSDKがJava、PHP、Go、Perl、
 先ずはcdコマンドでホームディレクトリ@<fn>{dir}に移動して、mkdirコマンドでpython@<fn>{python-dir}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-sdk-1}）
 
 //footnote[dir][前述のとおりWSLはWindows上で動くLinux環境であり、Linuxではフォルダのことをディレクトリと呼びます。なので、ここではディレクトリと書いてあったら「ああ、フォルダのことだな」と思ってください。]
-//footnote[python-dir][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
+//footnote[python-dir][この作成するディレクトリの名前は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
 
 //cmd{
 $ cd
@@ -497,26 +499,31 @@ $ explorer.exe .
 
 これでMessaging APIのSDKが準備できました。
 
+//pagebreak
+
 ==== Macの場合
 
-必要なコマンドを使えるようにするため、先ずはPythonの公式サイトからPythonのインストーラーをダウンロードしてきます。［Download the latest version for macOS］の下にある［Download Python 3.11.3］をクリック@<fn>{version}してください。（@<img>{download-python}）
+必要なコマンド@<fn>{pip-command}を使えるようにするため、先ずはPythonの公式サイトからPythonのインストーラーをダウンロードしてきます。［Download the latest version for macOS］の下にある［Download Python 3.x.x］をクリック@<fn>{version}してください。（@<img>{download-python}）
 
-//footnote[version][もし3.11.3よりも新しいバージョンが出ていたら、そちらをダウンロードしてください。]
+//footnote[pip-command][あなたのMacですでにpip3コマンドが使える状態であれば、このPythonをインストールする手順は飛ばして構いません。]
+//footnote[version][画像は3.11.3ですが、Python3系でこれよりも新しいバージョンが出ていたら、そちらをダウンロードしてください。]
 
  * Download Python | Python.org
  ** @<href>{https://www.python.org/downloads/}
 
-//image[download-python][Pythonのインストーラーをダウンロードする][scale=0.8]{
+//image[download-python][Pythonのインストーラーをダウンロードする][scale=1]{
 //}
 
-ダウンロードした［python-3.11.3-macos11.pkg］を開きます。インストーラの指示に従ってPythonをインストールしてください。（@<img>{install-python-1}）
+//pagebreak
 
-//image[install-python-1][インストーラの指示に従ってPythonをインストールする][scale=0.8]{
+ダウンロードした［python-3.x.x-macos11.pkg］を開きます。インストーラの指示に従ってPythonをインストールしてください。（@<img>{install-python-1}）
+
+//image[install-python-1][インストーラの指示に従ってPythonをインストールする][scale=0.7]{
 //}
 
 Pythonのインストールが完了したら［閉じる］をクリックします。（@<img>{python-installed}）
 
-//image[python-installed][インストールが完了したら［閉じる］をクリックする][scale=0.8]{
+//image[python-installed][インストールが完了したら［閉じる］をクリックする][scale=0.7]{
 //}
 
 インストール完了後、自動的に表示されるFinderで［Install Certificates.command］をダブルクリックで開きます。（@<img>{install-python-2}）
@@ -529,7 +536,7 @@ Pythonのインストールが完了したら［閉じる］をクリックし�
 //image[install-python-3][［プロセスが完了しました］と表示されたらそのターミナルは閉じる][scale=0.8]{
 //}
 
-これで必要なコマンドが使えるようになったはずです。［プロセスが完了しました］と表示されたターミナルは閉じてください。
+これで必要なコマンドが使えるようになったはずです。
 
 それでは@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
 
@@ -545,7 +552,7 @@ $ pip3 -V
 
 mkdirコマンドでpython@<fn>{python-dir-mac}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{install-python-5}）
 
-//footnote[python-dir-mac][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
+//footnote[python-dir-mac][この作成するディレクトリの名前は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
 
 //cmd{
 $ mkdir python
@@ -1023,12 +1030,12 @@ Messaging APIを使うにはチャネルアクセストークンが必要だっ�
 
 ［Create your account］と表示されたら、メールアドレスを入力して［Continue］をクリックします。（@<img>{openai-account-1}）
 
-//image[openai-account-1][メールアドレスを入力して［Continue］をクリックする][scale=0.8]{
+//image[openai-account-1][メールアドレスを入力して［Continue］をクリックする][scale=1]{
 //}
 
 続いてパスワードを入力して、［Continue］をクリックします。（@<img>{openai-account-2}）
 
-//image[openai-account-2][パスワードを入力して［Continue］をクリックする][scale=0.8]{
+//image[openai-account-2][パスワードを入力して［Continue］をクリックする][scale=1]{
 //}
 
 ［Verify your email］と表示されます。（@<img>{openai-account-3}）
@@ -1127,7 +1134,7 @@ curl https://api.openai.com/v1/chat/completions \
 
 curlコマンドでOpenAI APIに質問を投げて、回答を取得できました。「APIをたたく」ことに少し慣れてきましたか？
 
-ちなみに2023年5月現在、OpenAI APIはアカウントを作ってから最初の3ヶ月は5ドル分まで無料@<fn>{openai-free}で使えるようです。自分が既に無料枠をどれくらい使ったのかは、OpenAI APIのUsage@<fn>{openai-free-2}で確認できます。（@<img>{openai-usage}）
+ちなみに2023年5月現在、OpenAI APIはアカウントを作ってから最初の3ヶ月は5ドル分まで無料@<fn>{openai-free}で使えるようです。自分がすでに無料枠をどれくらい使ったのかは、OpenAI APIのUsage@<fn>{openai-free-2}で確認できます。（@<img>{openai-usage}）
 
 //footnote[openai-free][Pricing @<href>{https://openai.com/pricing}]
 //footnote[openai-free-2][Usage - OpenAI API @<href>{https://platform.openai.com/account/usage}]
@@ -1162,7 +1169,7 @@ $ ls
 
 そして再びmkdirコマンドでpython@<fn>{python-dir-2}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{get-openai-sdk-1}）
 
-//footnote[python-dir-2][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
+//footnote[python-dir-2][この作成するディレクトリの名前は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
 
 //cmd{
 $ mkdir python
@@ -1230,7 +1237,7 @@ $ ls
 
 そして再びmkdirコマンドでpython@<fn>{python-dir-mac-2}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{mac-openai-sdk-1}）
 
-//footnote[python-dir-mac-2][このディレクトリ名は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
+//footnote[python-dir-mac-2][この作成するディレクトリの名前は必ずpythonにしてください。ディレクトリ名をpython以外にするとこの後の手順で正常に動きません。]
 
 //cmd{
 $ mkdir python
@@ -1545,7 +1552,7 @@ SECRET_KEY	シークレットキー
 
 なんとなく先に色々片付けてからレスポンスを返したい気持ちは分かりますが、郵便局員が郵便物を持って来てくれたとき、わざわざ玄関前で待たせて封筒を開けて中身を読んでからようやく受領の判子を押してあげる、という順番だとおかしいよね、と考えると納得しやすいのではないでしょうか。先ずは受領の判子を押して郵便局員を帰らせてあげて、手紙を読んだり、返事を書いたりはそのあとでやりましょう。@<fn>{sorry-but}
 
-またメッセージに対する応答メッセージを送る場合、応答トークン@<fn>{reply_token_rule}はWebhookを受信後、速やか（具体的には1分以内）に使う必要があります。Webhook受信後、すぐに返信を送れる場合は応答メッセージで構いませんが、色々な処理を行ってかなり時間が経ってから返信したい場合は、応答トークンが既に無効になっている可能性があります。その場合は、対象となる友だちのユーザーIDを指定したプッシュメッセージで返信を送ることが可能です。
+またメッセージに対する応答メッセージを送る場合、応答トークン@<fn>{reply_token_rule}はWebhookを受信後、速やか（具体的には1分以内）に使う必要があります。Webhook受信後、すぐに返信を送れる場合は応答メッセージで構いませんが、色々な処理を行ってかなり時間が経ってから返信したい場合は、応答トークンがすでに無効になっている可能性があります。その場合は、対象となる友だちのユーザーIDを指定したプッシュメッセージで返信を送ることが可能です。
 
 ===[/column]
 
