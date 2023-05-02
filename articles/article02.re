@@ -902,7 +902,7 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 //image[webhook-url-4][［成功］と返ってきたら［OK］をクリックする][scale=0.95]{
 //}
 
-ボットサーバーがWebhookをきちんと受け取れなかったときに備えて、［Webhook URL］の少し下にある［エラーの統計情報］@<fn>{error}をオンにしておきましょう。（@<img>{webhook-error}）
+検証ではうまくいきましたが、今後ボットサーバーがWebhookをきちんと受け取れなかったときに備えて、［Webhook URL］の少し下にある［エラーの統計情報］@<fn>{error}をオンにしておきましょう。（@<img>{webhook-error}）
 
 //footnote[error][Webhookの送信におけるエラーの統計情報を確認する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}]
 
@@ -915,7 +915,7 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 
 //pagebreak
 
-［検証］を押して［成功］と返ってきたら、ボットサーバーは問題なく動いているようなので、同じ［Messaging API設定］タブにある［応答メッセージ］の［編集］からLINE Official Account Managerを開きます。（@<img>{webhook-url-5}）
+［検証］を押して［成功］と返ってきたことから、ボットサーバーが問題なく動いていると分かったので、同じ［Messaging API設定］タブにある［応答メッセージ］の［編集］からLINE Official Account Managerを開きます。（@<img>{webhook-url-5}）
 
 //image[webhook-url-5][［応答メッセージ］の［編集］からLINE Official Account Managerを開く][scale=0.8]{
 //}
@@ -954,10 +954,12 @@ CloudWatchを開いたら、左メニューの［ロググループ］から［/
 
 //pagebreak
 
-@<ttb>{[INFO]}からはじまる行を開いて確認します。すると、Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-code-1}）の48行目で出力しておいたログが確認できます。これがLINEプラットフォームから届いたWebhookのJSONです。（@<img>{cloudwatch-3}）
+@<ttb>{[INFO]}からはじまる行を開いて確認します。すると、Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-code-1}）の48行目で出力しておいたログが確認できます。（@<img>{cloudwatch-3}）
 
 //image[cloudwatch-3][LINEプラットフォームから届いたWebhookのJSONが確認できる][scale=1]{
 //}
+
+これがLINEプラットフォームから届いたWebhookのJSONです。（@<list>{webhook-json}）
 
 //listnum[webhook-json][［検証］を押したときに飛んできたWebhookのJSON][json]{
 {
@@ -979,7 +981,7 @@ CloudWatchを開いたら、左メニューの［ロググループ］から［/
 //image[parrot-reply][メッセージを送ったらLINE公式アカウントがオウム返ししてくれた][scale=0.8]{
 //}
 
-おめでとうございます！オウム返ししてくれるLINE Botの完成です。
+おめでとうございます！オウム返ししてくれるLINE Botの完成です。「LINE Botをつくる」というアチーブメントを達成です！
 
 ===[column] 【コラム】これは本当にLINEプラットフォームから来たWebhook？
 
@@ -991,7 +993,7 @@ CloudWatchを開いたら、左メニューの［ロググループ］から［/
 
 LINEプラットフォームから届くWebhookには、そのリクエストヘッダーに必ず@<ttb>{x-line-signature}という署名が含まれています。Messaging APIチャネルのチャネルシークレットを秘密鍵として扱い、届いたWebhookのリクエストボディのダイジェスト値を取得し、さらにそのダイジェスト値をチャネルシークレットを用いてBase64エンコードした値と、リクエストヘッダーの@<ttb>{x-line-signature}の署名が一致することを確認できれば、これが本当にLINEプラットフォームから届いたWebhookである、というセキュリティの担保ができます。
 
-この検証をしないで、無条件に「テキストメッセージのWebhookイベントが届いたらユーザーに返信する」のような処理をしていると、ボットサーバーに偽のWebhookを投げ続けることで、LINE Botを介して特定のユーザーに大量のメッセージを送りつける攻撃が可能になってしまいます。
+この検証をしないで、無条件に「テキストメッセージのWebhookイベントが届いたらユーザーに返信する」のような処理をしていると、悪意のある第三者がボットサーバーに偽のWebhookを投げ続けることで、LINE Botを介して特定のユーザーに大量のメッセージを送りつける攻撃が可能になってしまいます。
 
 署名検証の各言語ごとのコードサンプルは、公式ドキュメントの「署名を検証する@<fn>{signature}」にありますし、SDKを用いることで簡単に検証できます。
 
@@ -1004,9 +1006,11 @@ Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-
 
 //pagebreak
 
-== OpenAIのAPIを使ったAIチャットボットを作ってみよう
+=={open-ai-chatbot} OpenAIのAPIを使ったAIチャットボットを作ってみよう
 
-LINE公式アカウントにメッセージを送って、無事にオウム返しのチャットボットが動いてくれるとうれしいですね！うれしいものの、「オウム返しされたけど…だからなに？」という気持ちにもなるので、今度はOpenAIのAPIを使って、LINE公式アカウントの中身をちゃんと役に立つAIチャットボットに作り変えてみましょう。
+LINE公式アカウントにメッセージを送って、無事にオウム返しのチャットボットが動いてくれました。うれしいね！@<fn>{pamo}うれしいものの、「送ったメッセージをオウム返しされた…けど…だからなに？」という気持ちにもなるので、今度はOpenAIのAPIを使って、LINE公式アカウントの中身をちゃんと役に立つAIチャットボットに作り変えてみましょう。
+
+//footnote[pamo][Oh!パモさん、オウム返しwatch…ウレシイウレシイね。セイジ先生の授業はとてもよいので一通り受けることをお勧めする。]
 
 === ChatGPTとGPT-3.5とは
 
@@ -1018,6 +1022,8 @@ ChatGPTはOpenAIが提供している対話型のウェブサービスです。O
 //image[chat-gpt-35][ChatGPT（GPT-3.5）にChatGPTのことを質問している様子][scale=1]{
 //}
 
+//pagebreak
+
 このChatGPTのベースとして応答を生成している言語モデルがGPT-3.5、およびその後継であるGPT-4@<fn>{gpt-4}です。（@<img>{chat-gpt-4}）
 
 //footnote[gpt-4][2023年5月時点では、ChatGPT Plusという月額20ドルのサブスクリプションプランを契約すると言語モデルとしてGPT-4を選択できます。契約せずに無料で使う場合は、デフォルトのGPT-3.5しか選べません。]
@@ -1027,7 +1033,7 @@ ChatGPTはOpenAIが提供している対話型のウェブサービスです。O
 
 それでは先ほどのオウム返しボットを少し作り変えて、ユーザーがLINEで質問を送るとGPT-3.5がその文脈に基づいて回答を生成し、その回答がLINE公式アカウントからのメッセージとして返ってくる、というAIチャットボットにしていきましょう。@<fn>{chatgpt}
 
-//footnote[chatgpt][本書を書いている最中に「ChatGPTだー！」「GPT-3.5だー！」「いやGPT-4だー！」とインターネットがお祭り騒ぎになったので、なんとか間に合わせるために寝不足で吐きそうになりながら動作検証をして、この「OpenAIのAPIを使ってChatGPTみたいなAIチャットボットを作る」という節を書き足しました。だってみんな、いまAIチャットボット作れる本が出たら絶対に嬉しいと思ったから！]
+//footnote[chatgpt][本書を書いている最中に「ChatGPTだー！」「GPT-3.5だー！」「いやGPT-4だー！」とインターネットがお祭り騒ぎになったので、急いで動作検証をして、この@<hd>{article02|open-ai-chatbot}という節を書き足しました。なんとか間に合ってよかった…！]
 
 ==={issue-secret-key} OpenAIに登録してシークレットキーを取得する
 
@@ -1038,72 +1044,58 @@ Messaging APIを使うにはチャネルアクセストークンが必要だっ�
  * OpenAI API
  ** @<href>{https://platform.openai.com/overview}
 
-//image[openai-api-site][右上の［Sign up］を開く][scale=0.8]{
+//image[openai-api-site][右上の［Sign up］を開く][scale=1]{
 //}
 
 ［Create your account］と表示されたら、メールアドレスを入力して［Continue］をクリックします。（@<img>{openai-account-1}）
 
-//image[openai-account-1][メールアドレスを入力して［Continue］をクリックする][scale=1]{
+続いてパスワードを入力して［Continue］をクリックすると、［Verify your email］と表示されます。
+
+//image[openai-account-1][メールアドレスとパスワードを入力して［Continue］をクリックする][scale=1]{
 //}
 
-続いてパスワードを入力して、［Continue］をクリックします。（@<img>{openai-account-2}）
+すると、入力したメールアドレス宛てに［OpenAI - Verify your email］という件名のメールが届きます。［Verify email address］をクリックしてください。（@<img>{openai-account-2}）
 
-//image[openai-account-2][パスワードを入力して［Continue］をクリックする][scale=1]{
+//image[openai-account-2][届いたメールの［Verify email address］をクリックする][scale=0.7]{
 //}
 
-［Verify your email］と表示されます。（@<img>{openai-account-3}）
+メールアドレスの確認ができたら、［Tell us about you］と表示されます。苗字と名前、そして生年月日を入力して、［Continue］をクリックします。（@<img>{openai-account-3}）
 
-//image[openai-account-3][［Verify your email］と表示されたらメールを確認しよう][scale=0.8]{
+［Verify your phone number］と表示されたら、携帯電話の電話番号を入力します。プラス記号と国番号の81からはじまる国際的な電話番号の形式なので、あなたの電話番号が「080-0123-4567」なら「8001234567」と入力してください。入力したら［Send code］をクリックします。
+
+//image[openai-account-3][苗字と名前と生年月日、電話番号を入力する][scale=0.8]{
 //}
 
-すると、入力したメールアドレス宛てに［OpenAI - Verify your email］という件名のメールが届きます。［Verify email address］をクリックしてください。（@<img>{openai-account-4}）
+すると入力した電話番号のスマートフォン宛てに、［あなたのOpenAI API 認証コード］というSMSが届きます。（@<img>{openai-account-4}）
 
-//image[openai-account-4][届いたメールの［Verify email address］をクリックする][scale=0.8]{
+SMSに書いてある6桁の認証コードを、［Enter code］と表示された画面で入力してください。
+
+//image[openai-account-4][SMSで届いた6桁の認証コードを［Enter code］の画面で入力する][scale=0.8]{
 //}
 
-メールアドレスの確認ができたら、［Tell us about you］と表示されます。苗字と名前、そして生年月日を入力して、［Continue］をクリックします。（@<img>{openai-account-5}）
+右上のアイコンをクリックして自分のメールアドレスが表示されていたら、OpenAI APIのアカウント登録は完了です！おめでとうございます！それでは［VIEW API keys］を開いてください。（@<img>{openai-account-9}）
 
-//image[openai-account-5][苗字と名前と生年月日を入力して［Continue］をクリックする][scale=0.8]{
+//image[openai-account-9][OpenAI APIのアカウント登録が完了したら［VIEW API keys］を開く][scale=1]{
 //}
 
-［Verify your phone number］と表示されたら、携帯電話の電話番号を入力します。プラス記号と国番号の81からはじまる国際的な電話番号の形式なので、あなたの電話番号が「080-0123-4567」なら「8001234567」と入力してください。入力したら［Send code］をクリックします。（@<img>{openai-account-6}）
+OpenAI APIをたたくためのシークレットキーというものが欲しいのですが、まだ存在していないので［Create new secret key］をクリックして作成しましょう。（@<img>{openai-account-10}）
 
-//image[openai-account-6][電話番号を入力して［Send code］をクリックする][scale=0.8]{
+//image[openai-account-10][［Create new secret key］をクリックする][scale=1]{
 //}
 
-すると入力した電話番号のスマートフォン宛てに、［あなたのOpenAI API 認証コード］というSMSが届きます。（@<img>{openai-account-7}）
+シークレットキーの［Name］は任意入力ですが、何の用途で作った鍵なのか後で分からなくなってしまわないように、@<ttb>{OpenAI API secret key for LINE Bot}と書いておきましょう。［Create secret key］をクリックします。（@<img>{openai-account-11}）
 
-//image[openai-account-7][［あなたのOpenAI API 認証コード］][scale=0.4]{
-//}
-
-SMSに書いてある6桁の認証コードを、［Enter code］と表示された画面で入力してください。（@<img>{openai-account-8}）
-
-//image[openai-account-8][SMSで届いた6桁の認証コードを［Enter code］の画面で入力する][scale=0.8]{
-//}
-
-右上のアイコンをクリックして自分のメールアドレスが表示されていたら、OpenAI APIのアカウント登録は完了です。［VIEW API keys］を開いてしてください。（@<img>{openai-account-9}）
-
-//image[openai-account-9][OpenAI APIのアカウント登録が完了したら［VIEW API keys］を開く][scale=0.8]{
-//}
-
-OpenAI APIをたたくためのシークレットキーはまだ存在していないので、［Create new secret key］をクリックして作成しましょう。（@<img>{openai-account-10}）
-
-//image[openai-account-10][［Create new secret key］をクリックする][scale=0.8]{
-//}
-
-シークレットキーの［Name］は任意入力ですが、何の用途で作った鍵なのか後で分からなくなってしまわないように、［OpenAI API secret key for LINE Bot］と書いておきましょう。［Create secret key］をクリックします。（@<img>{openai-account-11}）
-
-//image[openai-account-11][［Create secret key］をクリックする][scale=0.8]{
+//image[openai-account-11][［Create secret key］をクリックする][scale=1]{
 //}
 
 シークレットキーが作成されました。このシークレットキーはこの画面でコピーしておかないと、以降二度と表示されません。もし無くしたらシークレットキーを再び作成することになります。コピーボタンを押して、チャネルアクセストークンやチャネルシークレットと同様に、パソコンのメモ帳にしっかりメモしておいてください。メモできたら［Done］をクリックして、ポップアップを閉じます。（@<img>{openai-account-12}）
 
-//image[openai-account-12][シークレットキーは二度と表示されないのでしっかりメモしておこう][scale=0.8]{
+//image[openai-account-12][シークレットキーは二度と表示されないのでしっかりメモしておこう][scale=1]{
 //}
 
 これでOpenAI APIをたたくためのシークレットキーが手に入りました。（@<img>{openai-account-13}）
 
-//image[openai-account-13][シークレットキーが手に入った！][scale=0.8]{
+//image[openai-account-13][シークレットキーが手に入った！][scale=1]{
 //}
 
 LINE Developersコンソールで取得したチャネルアクセストークンと同様に、このシークレットキーはOpenAI APIをたたくときに身分証のような役割を果たします。うっかりシークレットキーが載った画面をブログで公開したり、ソースコードに直接書いてGitHubにPushしたりしないように注意してください。
