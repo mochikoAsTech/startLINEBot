@@ -235,7 +235,7 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 
 続けて［チャネル基本設定］タブのチャネルシークレットもコピーして、一緒にメモしておきましょう。チャネルシークレットもこの後の手順で必要となります。（@<img>{console-6}）
 
-//image[console-6][チャネルアクセストークンもコピーする][scale=0.8]{
+//image[console-6][チャネルシークレットもコピーする][scale=0.8]{
 //}
 
 チャネルアクセストークンとチャネルシークレットが手に入ったので、早速Messaging APIでメッセージを送ってみましょう。
@@ -309,7 +309,7 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 
 やったぁ！Messaging APIをたたいてメッセージが送れましたね！おめでとうございます。
 
-いまあなたがたたいたのは、LINE公式アカウントと友だちになっている人全員にメッセージを一斉送信するための「ブロードキャストメッセージを送る」いうAPIです。もしcurlコマンドを実行した後にステータスコード200以外が返ってきて、LINEにメッセージが届かなかった場合は、公式ドキュメントのAPIリファレンス@<fn>{broadcast-message}でこの「ブロードキャストメッセージを送る」いうAPIのエラーレスポンス例を確認してみてください。
+いまあなたがたたいたのは、LINE公式アカウントと友だちになっている人全員にメッセージを一斉送信するための「ブロードキャストメッセージを送る」というAPIです。もしcurlコマンドを実行した後にステータスコード200以外が返ってきて、LINEにメッセージが届かなかった場合は、公式ドキュメントのAPIリファレンス@<fn>{broadcast-message}でこの「ブロードキャストメッセージを送る」というAPIのエラーレスポンス例を確認してみてください。
 
 //footnote[broadcast-message][ブロードキャストメッセージを送る | Messaging APIリファレンス | LINE Developers　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-broadcast-message}]
 
@@ -479,7 +479,7 @@ $ zip -r python.zip python
 $ ls
 //}
 
-//image[get-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//image[get-sdk-3][zipコマンドでpythonディレクトリをZIPに固めてlsコマンドで確認][scale=1]{
 //}
 
 最後に@<ttb>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。（@<img>{get-sdk-4}、@<img>{get-sdk-5}）
@@ -573,7 +573,7 @@ $ zip -r python.zip python
 $ ls -ld python python.zip
 //}
 
-//image[install-python-7][zipコマンドでpythonディレクトリをZIPに固める][scale=0.95]{
+//image[install-python-7][zipコマンドでpythonディレクトリをZIPに固めてlsコマンドで確認][scale=0.95]{
 //}
 
 最後に@<ttb>{open .}をたたくと、ターミナルで見ていたディレクトリがFinderで表示されます。
@@ -892,7 +892,7 @@ LINE Developersコンソール@<fn>{console}を開いて、Messaging APIチャ�
 //image[webhook-url-2][APIエンドポイントのURLを貼り付けて［更新］をクリックする][scale=0.8]{
 //}
 
-Webhook URLを設定したら、［検証］を押してボットサーバーとの動作検証をしてみましょう。（@<img>{webhook-url-3}）
+Webhook URLを設定したら、［検証］を押してボットサーバーの動作検証をしてみましょう。（@<img>{webhook-url-3}）
 
 //image[webhook-url-3][［検証］を押す][scale=0.95]{
 //}
@@ -929,7 +929,7 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 
 ==={greeting} 友だち追加されたときのあいさつメッセージを併用する
 
-友だち追加されたときに、自動で任意のメッセージを送ることができる「あいさつメッセージ」も、LINE Official Account Managerの［応答設定］でオン、オフの設定ができます。このあいさつメッセージは、Webhookと併用することが可能です。本書では、友だち追加されたときの応答は「あいさつメッセージ」で行い、メッセージが届いたときの応答はボットサーバーから行いたいので、あいさつメッセージはオンのままで構いません。
+友だち追加されたときに、自動で任意のメッセージを送れる「あいさつメッセージ」も、LINE Official Account Managerの［応答設定］でオン、オフの設定ができます。このあいさつメッセージは、Webhookと併用することが可能です。本書では、友だち追加されたときの応答は「あいさつメッセージ」で行い、メッセージが届いたときの応答はボットサーバーから行いたいので、あいさつメッセージはオンのままで構いません。
 
 なお友だち追加されたときにWebhookで飛んでくるフォローイベント@<fn>{follow}を用いると、「あいさつメッセージ」と同等の処理をボットサーバーでも実現できます。
 
@@ -1061,7 +1061,7 @@ Messaging APIを使うにはチャネルアクセストークンが必要だっ�
 
 メールアドレスの確認ができたら、［Tell us about you］と表示されます。苗字と名前、そして生年月日を入力して、［Continue］をクリックします。（@<img>{openai-account-3}）
 
-［Verify your phone number］と表示されたら、携帯電話の電話番号を入力します。プラス記号と国番号の81からはじまる国際的な電話番号の形式なので、あなたの電話番号が「080-0123-4567」なら「8001234567」と入力してください。入力したら［Send code］をクリックします。
+［Verify your phone number］と表示されたら、携帯電話の電話番号を入力します。プラス記号と国番号の81からはじまる国際的な電話番号の形式なので、あなたの電話番号が「080-0123-4567」なら「+81」の後ろに「8001234567」と入力してください。入力したら［Send code］をクリックします。
 
 //image[openai-account-3][苗字と名前と生年月日、電話番号を入力する][scale=0.8]{
 //}
@@ -1073,9 +1073,9 @@ SMSに書いてある6桁の認証コードを、［Enter code］と表示され
 //image[openai-account-4][SMSで届いた6桁の認証コードを［Enter code］の画面で入力する][scale=0.8]{
 //}
 
-右上のアイコンをクリックして自分のメールアドレスが表示されていたら、OpenAI APIのアカウント登録は完了です！おめでとうございます！それでは［VIEW API keys］を開いてください。（@<img>{openai-account-9}）
+右上のアイコンをクリックして自分のメールアドレスが表示されていたら、OpenAI APIのアカウント登録は完了です！おめでとうございます！それでは［View API keys］を開いてください。（@<img>{openai-account-9}）
 
-//image[openai-account-9][OpenAI APIのアカウント登録が完了したら［VIEW API keys］を開く][scale=1]{
+//image[openai-account-9][OpenAI APIのアカウント登録が完了したら［View API keys］を開く][scale=1]{
 //}
 
 OpenAI APIをたたくためのシークレットキーというものが欲しいのですが、まだ存在していないので［Create new secret key］をクリックして作成しましょう。（@<img>{openai-account-10}）
@@ -1128,7 +1128,7 @@ curl https://api.openai.com/v1/chat/completions \
 //image[openai-curl-2][貼り付けたらEnterを押して実行する][scale=1]{
 //}
 
-回答の生成には時間がかかりますが、少し経つとレスポンスが画面に出力されます。curlコマンドを使ってOpenAI APIに質問を投げた結果、レスポンスとして回答を含むJSONが返ってきたことが分かります。（@<img>{openai-curl-3}）
+回答の生成には時間がかかりますが、少し経つとレスポンスが画面に出力されます。curlコマンドを使ってOpenAI APIに質問を投げた結果、レスポンスとして回答を含むJSONが返ってきました！（@<img>{openai-curl-3}）
 
 //image[openai-curl-3][回答を含むJSONが返ってきた][scale=1]{
 //}
@@ -1137,7 +1137,7 @@ curl https://api.openai.com/v1/chat/completions \
 
 //footnote[openai-reference][Create chat completion | API Reference - OpenAI API @<href>{https://platform.openai.com/docs/api-reference/chat/create}]
 
-curlコマンドでOpenAI APIに質問を投げて、回答を取得できました。「APIをたたく」ことに少し慣れてきましたか？
+curlコマンドでOpenAI APIに質問を投げて、回答を取得できましたね。「APIをたたく」ことに少し慣れてきましたか？
 
 ちなみに2023年5月現在、OpenAI APIはアカウントを作ってから最初の3ヶ月は5ドル分まで無料@<fn>{openai-free}で使えるようです。自分がすでに無料枠をどれくらい使ったのかは、OpenAI APIのUsage@<fn>{openai-free-2}で確認できます。（@<img>{openai-usage}）
 
@@ -1203,7 +1203,7 @@ $ zip -r python.zip python
 $ ls
 //}
 
-//image[get-openai-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//image[get-openai-sdk-3][zipコマンドでpythonディレクトリをZIPに固めてlsコマンドで確認][scale=1]{
 //}
 
 最後に@<ttb>{explorer.exe .}をたたくと、WSLで見ていたディレクトリがエクスプローラで表示されます。（@<img>{get-sdk-4}、@<img>{get-sdk-5}）
@@ -1271,7 +1271,7 @@ $ zip -r python.zip python
 $ ls -ld python python.zip
 //}
 
-//image[mac-openai-sdk-3][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//image[mac-openai-sdk-3][zipコマンドでpythonディレクトリをZIPに固めてlsコマンドで確認][scale=1]{
 //}
 
 最後に@<ttb>{open .}をたたくと、ターミナルで見ていたディレクトリがFinderで表示されます。
