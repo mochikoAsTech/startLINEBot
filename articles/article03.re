@@ -1,6 +1,6 @@
 = Messaging APIの色んな機能を試してみよう
 
-色んな機能を組み合わせて自分だけのLINE Botをつくってみよう！
+色んな機能を組み合わせて自分だけのLINE Botをつくろう！
 
 //pagebreak
 
@@ -49,7 +49,7 @@ Messaging APIでメッセージを送るとき、いちばん簡単なのは友�
 
 WSLまたはターミナルを起動してcurlコマンドをたたくと、LINE公式アカウントからこんなメッセージが届きます。（@<img>{change-icon-and-name}）
 
-//footnote[change-icon-and-send-message][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/change-icon-and-send-message.sh}]
+//footnote[change-icon-and-send-message][このコードはGitHubにある本書のリポジトリで公開されています。PDFから直接コピー＆ペーストすると行番号などが混入してしまうため、ぜひこちらを使ってください。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/change-icon-and-send-message.sh}]
 
 //listnum[send-message-from-cat][アイコンや表示名を変更してメッセージを送るcurlコマンド][sh]{
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \

@@ -1,6 +1,6 @@
 = Messaging APIでLINE Botをつくってみよう
 
-LINE公式アカウントの「中の人」を、人間の代わりにボットにしてみよう。
+LINE公式アカウントの「中の人」を人間の代わりにボットにしよう。
 
 //pagebreak
 
@@ -120,7 +120,7 @@ LINEビジネスID@<fn>{business-id}のログイン画面が表示されるの�
 //image[line-for-business-login-3][［ログイン］すると4桁の認証番号が表示される][scale=0.8]{
 //}
 
-二要素認証のため、4桁の認証番号が表示されます。スマートフォンのLINEを開くと、認証番号入力の画面が表示されますので、この4桁の認証番号を入力して［本人確認］をタップします。［ログインしました］と表示されたら、［確認］をタップします。（@<img>{line-for-business-login-5}）
+二要素認証のため、4桁の認証番号が表示されます。スマートフォンのLINEを開くと、認証番号入力の画面が表示されますので、この4桁の認証番号を入力して［本人確認］をタップします。［ログインしました］と表示されたら、［確認］をタップしてください。（@<img>{line-for-business-login-5}）
 
 //image[line-for-business-login-5][認証番号を入力して［本人確認］をタップする][scale=0.85]{
 //}
@@ -178,7 +178,7 @@ LINE Official Account Managerにログインできたら、アカウントリス
      
 もしあなたがサービス提供者として、プライバシーポリシーや利用規約をすでに持っていたら、プロバイダーのプライバシーポリシーと利用規約としてここでURLを登録できます。個人開発者であればおそらくどちらも持っていないと思いますので、その場合は何も入力せずに［OK］を押して進んで構いません。（@<img>{create-messaging-api-channel-8}）
 
-//image[create-messaging-api-channel-8][入力せずに［OK］を押す][scale=0.8]{
+//image[create-messaging-api-channel-8][入力せずに［OK］を押す][scale=1]{
 //}
 
 このLINE公式アカウントを、このプロバイダー配下のMessaging APIチャネルと紐づけますがいいですか、という最終確認の画面が表示されます。記載のとおり、一度チャネルをプロバイダーと紐づけてしまうと、後から「やっぱりあっちのプロバイダー配下に移動させたい！」と思っても、絶対に移動できないので、プロバイダー名はよく確認してください。問題なければ［OK］を押します。（@<img>{create-messaging-api-channel-9}）
@@ -204,12 +204,12 @@ Messaging APIを使ってメッセージを送信するにあたって、前述�
 
 すでにLINE Official Account Managerにログインしていれば、上記のURLを開くと、そのままLINE Developersコンソールのプロバイダー一覧が表示されるはずです。もしログインを求められたら、@<hd>{article02|login-oamanager}と同じようにLINEのアカウントでログインしてください。プロバイダー一覧が表示されたら、左メニューで、先ほど作ったプロバイダーを選びます。（@<img>{console}）
 
-//image[console][LINE Developersコンソールのプロバイダー一覧が表示された][scale=0.8]{
+//image[console][さっき作ったプロバイダーを選ぶ][scale=0.8]{
 //}
 
 プロバイダーを選ぶと、そのプロバイダーの配下にあるチャネルの一覧が表示されます。続いて、同じく先ほど作ったMessaging APIチャネルを選びます。（@<img>{console-2}）
 
-//image[console-2][プロバイダー配下のチャネル一覧が表示された][scale=0.8]{
+//image[console-2][プロバイダー配下のチャネル一覧から先ほどのチャネルを選ぶ][scale=0.8]{
 //}
 
 Messaging APIチャネルが表示されたら、［チャネル基本設定］タブの右隣にある［Messaging API設定］タブを開いてください。（@<img>{console-3}）
@@ -233,7 +233,7 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 
 いまコピーしたチャネルアクセストークンはこの後で何度も必要となります。忘れないように、パソコンのメモ帳にしっかりメモしておいてください。
 
-続けて［チャネル基本設定］タブのチャネルシークレットもコピーして、一緒にメモしておきましょう。チャネルアクセストークンと同様に、後で必要となります。（@<img>{console-6}）
+続けて［チャネル基本設定］タブのチャネルシークレットもコピーして、一緒にメモしておきましょう。チャネルシークレットもこの後の手順で必要となります。（@<img>{console-6}）
 
 //image[console-6][チャネルアクセストークンもコピーする][scale=0.8]{
 //}
@@ -242,7 +242,7 @@ Messaging APIチャネルが表示されたら、［チャネル基本設定］�
 
 ==={curl} Messaging APIでブロードキャストメッセージを送信する
 
-実は、ただメッセージを送るだけならウェブサーバーは必要ありません。あなたのパソコンでcurlコマンドをたたくことで、Messaging APIを使ってメッセージを送信できます。あなたが使っているパソコンがWindowsならWSL（@<img>{wsl}）@<fn>{wsl}を起動してください。
+実は、ただメッセージを送るだけならボットサーバーは必要ありません。あなたのパソコンでcurlコマンドをたたくことで、Messaging APIを使ってLINE公式アカウントからメッセージを送信できます。あなたが使っているパソコンがWindowsならWSL@<fn>{wsl}（@<img>{wsl}）を起動してください。
 
 //image[wsl][WindowsならWSLを起動する][scale=0.8]{
 //}
@@ -264,7 +264,7 @@ WSLやターミナルがどこにあるのか分からないときは、Windows�
 
 WSLまたはターミナルが起動できたら、次のcurlコマンド@<fn>{send-broadcast-message}（@<list>{curl-send-message}）の3行目にある@<ttb>{{チャネルアクセストークン\}}の部分を、Messaging APIチャネルのチャネルアクセストークンに置き換えてください。チャネルアクセストークンは、先ほど@<hd>{article02|issue-token}でコピーしましたね。
 
-//footnote[send-broadcast-message][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/send-broadcast-message.sh}]
+//footnote[send-broadcast-message][このコードをはじめとして、本書に出てくるコードはいずれもGitHubにある本書のリポジトリで公開されています。PDFから直接コピー＆ペーストすると行番号などが混入してしまうため、ぜひこちらを使ってください。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/send-broadcast-message.sh}]
 
 //listnum[curl-send-message][curlコマンドで友だちにメッセージを送る][sh]{
 curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
@@ -379,7 +379,9 @@ LINE Official Account Managerや管理アプリには、応答メッセージと
 
 === 方法4. Messaging APIで返信する
 
-4つめはMessaging APIで返信する、という方法です。Messaging APIでは、この「ユーザー起点のコミュニケーション」に気づく方法として、Webhookというものが用意されており、このWebhookをボットサーバーで受け止めることでボットから返信ができます。ではWebhookとはいったいどんなものなのでしょう？
+4つめはMessaging APIで返信する、という方法です。Messaging APIでは、この「ユーザー起点のコミュニケーション」に気づく方法として、Webhookというものが用意されており、このWebhookをボットサーバー@<fn>{bot-server}で受け止めることでボットから返信ができます。ではWebhookとはいったいどんなものなのでしょう？
+
+//footnote[bot-server][ボット（自動応答するためのプログラム）が稼働しているウェブサーバーのことをボットサーバーと呼びます。]
 
 ==={webhook} Webhookとは
 
@@ -463,7 +465,7 @@ $ ls
 //image[get-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
 //}
 
-取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。そしてaptコマンドでzipコマンドを連れてきます。@<ttb>{sudo apt install zip}をたたくと、メッセージがだだーっと流れた後に@<ttb>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
+取ってきたSDKをぎゅっと圧縮してZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。そしてaptコマンドでzipコマンドを連れてきます。@<ttb>{sudo apt install zip}をたたくと、メッセージがだだーっと流れた後に@<ttb>{Do you want to continue? [Y/n]}と聞かれるので、Yを入力してEnterを押してください。
 
 //cmd{
 $ cd ..
@@ -497,7 +499,7 @@ $ explorer.exe .
 //image[copy-to-desktop][python.zipはデスクトップにコピーしておく][scale=1]{
 //}
 
-これでMessaging APIのSDKが準備できました。
+これでMessaging APIのSDKが準備できました。@<hd>{article02|lambda-api-gateway}に進んでください。
 
 //pagebreak
 
@@ -526,7 +528,7 @@ Pythonのインストールが完了したら［閉じる］をクリックし�
 //image[python-installed][インストールが完了したら［閉じる］をクリックする][scale=0.7]{
 //}
 
-インストール完了後、自動的に表示されるFinderで［Install Certificates.command］をダブルクリックで開きます。（@<img>{install-python-2}）
+インストール完了後、自動的に表示されるFinderで［Install Certificates.command］をダブルクリックして開きます。（@<img>{install-python-2}）
 
 //image[install-python-2][［Install Certificates.command］を開く][scale=0.8]{
 //}
@@ -539,16 +541,6 @@ Pythonのインストールが完了したら［閉じる］をクリックし�
 これで必要なコマンドが使えるようになったはずです。
 
 それでは@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
-
-python3コマンドとpip3コマンドでそれぞれのバージョンを確認してみましょう。（@<img>{install-python-4}）
-
-//cmd{
-$ python3 -V
-$ pip3 -V
-//}
-
-//image[install-python-4][必要なコマンドが使えることを確認する][scale=0.8]{
-//}
 
 mkdirコマンドでpython@<fn>{python-dir-mac}というディレクトリを作ります。lsコマンドで確認して「python」と表示されたら、問題なくpythonディレクトリが作成できていますので、作成したpythonディレクトリの中にcdコマンドで移動してください。（@<img>{install-python-5}）
 
@@ -573,7 +565,7 @@ $ ls
 //image[install-python-6][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
 //}
 
-取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{install-python-7}）
+取ってきたSDKを圧縮してZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{install-python-7}）
 
 //cmd{
 $ cd ..
@@ -600,7 +592,7 @@ open .
 
 これでMessaging APIのSDKが準備できました。
       
-=== AWS LambdaとAPI Gatewayでボットサーバーを作る
+==={lambda-api-gateway} AWS LambdaとAPI Gatewayでボットサーバーを作る
 
 今回はWebhookを受け取ってレスポンスを返すボットサーバーとして、AWSのサーバーレスサービス、AWS LambdaとAPI Gatewayを使用します。
 
@@ -609,7 +601,7 @@ AWSを初めて使用する場合、AWSアカウントを作成してから1年�
  * AWS無料利用枠
  ** @<href>{https://aws.amazon.com/jp/free/}
 
-//image[awsFree][AWS無料利用枠][scale=0.8]{
+//image[awsFree][AWS無料利用枠][scale=0.85]{
 //}
 
 //footnote[create-aws-account][なおAWSアカウントの作成の詳しい手順は「DNSをはじめよう」という書籍で、またAWSとは何かについての説明や、無料利用枠の範囲、利用金額が一定額を超えたらアラートが飛ぶようにする設定などは「AWSをはじめよう」という書籍で詳しく紹介しています。もしAWSアカウントの作成や設定に不安がある場合は、そちらを参考にしてください。 @<href>{https://mochikoastech.booth.pm/}]
@@ -619,17 +611,17 @@ AWSを初めて使用する場合、AWSアカウントを作成してから1年�
  * AWSマネジメントコンソール
  ** @<href>{https://console.aws.amazon.com/}
 
-//image[search-lambda][検索窓からLambdaを開く][scale=0.8]{
+//image[search-lambda][検索窓からLambdaを開く][scale=0.85]{
 //}
 
 ==== Messaging API SDKのレイヤーを作成する
 
 AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レイヤーの作成］をクリックします。（@<img>{create-layer}）
 
-//image[create-layer][［レイヤーの作成］をクリック][scale=0.8]{
+//image[create-layer][［レイヤーの作成］をクリック][scale=1]{
 //}
 
-「名前」と「説明」は次のように入力します。（@<table>{layer-settings}）
+レイヤー設定の「名前」や「説明」などは次のように入力します。（@<table>{layer-settings}）
 
 //table[layer-settings][レイヤー設定]{
 名前	Messaging-API-SDK-for-python
@@ -653,14 +645,14 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 
 これでMessaging API SDKのレイヤーができました！（@<img>{create-layer-3}）
 
-//image[create-layer-3][レイヤーができた！][scale=0.8]{
+//image[create-layer-3][レイヤーができた！][scale=0.95]{
 //}
 
 ==== Lambda関数を作成する
 
 次はLambda関数を作成しますので、左メニューの［関数］から［関数の作成］を開いてください。（@<img>{create-lambda}）
 
-//image[create-lambda][［関数の作成］をクリックする][scale=0.8]{
+//image[create-lambda][［関数の作成］をクリックする][scale=0.95]{
 //}
 
 関数の作成に必要な情報は、次のように入力します。（@<table>{create-app}）
@@ -674,17 +666,19 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 
 必要事項を入力したら［関数の作成］をクリックします。（@<img>{create-lambda-2}）
 
-//image[create-lambda-2][［関数の作成］をクリックする][scale=0.8]{
+//image[create-lambda-2][入力したら［関数の作成］をクリックする][scale=1]{
 //}
+
+//pagebreak
 
 これでLambda関数ができました！続いて、このLambda関数に、先に作っておいたMessaging API SDKのレイヤーを追加したいので、［Layers］をクリックします。（@<img>{create-lambda-3}）
 
-//image[create-lambda-3][Lambda関数ができたら［Layers］をクリックする][scale=0.8]{
+//image[create-lambda-3][Lambda関数ができたら［Layers］をクリックする][scale=1]{
 //}
 
 ［レイヤーの追加］をクリックします。（@<img>{create-lambda-4}）
 
-//image[create-lambda-4][［レイヤーの追加］をクリックする][scale=0.8]{
+//image[create-lambda-4][［レイヤーの追加］をクリックする][scale=1]{
 //}
 
 レイヤーは次のように選択します。（@<table>{select-layer}）
@@ -697,12 +691,14 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 
 使用するレイヤーを選択したら［追加］をクリックします。（@<img>{create-lambda-5}）
 
-//image[create-lambda-5][［追加］をクリックする][scale=0.8]{
+//image[create-lambda-5][［追加］をクリックする][scale=1]{
 //}
+
+//pagebreak
 
 ［Layers］の後ろの数字が@<ttb>{(0)}から@<ttb>{(1)}になりました。これでLambda関数にMessaging API SDKのレイヤーが追加できました！こうしてレイヤーを追加することで、Lambda関数でMessaging API SDKが使えるようになります。（@<img>{create-lambda-6}）
 
-//image[create-lambda-6][Messaging API SDKのレイヤーが追加できた！][scale=0.8]{
+//image[create-lambda-6][Messaging API SDKのレイヤーが追加できた！][scale=0.9]{
 //}
 
 次はAPI Gatewayを作成しますので、［トリガーを追加］を開いてください。
@@ -711,7 +707,7 @@ AWS Lambdaを開いたら、左メニューの［レイヤー］から、［レ�
 
 ［ソースを選択］で［API Gateway］を選択します。（@<img>{create-api-gateway}）
 
-//image[create-api-gateway][［API Gateway］を選択する][scale=0.8]{
+//image[create-api-gateway][［API Gateway］を選択する][scale=0.9]{
 //}
 
 トリガーの設定は次のようにします。（@<table>{trigger-settings}）
@@ -725,17 +721,19 @@ APIタイプ	HTTP API
 
 トリガーの設定を選択したら［追加］をクリックします。（@<img>{create-api-gateway-2}）
 
-//image[create-api-gateway-2][［追加］をクリックする][scale=0.8]{
+//image[create-api-gateway-2][［追加］をクリックする][scale=1]{
 //}
+
+//pagebreak
 
 これでAPI Gatewayが作成できました！（@<img>{create-api-gateway-3}）
 
-//image[create-api-gateway-3][API Gatewayができた！][scale=0.8]{
+//image[create-api-gateway-3][API Gatewayができた！][scale=1]{
 //}
 
 ［トリガー］の中にある［APIエンドポイント］のURLをブラウザで開くと、AWS Lambdaから［"Hello from Lambda!"］というレスポンスが返ってきます。（@<img>{create-api-gateway-4}）
 
-//image[create-api-gateway-4][［APIエンドポイント］のURLを開くとレスポンスが返ってきた][scale=0.8]{
+//image[create-api-gateway-4][［APIエンドポイント］のURLを開くとレスポンスが返ってきた][scale=1]{
 //}
 
 この［APIエンドポイント］のURLは、後でWebhookを受け止めるボットサーバーの「Webhook URL」として使用します。チャネルアクセストークンやチャネルシークレットと同様に、パソコンのメモ帳にしっかりメモしておいてください。
@@ -762,7 +760,7 @@ def lambda_handler(event, context):
 
 このコードを、次のようにWebhookを受け取ってオウム返しするコード@<fn>{parrot-bot-url}に書き直してみましょう。（@<list>{parrot-source-code-1}）
 
-//footnote[parrot-bot-url][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/parrotbot.py}]
+//footnote[parrot-bot-url][このコードはGitHubにある本書のリポジトリで公開されています。PDFから直接コピー＆ペーストすると行番号などが混入してしまうため、ぜひこちらを使ってください。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/parrotbot.py}]
 
 //listnum[parrot-source-code-1][Webhookでメッセージを受け取ってオウム返しするコード][python]{
 import json
@@ -836,12 +834,14 @@ def lambda_handler(event, context):
 
 コードを直したら、［Deploy］を押してデプロイ（修正後のコードを反映）します。（@<img>{parrot-bot-2}）
 
-//image[parrot-bot-2][［Deploy］を押して修正後のコードを反映する][scale=0.8]{
+//image[parrot-bot-2][［Deploy］を押して修正後のコードを反映する][scale=1]{
 //}
+
+//pagebreak
 
 ［関数 Bot-Server-on-Lambda が正常に更新されました。］と表示されたらデプロイ完了です。（@<img>{parrot-bot-3}）
 
-//image[parrot-bot-3][デプロイ完了][scale=0.8]{
+//image[parrot-bot-3][デプロイ完了][scale=0.9]{
 //}
 
 ==== 環境変数を設定する
@@ -850,7 +850,7 @@ def lambda_handler(event, context):
 
 Lambda関数の［設定］タブから［環境変数］を開いて、［編集］をクリックします。（@<img>{parrot-bot-4}）
 
-//image[parrot-bot-4][［環境変数］の［編集］をクリックする][scale=0.8]{
+//image[parrot-bot-4][［環境変数］の［編集］をクリックする][scale=1]{
 //}
 
 ［環境変数の追加］を2回クリックして、［キー］と［値］を次のように設定します。チャネルアクセストークンとチャネルシークレットは、@<hd>{article02|issue-token}でコピーしてメモ帳に保存してあるはずです。（@<table>{set-env}）
@@ -862,17 +862,21 @@ CHANNEL_ACCESS_TOKEN	チャネルアクセストークン
 CHANNEL_SECRET	チャネルシークレット
 //}
 
-環境変数を編集したら［保存］をクリックします。（@<img>{parrot-bot-5}）
+チャネルアクセストークンとチャネルシークレットを環境変数に追加したら［保存］をクリックします。（@<img>{parrot-bot-5}）
 
-//image[parrot-bot-5][環境変数を編集したら［保存］をクリックする][scale=0.8]{
+//image[parrot-bot-5][環境変数を追加したら［保存］をクリックする][scale=1]{
 //}
+
+//pagebreak
 
 ［関数 Bot-Server-on-Lambda が正常に更新されました。］と表示されたら環境変数の設定完了です。（@<img>{parrot-bot-6}）
 
-//image[parrot-bot-6][環境変数の設定完了][scale=0.8]{
+//image[parrot-bot-6][環境変数の設定完了][scale=1]{
 //}
 
-これでボットサーバーの準備は万端です。LINE Developersコンソールに戻って、ボットサーバーのURLを「Webhook URL」に設定しましょう。
+これでボットサーバーの準備は万端です。LINE Developersコンソールに戻って、ボットサーバー（［APIエンドポイント］のURL）を「Webhook URL」に設定しましょう。
+
+//pagebreak
 
 === Webhook URLを設定する
 
@@ -890,21 +894,26 @@ LINE Developersコンソール@<fn>{console}を開いて、Messaging APIチャ�
 
 Webhook URLを設定したら、［検証］を押してボットサーバーとの動作検証をしてみましょう。（@<img>{webhook-url-3}）
 
-//image[webhook-url-3][［検証］を押す][scale=0.8]{
+//image[webhook-url-3][［検証］を押す][scale=0.95]{
 //}
 
 ［成功］と返ってきたら、LINEプラットフォームからのWebhookをボットサーバーが受け取って、ちゃんとステータスコード200を返してきています。［OK］を押してポップアップを閉じておきましょう。やりましたね！おめでとうございます。（@<img>{webhook-url-4}）
 
-//image[webhook-url-4][［成功］と返ってきたら［OK］をクリックする][scale=0.8]{
+//image[webhook-url-4][［成功］と返ってきたら［OK］をクリックする][scale=0.95]{
 //}
 
-ボットサーバーがWebhookをきちんと受け取れなかったときに備えて、［Webhook URL］の少し下にある［エラーの統計情報］@<fn>{error}をオンにしておきましょう。この［エラーの統計情報］をオンにしておくと、もしボットサーバーがWebhookの受け取りに失敗した場合に、LINE Developersコンソール上でそのログが確認できます。Webhook URLの［検証］を押してエラーが返ってきたときや、友だちがメッセージを送ってきたのにLINE公式アカウントからきちんと返信が送れていない場合は、ボットサーバーのログ@<fn>{logs}と共に、［統計情報］タブでエラーの統計情報も確認しましょう。（@<img>{webhook-error}）
+ボットサーバーがWebhookをきちんと受け取れなかったときに備えて、［Webhook URL］の少し下にある［エラーの統計情報］@<fn>{error}をオンにしておきましょう。（@<img>{webhook-error}）
 
 //footnote[error][Webhookの送信におけるエラーの統計情報を確認する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#error-statistics-aggregation}]
+
+//image[webhook-error][［エラーの統計情報］をオンにしておく][scale=1]{
+//}
+
+この［エラーの統計情報］をオンにしておくと、もしボットサーバーがWebhookの受け取りに失敗した場合に、LINE Developersコンソール上でそのログが確認できます。Webhook URLの［検証］を押してエラーが返ってきたときや、友だちがメッセージを送ってきたのにLINE公式アカウントからきちんと返信が送れていない場合は、ボットサーバーのログ@<fn>{logs}と共に、［統計情報］タブでエラーの統計情報も確認しましょう。
+
 //footnote[logs][ボットサーバーのログについては、@<hd>{article02|cloudwatch-logs}で後述します。]
 
-//image[webhook-error][［エラーの統計情報］をオンにしておく][scale=0.8]{
-//}
+//pagebreak
 
 ［検証］を押して［成功］と返ってきたら、ボットサーバーは問題なく動いているようなので、同じ［Messaging API設定］タブにある［応答メッセージ］の［編集］からLINE Official Account Managerを開きます。（@<img>{webhook-url-5}）
 
@@ -930,22 +939,24 @@ Webhook URLを設定したら、［検証］を押してボットサーバーと
 
 先ほど、LINE DevelopersコンソールでWebhook URLの［検証］を押したときに、LINEプラットフォームからボットサーバーに飛んできたWebhookを目視確認してみましょう。ボットサーバーのログは、AWSのCloudWatchで確認できます。AWSのマネジメントコンソールを開いて、上部の検索窓で@<ttb>{cloudwatch}と検索し、CloudWatchを開きます。（@<img>{cloudwatch}）
 
-//image[cloudwatch][検索窓からCloudWatchを開く][scale=0.8]{
+//image[cloudwatch][検索窓からCloudWatchを開く][scale=1]{
 //}
 
 CloudWatchを開いたら、左メニューの［ロググループ］から［/aws/lambda/Bot-Server-on-Lambda］を開きます。（@<img>{cloudwatch-1}）
 
-//image[cloudwatch-1][［/aws/lambda/Bot-Server-on-Lambda］を開く][scale=0.8]{
+//image[cloudwatch-1][［/aws/lambda/Bot-Server-on-Lambda］を開く][scale=1]{
 //}
 
 いちばん上にある最新のリクエストのログストリームを開きます。（@<img>{cloudwatch-2}）
 
-//image[cloudwatch-2][いちばん上にあるログストリームを開く][scale=0.8]{
+//image[cloudwatch-2][いちばん上にあるログストリームを開く][scale=1]{
 //}
+
+//pagebreak
 
 @<ttb>{[INFO]}からはじまる行を開いて確認します。すると、Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-code-1}）の48行目で出力しておいたログが確認できます。これがLINEプラットフォームから届いたWebhookのJSONです。（@<img>{cloudwatch-3}）
 
-//image[cloudwatch-3][LINEプラットフォームから届いたWebhookのJSONが確認できる][scale=0.8]{
+//image[cloudwatch-3][LINEプラットフォームから届いたWebhookのJSONが確認できる][scale=1]{
 //}
 
 //listnum[webhook-json][［検証］を押したときに飛んできたWebhookのJSON][json]{
@@ -990,6 +1001,8 @@ Webhookを受け取ってオウム返しするコード（@<list>{parrot-source-
 
 //footnote[ip-addr][Webook | LINE Developers　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#webhooks}]
 //footnote[signature][署名を検証する | LINE Developers　　　　　　　　　　　　　　　　　　　　　　　　　　　　 @<href>{https://developers.line.biz/ja/reference/messaging-api/#signature-validation}]
+
+//pagebreak
 
 == OpenAIのAPIを使ったAIチャットボットを作ってみよう
 
@@ -1101,7 +1114,7 @@ LINE Developersコンソールで取得したチャネルアクセストーク�
 
 再びWSLまたはターミナルを起動します。次のcurlコマンド@<fn>{ask-openai-question}（@<list>{openai-api-curl}）の3行目にある@<ttb>{{シークレットキー\}}の部分を、OpenAI APIのシークレットキーに置き換えてください。シークレットキーは、ついさっき@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存しましたね。
 
-//footnote[ask-openai-question][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/ask-openai-question.sh}]
+//footnote[ask-openai-question][このコードはGitHubにある本書のリポジトリで公開されています。PDFから直接コピー＆ペーストすると行番号などが混入してしまうため、ぜひこちらを使ってください。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/ask-openai-question.sh}]
 
 //listnum[openai-api-curl][curlコマンドで質問の回答を取得する][sh]{
 curl https://api.openai.com/v1/chat/completions \
@@ -1222,7 +1235,7 @@ $ explorer.exe .
 
 ===={openai-mac} Macの場合
 
-@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はターミナルのプロンプトを表していますので入力しないでください。
+@<hd>{article02|curl}で使用したターミナルを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はプロンプトを表していますので入力しないでください。
 
 先ずはlsコマンドで、さきほどMessaging APIのSDKを準備したpythonディレクトリとpython.zipが残っていることを確認します。rmコマンドでpythonディレクトリとpython.zipを削除したら、再びlsコマンドをたたいてもう無いことを確認します。（@<img>{mac-rm-rf}）
 
@@ -1258,7 +1271,7 @@ $ ls
 //image[mac-openai-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
 //}
 
-取ってきたSDKをぎゅっとZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{mac-openai-sdk-3}）
+取ってきたSDKをぎゅっと圧縮してZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{mac-openai-sdk-3}）
 
 //cmd{
 $ cd ..
@@ -1358,7 +1371,7 @@ Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。
 
 ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、丸ごと次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
 
-//footnote[ai-chat-bot-url][このコードはGitHubで公開されている本書のリポジトリからもダウンロードできます。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/aichatbot.py}]
+//footnote[ai-chat-bot-url][このコードはGitHubにある本書のリポジトリで公開されています。PDFから直接コピー＆ペーストすると行番号などが混入してしまうため、ぜひこちらを使ってください。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/aichatbot.py}]
 
 //listnum[ai-chat-source-code][AIチャットボットが自動で応答するコード][python]{
 import json
