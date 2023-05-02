@@ -555,14 +555,14 @@ $ cd python
 //image[install-python-5][pythonディレクトリを作ってその中に移動する][scale=1]{
 //}
 
-pipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{install-python-6}）
+pip3コマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{install-python-6}）
 
 //cmd{
 $ pip3 install line-bot-sdk -t . --no-user
 $ ls
 //}
 
-//image[install-python-6][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
+//image[install-python-6][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=0.95]{
 //}
 
 取ってきたSDKを圧縮してZIPに固めたいので、cdコマンドで1つの上のディレクトリに移動しましょう。zipコマンドでpythonディレクトリをぎゅっとZIPに固めます。lsコマンドでpython.zipとpythonディレクトリが確認できたら、これでSDKは準備完了です。（@<img>{install-python-7}）
@@ -573,7 +573,7 @@ $ zip -r python.zip python
 $ ls -ld python python.zip
 //}
 
-//image[install-python-7][zipコマンドでpythonディレクトリをZIPに固める][scale=1]{
+//image[install-python-7][zipコマンドでpythonディレクトリをZIPに固める][scale=0.95]{
 //}
 
 最後に@<ttb>{open .}をたたくと、ターミナルで見ていたディレクトリがFinderで表示されます。
@@ -1118,17 +1118,17 @@ curl https://api.openai.com/v1/chat/completions \
   }'
 //}
 
-チャネルアクセストークンを置き換えたら、curlコマンドをまるごとコピーしてWSLもしくはターミナルに貼り付けます。WSLの場合は、複数行をまとめて貼り付けると警告が出ますが、［強制的に貼り付け］を押します。（@<img>{openai-curl-1}）
+シークレットキーを置き換えたら、curlコマンドをまるごとコピーしてWSLもしくはターミナルに貼り付けます。WSLの場合は、複数行をまとめて貼り付けると警告が出ますが、［強制的に貼り付け］を押します。（@<img>{openai-curl-1}）
 
 //image[openai-curl-1][複数行の貼り付けに対する警告が出たら［強制的に貼り付け］を押す][scale=1]{
 //}
 
-貼り付けたらEnterを押して実行します。（@<img>{openai-curl-2}）
+貼り付けたらEnterを押してcurlコマンドを実行します。（@<img>{openai-curl-2}）
 
 //image[openai-curl-2][貼り付けたらEnterを押して実行する][scale=1]{
 //}
 
-回答の生成には少し時間がかかりますが、少し立つとレスポンスが画面に出力されます。curlコマンドを使ってAPIをたたいた結果、レスポンスとして回答を含むJSONが返ってきたことが分かります。（@<img>{openai-curl-3}）
+回答の生成には時間がかかりますが、少し経つとレスポンスが画面に出力されます。curlコマンドを使ってOpenAI APIに質問を投げた結果、レスポンスとして回答を含むJSONが返ってきたことが分かります。（@<img>{openai-curl-3}）
 
 //image[openai-curl-3][回答を含むJSONが返ってきた][scale=1]{
 //}
@@ -1144,7 +1144,7 @@ curlコマンドでOpenAI APIに質問を投げて、回答を取得できまし
 //footnote[openai-free][Pricing @<href>{https://openai.com/pricing}]
 //footnote[openai-free-2][Usage - OpenAI API @<href>{https://platform.openai.com/account/usage}]
 
-//image[openai-usage][無料枠をどれくらい使ったのかはUsageで確認しよう][scale=0.8]{
+//image[openai-usage][無料枠をどれくらい使ったのかはUsageで確認しよう][scale=1]{
 //}
 
 では続いて、OpenAI APIのSDKの準備をしていきましょう。
@@ -1160,7 +1160,7 @@ curlコマンドでOpenAI APIに質問を投げて、回答を取得できまし
 
 @<hd>{article02|curl}で使用したWSLを再び起動して、次のコマンドを順番にたたいていきます。@<ttb>{$}はプロンプトを表していますので入力しないでください。
 
-先ずはcdコマンドでさきほどMessaging APIのSDKを準備したのと同じホームディレクトリに移動して、lsコマンドでpythonディレクトリとpython.zipが残っていることを確認します。rmコマンドでpythonディレクトリとpython.zipを削除したら、再びlsコマンドをたたいてもう無いことを確認します。（@<img>{rm-rf}）
+先ずはcdコマンドでMessaging APIのSDKを準備したときと同じホームディレクトリに移動して、lsコマンドでpythonディレクトリとpython.zipが残っていることを確認します。rmコマンドでpythonディレクトリとpython.zipを削除したら、再びlsコマンドをたたいてもう無いことを確認します。（@<img>{rm-rf}）
 
 //cmd{
 $ cd
@@ -1195,7 +1195,7 @@ $ ls
 //image[get-openai-sdk-2][取ってきたSDKがpythonディレクトリの中にみっしり入っている][scale=1]{
 //}
 
-それではcdコマンドで1つの上のディレクトリに移動して、zipコマンドでpythonディレクトリをぎゅっとZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できればOKです。（@<img>{get-sdk-3}）
+それではcdコマンドで1つの上のディレクトリに移動して、zipコマンドでpythonディレクトリをぎゅっと圧縮してZIPに固めましょう。lsコマンドでpython.zipとpythonディレクトリが確認できればOKです。（@<img>{get-sdk-3}）
 
 //cmd{
 $ cd ..
@@ -1215,15 +1215,15 @@ $ explorer.exe .
 //image[get-openai-sdk-4][「explorer.exe .」をたたく][scale=1]{
 //}
 
-//image[get-openai-sdk-5][するとエクスプローラでpython.zipのあるフォルダが表示される][scale=0.8]{
+//image[get-openai-sdk-5][するとエクスプローラでpython.zipのあるフォルダが表示される][scale=0.9]{
 //}
 
 作成したpython.zipはこの後すぐに使うので、デスクトップに［ファイルを置き換える］でコピーしておきましょう。（@<img>{copy-to-desktop-2}）
 
-//image[copy-to-desktop-2][python.zipはデスクトップに［ファイルを置き換える］でコピーしておく][scale=0.8]{
+//image[copy-to-desktop-2][python.zipはデスクトップに［ファイルを置き換える］でコピーしておく][scale=0.9]{
 //}
 
-これでOpenAI APIのSDKが準備できました。
+これでOpenAI APIのSDKが準備できました。@<hd>{article02|openai-layer}に進んでください。
 
 ===={openai-mac} Macの場合
 
@@ -1253,10 +1253,10 @@ $ cd python
 //image[mac-openai-sdk-1][pythonディレクトリを作ってその中に移動する][scale=1]{
 //}
 
-pipコマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{mac-openai-sdk-2}）
+pip3コマンドでSDKをパソコンの中に取得してきます。SDKを取ってきたら、lsコマンドでpythonディレクトリの中身を確認してみましょう。中身がなんだかたくさん入っていれば成功です。（@<img>{mac-openai-sdk-2}）
 
 //cmd{
-$ pip install openai -t . --no-user
+$ pip3 install openai -t . --no-user
 $ ls
 //}
 
@@ -1283,16 +1283,18 @@ open .
 //image[mac-openai-sdk-4][「open .」をたたく][scale=1]{
 //}
 
-//image[mac-openai-sdk-5][するとFinderでpython.zipのあるディレクトリが表示される][scale=0.8]{
+//image[mac-openai-sdk-5][するとFinderでpython.zipのあるディレクトリが表示される][scale=1]{
 //}
 
 作成したpython.zipはこの後すぐに使うので、デスクトップにコピーしておきましょう。これでOpenAI APIのSDKが準備できました。
 
-=== OpenAI API SDKのレイヤーを作成する
+//pagebreak
+
+==={openai-layer} OpenAI API SDKのレイヤーを作成する
 
 先ほどのMessaging API SDKと同様に、OpenAI API SDKのレイヤーをAWS Lambdaに追加します。AWSのマネジメントコンソールからAWS Lambdaを開いたら、左メニューの［レイヤー］から、［レイヤーの作成］をクリックします。（@<img>{openai-create-layer}）
 
-//image[openai-create-layer][［レイヤーの作成］をクリック][scale=0.8]{
+//image[openai-create-layer][［レイヤーの作成］をクリック][scale=1]{
 //}
 
 「名前」と「説明」は次のように入力します。（@<table>{openai-layer-settings}）
@@ -1319,7 +1321,7 @@ open .
 
 これでOpenAI API SDKのレイヤーができました！（@<img>{openai-create-layer-3}）
 
-//image[openai-create-layer-3][レイヤーができた！][scale=0.8]{
+//image[openai-create-layer-3][レイヤーができた！][scale=1]{
 //}
 
 次は、作成したOpenAI API SDKのレイヤーをLambda関数から利用するための設定を行います。左メニューから［関数］を開いてください。
@@ -1328,18 +1330,20 @@ open .
 
 Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。（@<img>{add-openai-layer-to-lambda}）
 
-//image[add-openai-layer-to-lambda][［Bot-Server-on-Lambda］をクリックする][scale=0.8]{
+//image[add-openai-layer-to-lambda][［Bot-Server-on-Lambda］をクリックする][scale=1]{
 //}
 
 このLambda関数に、先に作っておいたMessaging API SDKのレイヤーを追加したいので、［Layers］をクリックします。（@<img>{add-openai-layer-to-lambda-2}）
 
-//image[add-openai-layer-to-lambda-2][［Layers］をクリックする][scale=0.8]{
+//image[add-openai-layer-to-lambda-2][［Layers］をクリックする][scale=1]{
 //}
 
 ［レイヤーの追加］をクリックします。（@<img>{add-openai-layer-to-lambda-3}）
 
-//image[add-openai-layer-to-lambda-3][［レイヤーの追加］をクリックする][scale=0.8]{
+//image[add-openai-layer-to-lambda-3][［レイヤーの追加］をクリックする][scale=1]{
 //}
+
+//pagebreak
 
 レイヤーは次のように選択します。（@<table>{select-openai-layer}）
 
@@ -1351,17 +1355,21 @@ Lambda関数の一覧で、［Bot-Server-on-Lambda］をクリックします。
 
 使用するレイヤーを選択したら［追加］をクリックします。（@<img>{add-openai-layer-to-lambda-4}）
 
-//image[add-openai-layer-to-lambda-4][［追加］をクリックする][scale=0.8]{
+//image[add-openai-layer-to-lambda-4][［追加］をクリックする][scale=1]{
 //}
+
+//pagebreak
 
 ［Layers］の後ろの数字が@<ttb>{(1)}から@<ttb>{(2)}になりました。これでLambda関数にOpenAI API SDKのレイヤーが追加できました！こうしてレイヤーを追加することで、Lambda関数からOpenAI API SDKが使えるようになります。（@<img>{add-openai-layer-to-lambda-5}）
 
 //image[add-openai-layer-to-lambda-5][OpenAI API SDKのレイヤーが追加できた！][scale=0.8]{
 //}
 
+//pagebreak
+
 === AWS Lambdaのコードに「OpenAIのAPIで質問の回答を取得する処理」を追加する
 
-ユーザーの質問に対して、AIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、丸ごと次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
+OpenAI SDKを使う準備ができたので、ユーザーの質問に対してAIチャットボットが自動で応答するようにコードを変更します。Lambda関数の［コード］タブのコードを、丸ごと次のコード@<fn>{ai-chat-bot-url}に置き換えてください。（@<list>{ai-chat-source-code}）
 
 //footnote[ai-chat-bot-url][このコードはGitHubにある本書のリポジトリで公開されています。PDFから直接コピー＆ペーストすると行番号などが混入してしまうため、ぜひこちらを使ってください。 @<href>{https://github.com/mochikoAsTech/startLINEBot/blob/master/articles/aichatbot.py}]
 
@@ -1478,13 +1486,17 @@ def lambda_handler(event, context):
 
 コードを直したら、［Deploy］を押してデプロイ（変更後のコードを反映）します。（@<img>{aichat-bot-deploy-1}）
 
-//image[aichat-bot-deploy-1][［Deploy］を押して変更後のコードを反映する][scale=0.8]{
+//image[aichat-bot-deploy-1][［Deploy］を押して変更後のコードを反映する][scale=1]{
 //}
+
+//pagebreak
 
 ［関数 Bot-Server-on-Lambda が正常に更新されました。］と表示されたらデプロイ完了です。（@<img>{aichat-bot-deploy-2}）
 
-//image[aichat-bot-deploy-2][デプロイ完了][scale=0.8]{
+//image[aichat-bot-deploy-2][デプロイ完了][scale=1]{
 //}
+
+//pagebreak
 
 === Lambda関数のタイムアウトまでの時間を延ばす
 
@@ -1494,7 +1506,7 @@ def lambda_handler(event, context):
 
 実はLambda関数には、コードを実行してからn秒立ったらタイムアウトする、つまり処理を打ち切る、という最長実行時間があります。［設定］タブの［一般設定］を開くと、［タイムアウト］が@<ttb>{0分3秒}になっていますね。タイムアウトのデフォルト値はこの通り3秒なので、Webhookが届いてコードを実行しはじめてから3秒以内にすべての処理が終わらないと、そこで処理が打ち切られてしまうのです。［編集］をクリックしてください。（@<img>{timeout}）
 
-//image[timeout][［編集］をクリックしてタイムアウトの秒数を変更しよう][scale=0.8]{
+//image[timeout][［編集］をクリックしてタイムアウトの秒数を変更しよう][scale=1]{
 //}
 
 このままの設定だと、Webhookを届いてOpenAI APIに質問を投げてから回答が戻ってくるまでに3秒以上かかった場合、タイムアウトして処理が打ち切られてしまうため、この［タイムアウト］の秒数を@<ttb>{3秒}から@<ttb>{30秒}@<fn>{seconds}に変更して［保存］します。（@<img>{timeout-2}）
@@ -1506,7 +1518,7 @@ def lambda_handler(event, context):
 
 Lambda関数の［タイムアウト］が@<ttb>{30秒}に変更されました。（@<img>{timeout-3}）
 
-//image[timeout-3][［タイムアウト］が30秒になった][scale=0.8]{
+//image[timeout-3][［タイムアウト］が30秒になった][scale=1]{
 //}
 
 それでは最後に、環境変数の設定を追加しましょう。
@@ -1517,7 +1529,7 @@ Lambda関数の［タイムアウト］が@<ttb>{30秒}に変更されました�
 
 Lambda関数の［設定］タブから［環境変数］を開いて、［編集］をクリックします。（@<img>{add-secret-key-to-env-1}）
 
-//image[add-secret-key-to-env-1][［環境変数］の［編集］をクリックする][scale=0.8]{
+//image[add-secret-key-to-env-1][［環境変数］の［編集］をクリックする][scale=1]{
 //}
 
 ［環境変数の追加］をクリックして、［キー］と［値］を次のように設定します。シークレットキーは、@<hd>{article02|issue-secret-key}でコピーしてメモ帳に保存してあるはずです。（@<table>{set-openai-env}）
@@ -1527,6 +1539,8 @@ Lambda関数の［設定］タブから［環境変数］を開いて、［編�
 --------------------
 SECRET_KEY	シークレットキー
 //}
+
+//pagebreak
 
 環境変数を編集したら［保存］をクリックします。（@<img>{add-secret-key-to-env-2}）
 
@@ -1547,7 +1561,9 @@ SECRET_KEY	シークレットキー
 //image[aichat-reply][メッセージを送ったらAIチャットボットが返事をしてくれた][scale=0.8]{
 //}
 
-さっきはオウム返しをするだけだったのに、AIチャットボットが回答をしてくれるようになりました！おめでとうございます！これでAIチャットボットの完成です。
+さっきはメッセージをオウム返しをするだけだったのに、AIチャットボットが回答をしてくれるようになりました！おめでとうございます！これで「AIチャットボットをつくる」というアチーブメントも達成です！
+
+//pagebreak
 
 ===[column] 【コラム】Webhookへのレスポンスが先？応答メッセージが先？
 
@@ -1557,9 +1573,10 @@ SECRET_KEY	シークレットキー
 
 なんとなく先に色々片付けてからレスポンスを返したい気持ちは分かりますが、郵便局員が郵便物を持って来てくれたとき、わざわざ玄関前で待たせて封筒を開けて中身を読んでからようやく受領の判子を押してあげる、という順番だとおかしいよね、と考えると納得しやすいのではないでしょうか。先ずは受領の判子を押して郵便局員を帰らせてあげて、手紙を読んだり、返事を書いたりはそのあとでやりましょう。@<fn>{sorry-but}
 
-またメッセージに対する応答メッセージを送る場合、応答トークン@<fn>{reply_token_rule}はWebhookを受信後、速やか（具体的には1分以内）に使う必要があります。Webhook受信後、すぐに返信を送れる場合は応答メッセージで構いませんが、色々な処理を行ってかなり時間が経ってから返信したい場合は、応答トークンがすでに無効になっている可能性があります。その場合は、対象となる友だちのユーザーIDを指定したプッシュメッセージで返信を送ることが可能です。
+またメッセージに対する応答メッセージを送る場合、応答トークン@<fn>{reply_token_rule}はWebhookを受信後、速やか（具体的には1分以内）に使う必要があります。Webhook受信後、すぐに返信を送れる場合は応答メッセージで構いませんが、色々な処理を行ってかなり時間が経ってから返信したい場合は、応答トークンがすでに無効になっている可能性があります。その場合は、対象となる友だちのユーザーIDを指定したプッシュメッセージ@<fn>{push}で返信を送ることが可能です。
 
 ===[/column]
 
 //footnote[sorry-but][この「Webhookを受け取ったら、先にレスポンスを返してその後に応答メッセージなどの処理をすべき」という説明を読んで、勘の良い読者の方はもうお気づきかもしれませんが、実は本書ではオウム返しボットのコードもAIチャットボットのコードも、郵便局員を待たせまくって、なんなら返信を書いてポストに投函してからようやく受領の判子を押しています。非同期処理まで含めると手順や説明が非常に複雑になってしまうため、本来はあまり推奨されない方法だと理解した上で、今回は動くものを簡単に作れることを優先してこのようにしています。]
 //footnote[reply_token_rule][応答トークンはすごく消費期限の短い「メッセージ無料送信チケット」のようなものです。応答トークンは、LINE公式アカウントが友だち追加されたときや、LINE公式アカウントにメッセージが送られたときに飛んでくるWebhookに含まれていて、友だち追加やメッセージに対する返信を送るときに使えます。 @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-reply-message-reply-token}]
+//footnote[push][プッシュメッセージを送る | Messaging APIリファレンス | LINE Developers @<href>{https://developers.line.biz/ja/reference/messaging-api/#send-push-message}]

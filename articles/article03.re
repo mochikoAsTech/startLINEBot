@@ -73,10 +73,12 @@ curl -v -X POST https://api.line.me/v2/bot/message/broadcast \
 }'
 //}
 
-//image[change-icon-and-name][ねこからメッセージが届いた][scale=0.6]{
+//image[change-icon-and-name][ねこからメッセージが届いた][scale=0.8]{
 //}
 
 たとえばテーマパークのLINE公式アカウントで、特定のキャラクターにちなんだイベントを告知するときだけ、メッセージの送信元をそのキャラクターのアイコンと名前にする、といった使い方が可能です。
+
+//pagebreak
 
 ===[column] 【コラム】URLを送る前にOGPの見た目を確認したり、キャッシュを消したりしたい
 
@@ -102,7 +104,7 @@ PagePokerという公式のツールを使うと、対象ページのOGPタグ@<
 
 === Flex Messageで見た目にこだわったメッセージを送る
 
-もっと格好良い、見た目にこだわったメッセージを送りたい！と思ったら、Flex Message Simulatorを使ってみましょう。
+単体のテキストや画像ではなく、もっと格好良い、見た目にこだわったメッセージを送りたい！と思ったら、Flex Message Simulatorを使ってみましょう。
 
  * Flex Message Simulator@<fn>{login}
  ** @<href>{https://developers.line.biz/flex-simulator/}
@@ -111,10 +113,12 @@ PagePokerという公式のツールを使うと、対象ページのOGPタグ@<
 
 GUIでレイアウトをカスタマイズするだけで、メッセージのJSON@<fn>{notice}が生成される素晴らしいツールです。（@<img>{flex-message-1}）
 
-//image[flex-message-1][Flex Message Simulatorで見た目にこだわったメッセージをつくってみよう][scale=0.8]{
+//image[flex-message-1][Flex Message Simulatorで見た目にこだわったメッセージをつくってみよう][scale=0.9]{
 //}
 
 //footnote[notice][ただしFlex Message Simulatorで出力されるJSONは、messages直下のFlex Message全体ではなく、コンテナ（contents以下）なので注意が必要です。Flex Messageの仕様については、APIリファレンスを参照してください。 @<href>{https://developers.line.biz/ja/reference/messaging-api/#flex-message}]
+
+//pagebreak
 
 しかも「このFlex Messageを送ったら実際はどんな見た目になるんだろう？画像は見切れないかな？」と思ったら、右上の［Send...］からメッセージをテスト送信できるのです。便利！（@<img>{flex-message-2}、@<img>{flex-message-3}）
 
@@ -132,7 +136,7 @@ GUIでレイアウトをカスタマイズするだけで、メッセージのJS
 
 //footnote[retry-webhook][受け取りに失敗したWebhookを再送する | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/receiving-messages/#webhook-redelivery}]
 
-どこで「Webhookを受け取れなかった」と判断されるのかというと、LINEプラットフォームから見て、「Webhookを受け取ってー！」というリクエストに対してきちんとステータスコード200が返ってこなければ「ボットサーバーはWebhookを受け取れなかった」と判断されます。
+どこで「Webhookを受け取れなかった」と判断されるのかというと、LINEプラットフォームから見て、「Webhookを受け取ってー！」というリクエストに対して、ボットサーバーからステータスコード200が返ってこなければ「ボットサーバーはWebhookを受け取れなかった」と判断されます。
 
 とても便利に見えるWebhookの再送機能ですが、ボットサーバーから見て「Webhookを受け取ってー！」というリクエストに対して、きちんとステータスコード200を返したつもりでも、ボットサーバーからLINEプラットフォームまでのネットワーク経路上で何か問題があって、きちんとレスポンスがLINEプラットフォームまで到達しないケースは考えられます。その場合、Webhookの再送をオンにしたことで次のようなトラブルが考えられます。
 
@@ -154,7 +158,7 @@ LINE公式アカウントと友だちになると、トーク画面の下部に�
 
 //footnote[richmenu-link][リッチメニューを使う | LINE Developers @<href>{https://developers.line.biz/ja/docs/messaging-api/using-rich-menus/}]
 
-//image[richmenu][リッチメニュー][scale=0.4]{
+//image[richmenu][リッチメニュー][scale=0.3]{
 //}
 
 このリッチメニューは、一番下の「新刊を読む！▼」と書いてあるバーをタップすることで開いたり閉じたりできます。このバーのテキストも、デフォルトの「メニュー」から「新刊を読む！」「メニューはこちら」「お問い合わせの入力はこちら」「ほっとするブレイクタイムを」「会員証」「お役立ち情報はこちら」「人気ランキングをチェック！」「こちらもチェック」「荷物の追跡・再配達・集荷受付」といったさまざまなテキストに変更できます。
@@ -166,14 +170,16 @@ LINE公式アカウントと友だちになると、トーク画面の下部に�
 
 === リッチメニュープレイグラウンドでリッチメニューを体験してみよう
 
-リッチメニューのさまざまな機能は、文字で説明するより体験してみるのが一番分かりやすいです。公式で提供されているリッチメニュープレイグラウンドという、「リッチメニューを体験するためのLINE公式アカウント」と友だちになってみましょう。（@<img>{richmenu-playground-qrcode}）
+リッチメニューのさまざまな機能は、文字で説明するより体験してみるのが一番分かりやすいです。公式で提供されているリッチメニュープレイグラウンド@<fn>{playground-url}という、「リッチメニューを体験するためのLINE公式アカウント」と友だちになってみましょう。（@<img>{richmenu-playground-qrcode}）
+
+//footnote[playground-url][リッチメニュープレイグラウンドと友だちになる。 @<href>{https://lin.ee/7ALASDvA}]
 
 //image[richmenu-playground-qrcode][リッチメニュープレイグラウンドと友だちになる][scale=0.3]{
 //}
 
 ［リッチメニューを開く▼］をタップすると、［メッセージアクションを試す］と表示されました。これは「ユーザーがリッチメニューをタップすることで、特定のメッセージをユーザーから自動送信させる」という機能です。早速［メッセージ送信］を試してみましょう。（@<img>{add-richmenu-playground}）
 
-//image[add-richmenu-playground][［メッセージ送信］をタップするとメッセージが送信されて返信が届いた][scale=0.8]{
+//image[add-richmenu-playground][［メッセージ送信］をタップするとメッセージが送信されて返信が届いた][scale=1]{
 //}
 
 あなたが文字を入力した訳ではないのに、［message sent successfully!］というメッセージがあなたから送信されました。これがメッセージアクションです。メッセージアクションによって、ユーザーからLINE公式アカウントに対して自動でメッセージが送られ、それによってWebhookがボットサーバーに届きました、という一連の流れを解説してくれています。
@@ -203,7 +209,7 @@ LINE公式アカウントと友だちになると、トーク画面の下部に�
 
 === Messaging API以外のプロダクトとの組み合わせ
 
-LINE APIには、Messaging APIの他に、LINEログインやLIFF (LINE Front-end Framework) やLINEミニアプリ、LINE Social Pluginsなどさまざまなプロダクトがあります。Messaging API単体でできることが把握できたら、他のプロダクトと組み合わせるとさらにどんなことができるのか、LINE Developersサイトで見てみましょう。
+LINE APIには、Messaging APIの他に、LINEログインやLIFF (LINE Front-end Framework) やLINEミニアプリ、LINE Social Pluginsなどさまざまなプロダクトがあります。Messaging API単体でできることが把握できたら、他のプロダクトと組み合わせるとさらにどんなことができるのか、LINE Developersサイトでドキュメントを見てみましょう。
 
  * LINE Developersサイト
  ** @<href>{https://developers.line.biz/}
